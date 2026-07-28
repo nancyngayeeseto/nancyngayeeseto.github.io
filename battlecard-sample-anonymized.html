@@ -16,6 +16,71 @@ body{font-family:'Inter',-apple-system,system-ui,sans-serif;color:#1a1a1a;backgr
 <script>
 const {useState,useMemo,createElement:h}=React;
 
+const personas={
+ciso:{id:"ciso",label:"CISO / Security Lead",icon:"\ud83d\udee1\ufe0f",color:"#c0392b",
+priorities:["Certifications and compliance","Data encryption and sovereignty","Threat resilience and anti-tamper","Audit trail and access controls"],
+buyingStyle:"Risk-averse. Needs evidence that the solution meets security standards. Will block a deal if compliance gaps exist. Values independent testing over vendor claims.",
+keyMetrics:["Encryption standard (AES-256)","Certification status","Vulnerability assessment history","Data residency controls"],
+objectionFocus:"security"},
+ops:{id:"ops",label:"Head of Operations",icon:"\u2699\ufe0f",color:"#2980B9",
+priorities:["Uptime and reliability in field conditions","Deployment speed and simplicity","Total cost of ownership over 3-5 years","Interoperability with existing systems"],
+buyingStyle:"Pragmatic. Wants proof it works in their specific environment. Influenced by references from similar deployments. Will champion internally if convinced on operational fit.",
+keyMetrics:["Mean time to deploy","System availability (%)","Maintenance overhead","Integration complexity"],
+objectionFocus:"operational"},
+procurement:{id:"procurement",label:"Procurement Officer",icon:"\ud83d\udcca",color:"#27ae60",
+priorities:["Contract vehicle access and procurement pathway","Pricing and total cost transparency","Vendor financial stability and longevity","Regional support and SLA guarantees"],
+buyingStyle:"Process-driven. Evaluates vendor risk as much as product capability. Needs clear procurement pathways and will favour vendors already on approved lists. Price-sensitive but not price-only.",
+keyMetrics:["Contract vehicle availability","Total contract value vs budget","Vendor financial health","SLA terms and penalties"],
+objectionFocus:"commercial"},
+tech:{id:"tech",label:"Technical Evaluator / CTO",icon:"\ud83d\udd27",color:"#8E44AD",
+priorities:["Bandwidth performance under real conditions","Edge processing and analytics capabilities","API and integration architecture","Scalability and future roadmap"],
+buyingStyle:"Evidence-driven. Will run POCs and benchmarks. Sceptical of marketing claims. Wants to see performance data, architecture diagrams, and API documentation. Often the strongest internal advocate or blocker.",
+keyMetrics:["Sustained bandwidth (kbps)","Latency (ms)","Edge compute capability","API coverage"],
+objectionFocus:"technical"}
+};
+
+const personaObjestions={
+novacast:{
+ciso:[{says:"NovaCast has passed security testing in allied nation environments.",response:"Ask which specific certifications they hold and whether those are recognised by your national authority. Partnership-phase testing and formal certification are different. Request their certification documentation."},{says:"Their platform encrypts all data end-to-end.",response:"End-to-end encryption is table stakes. The question is whether their encryption meets your specific national standard and whether it has been independently validated, not just vendor-asserted."}],
+ops:[{says:"NovaCast offers video, voice, and telemetry in one platform, simplifying operations.",response:"A unified platform sounds simpler, but ask how many of those capabilities you actually need deployed. Most operations already have voice and data comms. Adding unused modules increases complexity, training burden, and failure points."},{says:"NovaCast can transmit at lower bandwidth than StreamEdge.",response:"Ask them to demonstrate sustained performance in conditions that match your operational environment, including packet loss, link drops, and variable bandwidth. A claimed minimum under lab conditions differs from what you will see in the field."}],
+procurement:[{says:"NovaCast recently raised significant funding, showing market confidence.",response:"Funding shows investor interest, but ask about revenue sustainability and customer concentration. Their deployment base is concentrated with approximately 60 units to a single customer. Diversified revenue is a stronger indicator of long-term vendor viability."},{says:"NovaCast can offer competitive pricing on the full platform.",response:"Evaluate total cost including modules you will not use. A lower headline price on a broader platform may not be cheaper than a purpose-built solution when you factor in training, integration, and maintenance of unused features."}],
+tech:[{says:"NovaCast can transmit at single-digit kbps.",response:"Request the test methodology. Was this sustained over hours or a peak demo figure? What codec, resolution, and frame rate? What packet loss was simulated? Our sub-100 kbps figure reflects sustained operational deployments over SATCOM with real packet loss."},{says:"Their platform handles video, voice, and telemetry natively.",response:"Ask about the architecture trade-offs. A multi-function platform typically means shared processing resources. Under bandwidth pressure, how does the system prioritise video vs telemetry? Can you configure quality of service per stream?"}]
+},
+secureview:{
+ciso:[{says:"SecureView has national security certification.",response:"Certification is significant and worth understanding in detail. Ask whether the certification covers the specific deployment environment you need, particularly non-cellular networks. A product certified for cellular may not carry the same assurance over SATCOM."},{says:"They are part of a larger portfolio group with more resources for security.",response:"A larger parent group can mean more resources, but also more complexity. Ask who owns the security roadmap for this specific product within the 13-company portfolio, and whether security updates are prioritised by the product team or the group."}],
+ops:[{says:"SecureView has proven deployments across major international events.",response:"Strong track record in event security, which typically means urban, cellular-connected environments with temporary deployments. Ask how many of those deployments operated over non-cellular networks or in sustained, permanent installations matching your environment."},{says:"Their product is mature and battle-tested.",response:"Maturity in cellular environments is real. The question is whether that maturity extends to your network type. A product optimised for 4G will behave differently over SATCOM. Request a POC in your actual network conditions."}],
+procurement:[{says:"SecureView is backed by a PE group, ensuring long-term stability.",response:"PE backing provides capital, but the parent group has 13 portfolio companies. Ask about the specific investment roadmap for this product line. PE-backed companies can also face pressure to cut costs or consolidate products that do not meet return targets."},{says:"They have established channel partners in your region.",response:"Regional presence matters for support. Ask what the SLA is for your specific deployment type, and whether the channel partner has experience supporting non-cellular deployments or only their urban surveillance product line."}],
+tech:[{says:"SecureView achieves single-digit kbps over cellular.",response:"Impressive over cellular, where network behaviour is predictable. Ask them to demonstrate the same performance over SATCOM or BGAN, where latency, jitter, and packet loss are fundamentally different. Their architecture is optimised for cellular characteristics."},{says:"They have been deployed across critical infrastructure.",response:"Ask specifically about non-cellular critical infrastructure. Pipeline monitoring over SATCOM, offshore platform monitoring, remote facility surveillance. If the references are primarily urban CCTV and transport, the relevance to your use case may be limited."}]
+},
+compactstream:{
+ciso:[{says:"CompactStream has a research agreement with special operations, proving security trust.",response:"A research agreement is a testing arrangement, not a security certification. The agency is evaluating the technology, which is different from certifying it. Ask whether CompactStream holds any formal security certification independently of the research relationship."},{says:"Their encoder is software-defined, reducing hardware attack surface.",response:"A smaller hardware footprint can reduce some vectors, but the encoder is one component. Ask about the security of the complete solution you would need to build around it, including VMS, analytics, and storage, since CompactStream provides only the encoder."}],
+ops:[{says:"CompactStream runs on minimal hardware, making deployment easier.",response:"Lower hardware requirements are a real advantage for tactical scenarios. The trade-off is that you are deploying an encoder only. You will need to source, integrate, and maintain VMS, analytics, and edge storage separately. Ask about the total operational burden of the complete system."},{says:"They have demonstrated in 20+ military exercises.",response:"Exercise demonstrations validate capability in controlled conditions. Ask for references from sustained operational deployments, meaning months or years of continuous use, not multi-day exercises. The reliability profile is different."}],
+procurement:[{says:"CompactStream is on existing contract vehicles, making procurement faster.",response:"Contract vehicle access is a genuine advantage for speed. If you are not constrained to those specific vehicles, evaluate whether procurement convenience should outweigh solution completeness. Factor in the cost of separately procuring VMS, analytics, and storage."},{says:"Their price point is lower than StreamEdge.",response:"Compare like for like. CompactStream provides an encoder. StreamEdge provides a complete platform. When you add the cost of VMS, analytics, edge storage, and integration labour to the encoder price, the total may be comparable or higher."}],
+tech:[{says:"CompactStream has demonstrated video over military satellite and HF radio.",response:"Genuinely impressive demonstrations. Ask for the test parameters: resolution, frame rate, sustained duration, and packet loss tolerance. Also ask whether the demonstration included edge analytics during network blackouts, or encoding only."},{says:"Their software-defined encoder is more flexible than hardware solutions.",response:"Software flexibility is real. But an encoder is one layer of a video solution. Ask about their roadmap for edge analytics, on-device storage during outages, and integration APIs. If you need a platform, you will be building the rest yourself."}]
+}
+};
+
+const personaTrapQs={
+novacast:{
+ciso:[{q:"Can you provide your current certification documentation and the scope of environments it covers?",reveals:"Certification gaps for non-standard environments."},{q:"Has your encryption implementation been independently audited, and by which body?",reveals:"Vendor-asserted vs independently validated encryption."}],
+ops:[{q:"Walk us through a deployment where your platform operated continuously for 6+ months in a SATCOM environment.",reveals:"Limited sustained operational deployments."},{q:"If we only need video, what is the overhead of carrying the voice and telemetry modules?",reveals:"Platform bloat for single-function requirements."}],
+procurement:[{q:"What is your customer concentration? How many distinct organisations are using your platform operationally?",reveals:"Revenue concentrated with very few customers."},{q:"Can we procure the video component independently, or must we license the full platform?",reveals:"Pricing flexibility limitations."}],
+tech:[{q:"What independent third-party testing has validated your single-digit kbps claim under sustained packet loss?",reveals:"If only internal testing, that is a gap."},{q:"What is your sustained frame rate and resolution at your claimed minimum bandwidth?",reveals:"Trade-offs between bandwidth and usable video quality."}]
+},
+secureview:{
+ciso:[{q:"Does your national security certification cover deployments over SATCOM and BGAN, or only cellular networks?",reveals:"Certification scope may not cover the prospect's environment."},{q:"Since the acquisition, has the security certification been re-validated under the new corporate structure?",reveals:"Potential certification continuity risk post-acquisition."}],
+ops:[{q:"What percentage of your current deployments operate over non-cellular networks?",reveals:"Deployments are overwhelmingly cellular."},{q:"If our network link drops for 30+ minutes, what happens to video analytics at the edge?",reveals:"Extended disconnection impairs their model."}],
+procurement:[{q:"Within the 13-company portfolio, what is the specific investment commitment to this product line over the next 3 years?",reveals:"Risk of deprioritisation within a diversified portfolio."},{q:"Does your regional channel partner have experience supporting SATCOM deployments, or primarily cellular installations?",reveals:"Support capability gaps for non-cellular environments."}],
+tech:[{q:"Can you demonstrate your claimed bandwidth performance over a SATCOM link with 600ms+ latency and 5% packet loss?",reveals:"Performance is optimised for cellular, not satellite."},{q:"What edge processing continues during complete network disconnection?",reveals:"Architecture depends on connectivity for analytics."}]
+},
+compactstream:{
+ciso:[{q:"What formal security certifications does CompactStream hold independently of the research agreement?",reveals:"Research agreement is not a certification."},{q:"Since your product is an encoder, who is responsible for the security of the VMS, analytics, and storage we would need to add?",reveals:"Security responsibility fragmentation in a multi-vendor solution."}],
+ops:[{q:"Can you provide references from sustained operational deployments of 6+ months, not exercises?",reveals:"Strongest evidence is short-duration exercises."},{q:"What is the total integration effort to build a complete video solution around your encoder?",reveals:"Significant hidden operational burden."}],
+procurement:[{q:"When we add VMS, analytics, and edge storage to your encoder price, what is the total solution cost?",reveals:"Headline encoder price understates total cost."},{q:"What is your deployment footprint outside the United States?",reveals:"Minimal international presence and support."}],
+tech:[{q:"Beyond encoding, what edge analytics does your platform provide when the network is unavailable?",reveals:"Encoder only, no analytics platform."},{q:"What is your sustained performance over 24 hours at your claimed minimum bandwidth, not a short demonstration?",reveals:"Demo vs sustained operational performance."}]
+}
+};
+
 const winLossDeals=[
 {date:"2026-06-15",deal:"European Defence Forward Surveillance",outcome:"Won",competitor:"SecureView",vertical:"Defence",region:"Europe",value:275000,factor:"Bandwidth performance",detail:"StreamEdge maintained usable video at 64 kbps on BGAN. SecureView degraded below 200 kbps.",quote:"Your solution performed where theirs could not. On satellite it was clear which worked.",stage:"Technical Evaluation"},
 {date:"2026-05-28",deal:"Nordic Maritime Monitoring",outcome:"Won",competitor:"NovaCast",vertical:"Maritime",region:"Scandinavia",value:180000,factor:"Deployment evidence",detail:"StreamEdge provided three operational maritime references. NovaCast had only commercial streaming customers.",quote:"We needed a vendor who has done this in our environment before.",stage:"Procurement"},
@@ -82,11 +147,15 @@ const[sec,setSec]=useState("overview");
 const[qr,setQr]=useState(false);
 const[search,setSearch]=useState("");
 const[ss,setSs]=useState(false);
+const[ap,setAp]=useState(null);
 const comp=competitors[ac];
 const stats=useMemo(()=>gs(ac),[ac]);
 const all=useMemo(()=>({novacast:gs("novacast"),secureview:gs("secureview"),compactstream:gs("compactstream")}),[]);
-const secs=qr?[{id:"objections",l:"Objections"},{id:"trap",l:"Trap Questions"},{id:"quickwins",l:"Quick Wins"}]:[{id:"overview",l:"Overview"},{id:"winloss",l:"Win/Loss"},{id:"comparison",l:"Head-to-Head"},{id:"trap",l:"Trap Qs"},{id:"objections",l:"Objections"},{id:"redflags",l:"Red Flags"},{id:"quickwins",l:"Quick Wins"}];
+const secs=qr?[{id:"objections",l:"Objections"},{id:"trap",l:"Trap Questions"},{id:"quickwins",l:"Quick Wins"}]:[{id:"overview",l:"Overview"},{id:"winloss",l:"Win/Loss"},{id:"comparison",l:"Head-to-Head"},{id:"persona",l:"Personas"},{id:"trap",l:"Trap Qs"},{id:"objections",l:"Objections"},{id:"redflags",l:"Red Flags"},{id:"quickwins",l:"Quick Wins"}];
 const sr=useMemo(()=>{if(!search||search.length<2)return[];const q=search.toLowerCase();const r=[];Object.values(competitors).forEach(c=>{c.objections.forEach(o=>{if((o.says+o.response).toLowerCase().includes(q))r.push({comp:c.name,sec:"Objections",text:o.says,color:c.color});});c.trapQuestions.forEach(t=>{if((t.q+t.reveals).toLowerCase().includes(q))r.push({comp:c.name,sec:"Trap Qs",text:t.q.slice(0,80)+"...",color:c.color});});c.redFlags.forEach(f=>{if(f.toLowerCase().includes(q))r.push({comp:c.name,sec:"Red Flags",text:f,color:c.color});});});return r.slice(0,8);},[search]);
+
+const curObjections=useMemo(()=>{if(ap&&personaObjestions[ac]&&personaObjestions[ac][ap])return personaObjestions[ac][ap];return comp.objections;},[ac,ap,comp]);
+const curTrapQs=useMemo(()=>{if(ap&&personaTrapQs[ac]&&personaTrapQs[ac][ap])return personaTrapQs[ac][ap];return comp.trapQuestions;},[ac,ap,comp]);
 
 return h("div",{style:{fontFamily:"'Inter',-apple-system,system-ui,sans-serif",maxWidth:"900px",margin:"0 auto",color:"#1a1a1a"}},
 h("div",{style:{textAlign:"center",padding:"24px 16px 16px",borderBottom:"1px solid #e0e0e0"}},
@@ -96,6 +165,12 @@ h("div",{style:{display:"flex",justifyContent:"center",gap:"12px",marginTop:"10p
 h("button",{onClick:()=>setSs(!ss),style:{...ps(ss,"#333"),fontSize:"13px"}},"\ud83d\udd0d Search"),
 h("button",{onClick:()=>{setQr(!qr);setSec(qr?"overview":"objections");},style:{...ps(qr,"#e74c3c"),fontSize:"13px",background:qr?"#e74c3c":"transparent",color:qr?"#fff":"#666"}},qr?"\u2715 Exit Quick Reference":"\u26a1 Quick Reference")),
 qr&&h("div",{style:{marginTop:"8px",fontSize:"12px",color:"#e74c3c",fontWeight:600}},"QUICK REFERENCE \u2014 talk tracks, trap questions, quick wins only")),
+
+ap&&h("div",{style:{background:personas[ap].color+"10",borderBottom:"1px solid "+personas[ap].color+"30",padding:"8px 16px",display:"flex",alignItems:"center",justifyContent:"center",gap:"8px"}},
+h("span",{style:{fontSize:"13px"}},personas[ap].icon),
+h("span",{style:{fontSize:"12px",fontWeight:700,color:personas[ap].color}},"Persona Active: "+personas[ap].label),
+h("span",{style:{fontSize:"11px",color:"#888"}}," \u2014 Objections and Trap Qs are tailored"),
+h("button",{onClick:()=>setAp(null),style:{marginLeft:"8px",background:"none",border:"1px solid #ccc",borderRadius:"12px",padding:"2px 10px",fontSize:"11px",cursor:"pointer",color:"#888"}},"\u2715 Clear")),
 
 ss&&h("div",{style:{padding:"12px 16px",borderBottom:"1px solid #eee"}},
 h("input",{type:"text",value:search,onChange:e=>setSearch(e.target.value),placeholder:"Search across all competitors...",style:{width:"100%",padding:"10px 14px",border:"1px solid #ddd",borderRadius:"8px",fontSize:"14px",outline:"none",boxSizing:"border-box"}}),
@@ -117,6 +192,19 @@ h("div",{style:{display:"grid",gridTemplateColumns:"repeat(auto-fit, minmax(250p
 h("div",{style:cd()},h("div",{style:{fontSize:"11px",fontWeight:700,color:"#27ae60",textTransform:"uppercase",marginBottom:"6px"}},"\u2713 Our Sweet Spot"),h("p",{style:{fontSize:"13px",lineHeight:1.5,margin:0}},comp.ourSweet)),
 h("div",{style:cd()},h("div",{style:{fontSize:"11px",fontWeight:700,color:"#e74c3c",textTransform:"uppercase",marginBottom:"6px"}},"\u2715 Their Sweet Spot"),h("p",{style:{fontSize:"13px",lineHeight:1.5,margin:0}},comp.theirSweet)))),
 
+sec==="persona"&&!qr&&h("div",null,
+h("h3",{style:{fontSize:"18px",fontWeight:700,marginBottom:"4px"}},"Buyer Persona Playbook"),
+h("p",{style:{fontSize:"13px",color:"#666",marginBottom:"16px"}},"Select a persona to tailor objection handling and trap questions to their priorities. The active persona filter applies across all sections."),
+Object.values(personas).map(p=>h("div",{key:p.id,onClick:()=>setAp(p.id),style:{...cd({marginBottom:"12px",borderLeft:"4px solid "+p.color,cursor:"pointer",transition:"box-shadow 0.15s",boxShadow:ap===p.id?"0 0 0 2px "+p.color:"none"})}},
+h("div",{style:{display:"flex",alignItems:"center",gap:"10px",marginBottom:"10px"}},
+h("div",{style:{width:"36px",height:"36px",borderRadius:"10px",background:p.color+"15",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"18px"}},p.icon),
+h("div",{style:{flex:1}},h("div",{style:{fontSize:"15px",fontWeight:700}},p.label),h("div",{style:{fontSize:"11px",color:p.color,fontWeight:600,textTransform:"uppercase"}},ap===p.id?"ACTIVE":"Click to activate")),
+ap===p.id&&h("span",{style:{...bg(p.color)}},"Active")),
+h("div",{style:{fontSize:"13px",lineHeight:1.6,marginBottom:"10px",fontStyle:"italic",color:"#555"}},p.buyingStyle),
+h("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"8px"}},
+h("div",null,h("div",{style:{fontSize:"11px",fontWeight:700,color:"#888",textTransform:"uppercase",marginBottom:"4px"}},"Priorities"),p.priorities.map((pr,i)=>h("div",{key:i,style:{fontSize:"12px",marginBottom:"2px"}},"\u2022 "+pr))),
+h("div",null,h("div",{style:{fontSize:"11px",fontWeight:700,color:"#888",textTransform:"uppercase",marginBottom:"4px"}},"Key Metrics"),p.keyMetrics.map((m,i)=>h("div",{key:i,style:{fontSize:"12px",marginBottom:"2px"}},"\u2022 "+m))))))),
+
 sec==="winloss"&&!qr&&h("div",null,
 h("h3",{style:{fontSize:"18px",fontWeight:700,marginBottom:"4px"}},"Win/Loss vs "+comp.name),
 h("p",{style:{fontSize:"13px",color:"#666",marginBottom:"16px"}},stats.count+" deals \u00b7 "+stats.wins.length+"W \u2013 "+stats.losses.length+"L \u00b7 \u00a3"+(stats.totalValue/1000).toFixed(0)+"k"),
@@ -136,8 +224,10 @@ h("div",{style:cd()},["Bandwidth","Deployments","Certifications","Network Focus"
 h("div",{style:{...cd({marginTop:"16px"})}},h("div",{style:{fontSize:"11px",fontWeight:700,textTransform:"uppercase",color:"#888",marginBottom:"12px"}},"All Competitors \u2014 Win Rate"),Object.values(competitors).map(c=>{const s=all[c.id];return h("div",{key:c.id,style:{display:"flex",alignItems:"center",gap:"12px",marginBottom:"10px"}},h("div",{style:{width:"120px",fontSize:"13px",fontWeight:600,color:c.color}},c.name),h("div",{style:{flex:1,height:"20px",borderRadius:"4px",background:"#eee",overflow:"hidden",display:"flex"}},h("div",{style:{width:s.winRate+"%",background:"#27ae60"}}),h("div",{style:{width:(100-s.winRate)+"%",background:"#e74c3c"}})),h("div",{style:{width:"80px",fontSize:"13px",fontWeight:700,textAlign:"right"}},s.winRate+"% ("+s.wins.length+"W-"+s.losses.length+"L)"));}))),
 
 sec==="trap"&&h("div",null,
-h("h3",{style:{fontSize:"18px",fontWeight:700,marginBottom:"16px"}},"Trap Questions"+(qr?" \u2014 ask these now":"")),
-comp.trapQuestions.map((t,i)=>h("div",{key:i,style:{...cd({marginBottom:"12px"})}},
+h("h3",{style:{fontSize:"18px",fontWeight:700,marginBottom:"4px"}},"Trap Questions"+(qr?" \u2014 ask these now":"")),
+ap&&h("p",{style:{fontSize:"12px",color:personas[ap].color,fontWeight:600,marginBottom:"12px"}},personas[ap].icon+" Tailored for "+personas[ap].label),
+!ap&&!qr&&h("p",{style:{fontSize:"12px",color:"#888",marginBottom:"12px"}},"Tip: Select a persona from the Personas tab to see role-specific trap questions"),
+curTrapQs.map((t,i)=>h("div",{key:i,style:{...cd({marginBottom:"12px"})}},
 h("div",{style:{display:"flex",gap:"12px"}},
 h("div",{style:{width:"28px",height:"28px",borderRadius:"50%",background:comp.color+"15",color:comp.color,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:800,fontSize:"14px",flexShrink:0}},i+1),
 h("div",{style:{flex:1}},
@@ -145,8 +235,10 @@ h("p",{style:{fontSize:"14px",fontWeight:600,lineHeight:1.5,margin:"0 0 6px",fon
 !qr&&h("div",{style:{fontSize:"12px",color:"#777",background:"#f5f5f5",borderRadius:"6px",padding:"8px 12px"}},h("strong",null,"Reveals: "),t.reveals)))))),
 
 sec==="objections"&&h("div",null,
-h("h3",{style:{fontSize:"18px",fontWeight:700,marginBottom:"16px"}},"Objection Handling"+(qr?" \u2014 your responses":"")),
-comp.objections.map((o,i)=>h("div",{key:i,style:{...cd({marginBottom:"16px"})}},
+h("h3",{style:{fontSize:"18px",fontWeight:700,marginBottom:"4px"}},"Objection Handling"+(qr?" \u2014 your responses":"")),
+ap&&h("p",{style:{fontSize:"12px",color:personas[ap].color,fontWeight:600,marginBottom:"12px"}},personas[ap].icon+" Tailored for "+personas[ap].label),
+!ap&&!qr&&h("p",{style:{fontSize:"12px",color:"#888",marginBottom:"12px"}},"Tip: Select a persona from the Personas tab to see role-specific objection handling"),
+curObjections.map((o,i)=>h("div",{key:i,style:{...cd({marginBottom:"16px"})}},
 h("div",{style:{background:"#e74c3c0c",borderRadius:"8px",padding:"10px 14px",marginBottom:"10px",border:"1px solid #e74c3c18"}},h("div",{style:{fontSize:"11px",fontWeight:700,color:"#e74c3c",textTransform:"uppercase",marginBottom:"3px"}},"They say"),h("div",{style:{fontSize:"15px",fontWeight:600}},'"'+o.says+'"')),
 h("div",{style:{background:"#27ae600a",borderRadius:"8px",padding:"10px 14px",border:"1px solid #27ae6020"}},h("div",{style:{fontSize:"11px",fontWeight:700,color:"#27ae60",textTransform:"uppercase",marginBottom:"3px"}},"Your response"),h("div",{style:{fontSize:"14px",lineHeight:1.6}},o.response))))),
 
@@ -160,7 +252,7 @@ comp.quickWins.map((p,i)=>h("div",{key:i,style:{...cd({marginBottom:"12px",borde
 h("div",{style:{display:"flex",alignItems:"center",gap:"10px",marginBottom:"6px"}},h("div",{style:{width:"28px",height:"28px",borderRadius:"50%",background:comp.color,color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontWeight:800,fontSize:"14px"}},i+1),h("span",{style:{fontSize:"15px",fontWeight:700}},p.title)),
 h("p",{style:{fontSize:"14px",lineHeight:1.6,margin:0,paddingLeft:"38px"}},p.action))))),
 
-h("div",{style:{textAlign:"center",padding:"16px",borderTop:"1px solid #eee",fontSize:"11px",color:"#999"}},"Competitive Intelligence \u00b7 Work Sample (Anonymized) \u00b7 "+winLossDeals.length+" deals tracked"));
+h("div",{style:{textAlign:"center",padding:"16px",borderTop:"1px solid #eee",fontSize:"11px",color:"#999"}},"Competitive Intelligence \u00b7 Work Sample (Anonymized) \u00b7 "+winLossDeals.length+" deals tracked \u00b7 4 buyer personas"));
 }
 ReactDOM.render(h(App),document.getElementById("root"));
 </script>
