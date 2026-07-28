@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sales Battlecards - Work Sample (Anonymized)</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',-apple-system,system-ui,sans-serif;color:#1a1a1a;background:#fff}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const {useState,useMemo,createElement:h}=React;
+
+const winLossDeals=[
+{date:"2026-06-15",deal:"European Defence Forward Surveillance",outcome:"Won",competitor:"SecureView",vertical:"Defence",region:"Europe",value:275000,factor:"Bandwidth performance",detail:"StreamEdge maintained usable video at 64 kbps on BGAN. SecureView degraded below 200 kbps.",quote:"Your solution performed where theirs could not. On satellite it was clear which worked.",stage:"Technical Evaluation"},
+{date:"2026-05-28",deal:"Nordic Maritime Monitoring",outcome:"Won",competitor:"NovaCast",vertical:"Maritime",region:"Scandinavia",value:180000,factor:"Deployment evidence",detail:"StreamEdge provided three operational maritime references. NovaCast had only commercial streaming customers.",quote:"We needed a vendor who has done this in our environment before.",stage:"Procurement"},
+{date:"2026-05-10",deal:"APAC Border Surveillance",outcome:"Lost",competitor:"SecureView",vertical:"Government",region:"APAC",value:400000,factor:"Certification gap",detail:"Prospect required national security certification. SecureView had it; StreamEdge's was in progress.",quote:"Your technology tested well but we cannot proceed without the accreditation.",stage:"Procurement"},
+{date:"2026-04-22",deal:"US Special Ops Tactical Video",outcome:"Lost",competitor:"CompactStream",vertical:"Defence",region:"USA",value:290000,factor:"Existing partnership",detail:"The agency was already testing CompactStream's encoder under a research agreement. Switching would have added six months.",quote:"We liked your edge analytics but the existing pathway was already underway.",stage:"Technical Evaluation"},
+{date:"2026-04-08",deal:"Middle East Energy Platform",outcome:"Won",competitor:"NovaCast",vertical:"Energy",region:"Middle East",value:165000,factor:"Edge processing",detail:"Satellite link drops 3-4x daily. StreamEdge's edge processing continued during outages.",quote:"We needed something that keeps working when the satellite link drops.",stage:"Technical Evaluation"},
+{date:"2026-03-30",deal:"UK Urban Rapid Deployment",outcome:"Lost",competitor:"SecureView",vertical:"Government",region:"UK",value:90000,factor:"Cellular environment fit",detail:"Urban 4G/5G environment. SecureView was purpose-built for this. StreamEdge's advantages were irrelevant.",quote:"Your solution is more than we need. We have 4G coverage everywhere.",stage:"Discovery"},
+{date:"2026-03-15",deal:"NATO Exercise Integration",outcome:"Won",competitor:"CompactStream",vertical:"Defence",region:"Europe",value:220000,factor:"Complete solution vs encoder",detail:"The alliance needed a complete video solution. CompactStream was encoder-only requiring separate analytics.",quote:"We do not have the resources to integrate an encoder into a full platform.",stage:"Technical Evaluation"},
+{date:"2026-02-28",deal:"European Navy Shore-to-Ship",outcome:"Won",competitor:"SecureView",vertical:"Maritime",region:"Europe",value:320000,factor:"SATCOM performance",detail:"StreamEdge delivered at 80 kbps. SecureView could not sustain below 300 kbps on the same link.",quote:"On our satellite connection the difference was immediately obvious.",stage:"Technical Evaluation"},
+{date:"2026-02-10",deal:"US Army Programme Office",outcome:"Lost",competitor:"CompactStream",vertical:"Defence",region:"USA",value:0,factor:"US procurement pathway",detail:"The programme office preferred CompactStream due to existing contract vehicle access. StreamEdge was not on any US vehicle.",quote:"We need to procure through existing channels. Onboarding a new vendor would take a year.",stage:"Discovery"},
+{date:"2026-01-05",deal:"APAC Port Authority",outcome:"Lost",competitor:"SecureView",vertical:"Maritime",region:"APAC",value:260000,factor:"Regional support presence",detail:"SecureView had APAC channel partners. StreamEdge had no local support.",quote:"We need local support. If something fails overnight we need someone in our timezone.",stage:"Procurement"},
+{date:"2025-12-15",deal:"European Federal Police",outcome:"Lost",competitor:"SecureView",vertical:"Government",region:"Europe",value:145000,factor:"Cellular environment fit",detail:"Urban LTE border monitoring. SecureView's cellular product was the right fit.",quote:"Their cellular product does exactly what we need at the right price point.",stage:"Discovery"},
+{date:"2025-11-28",deal:"UK Special Forces ISR",outcome:"Won",competitor:"CompactStream",vertical:"Defence",region:"UK",value:360000,factor:"Edge analytics",detail:"On-device analytics during network blackouts. CompactStream had no equivalent capability.",quote:"The edge analytics sealed it. When connectivity drops we still need the system working.",stage:"Technical Evaluation"},
+{date:"2025-11-10",deal:"Canadian Navy Arctic Patrol",outcome:"Won",competitor:"NovaCast",vertical:"Maritime",region:"Canada",value:250000,factor:"Extreme environment references",detail:"HF/SATCOM in Arctic conditions. StreamEdge had Arctic deployment references; NovaCast had none.",quote:"You have actually done this in the Arctic before. That matters more than any demo.",stage:"Procurement"},
+{date:"2025-10-25",deal:"US Marine Expeditionary",outcome:"Lost",competitor:"CompactStream",vertical:"Defence",region:"USA",value:185000,factor:"Specific integration",detail:"CompactStream had demonstrated over the required military satellite system. StreamEdge could not meet this requirement.",quote:"We need this to work over that specific system. CompactStream has already proven it.",stage:"Technical Evaluation"},
+{date:"2025-09-20",deal:"European MOD Vehicle Surveillance",outcome:"Won",competitor:"SecureView",vertical:"Defence",region:"Europe",value:210000,factor:"Contested RF performance",detail:"In simulated jamming, StreamEdge adapted; SecureView degraded.",quote:"In the jamming scenario your system adapted and theirs failed.",stage:"Technical Evaluation"},
+{date:"2025-09-05",deal:"Middle East Defence Procurement",outcome:"Lost",competitor:"NovaCast",vertical:"Defence",region:"Middle East",value:330000,factor:"Price",detail:"NovaCast came in at nearly half the price with existing regional relationships.",quote:"Your technology won the evaluation but the price difference was too significant.",stage:"Procurement"},
+{date:"2025-08-18",deal:"UK Maritime Coastguard",outcome:"Won",competitor:"SecureView",vertical:"Maritime",region:"UK",value:175000,factor:"Maritime SATCOM performance",detail:"Proven maritime SATCOM capability. SecureView struggled with maritime link characteristics.",quote:"We have been let down by solutions that work on land but not at sea. Yours works at sea.",stage:"Technical Evaluation"}
+];
+
+const competitors={
+novacast:{name:"NovaCast",formerly:"Signal Relay Group",ticker:"ASX: NVC",color:"#E67E22",id:"novacast",
+executiveSummary:"ALERT: Signal Relay Group rebranded to NovaCast Ltd in mid-2026. If a prospect mentions either name, this is the same competitor. They claim single-digit kbps bandwidth and are pursuing defence validation via international partnerships. Broader platform (video + voice + telemetry) but limited defence deployments. Recently raised significant funding.",
+theirSweet:"Defence buyers evaluating integrated multi-sensor platforms, especially within allied nation corridors",
+ourSweet:"Operations requiring proven, deployed ultra-low-bandwidth video in SATCOM, maritime, and BGAN environments",
+trapQuestions:[{q:"Walk us through a specific operational deployment where your platform maintained video under sustained packet loss in a SATCOM environment.",reveals:"Defence validation is partnership/test phase only."},{q:"What independent third-party testing has validated your single-digit kbps claim?",reveals:"If only internal testing, that is a gap."},{q:"Can we procure just the video component without the full voice/telemetry stack?",reveals:"Platform complexity adds overhead."}],
+objections:[{says:"NovaCast can transmit at lower bandwidth than StreamEdge.",response:"There is a difference between a claimed minimum under ideal conditions and sustained operational performance. Our sub-100 kbps reflects proven SATCOM/maritime deployments with real packet loss."},{says:"NovaCast offers video, voice, and telemetry in one platform.",response:"Most customers already have voice and data comms. What they are missing is video that works at extreme bandwidths. We solve that specific problem with a purpose-built approach."},{says:"NovaCast is being tested in conflict zones.",response:"The partnership is a non-binding agreement covering planned testing, not completed testing. No independent data has been published yet."}],
+redFlags:["Mentions 'NovaCast' or 'Signal Relay Group'","Asks about integrated video/voice/telemetry","References unmanned systems or drone comms","Mentions allied nation corridors","Asks about single-digit kbps performance"],
+quickWins:[{title:"Deployment Evidence Challenge",action:"Ask: 'How many operational deployments has each vendor demonstrated in conditions equivalent to yours?'"},{title:"Focused POC",action:"Propose testing video performance in the prospect's actual network conditions."}],
+comparison:{bandwidth:"Single-digit kbps (claimed)",deployments:"~60 units (1 customer)",certs:"Commercial readiness level",network:"Low-bandwidth (general)",backing:"Public market, recently funded"}},
+
+secureview:{name:"SecureView",formerly:null,ticker:"Private (PE-backed)",color:"#2980B9",id:"secureview",
+executiveSummary:"Most established competitor. National security certified, proven defence deployments, single-digit kbps over cellular. Their product is mature but cellular-optimised. Now part of a larger portfolio group (13 companies).",
+theirSweet:"Surveillance over cellular (3G/4G/5G) in urban, transport, and critical infrastructure contexts",
+ourSweet:"Mission-critical deployments where bandwidths are below cellular (SATCOM, BGAN, contested RF)",
+trapQuestions:[{q:"What percentage of your deployments operate over non-cellular networks such as SATCOM, BGAN, or HF?",reveals:"Deployments are overwhelmingly cellular."},{q:"If our network link drops for 30+ minutes, what happens to video analytics at the edge?",reveals:"Extended disconnection impairs their model."},{q:"Now that you are part of a larger group, who is our contact for roadmap influence?",reveals:"Acquisition integration risk and diluted focus."}],
+objections:[{says:"SecureView has national security certification.",response:"Certification is important for government procurement. Consider whether the certification covers your specific network environment. Certification validates the product, not performance in SATCOM."},{says:"They have been deployed across major defence exercises and international events.",response:"Strong track record in event security over 4G. But securing a venue over 4G is different from contested SATCOM. Ask about non-cellular deployments specifically."},{says:"They are part of a larger group with more stability.",response:"The parent group has 13 portfolio companies. The question is whether your requirement gets the same roadmap priority in a diversified portfolio as it would from a focused specialist."}],
+redFlags:["Mentions 'SecureView' or their product name","Asks about national security certification","References cellular bandwidth savings","Primary use case is urban surveillance","Mentions telecom carrier partnerships","References the parent portfolio group"],
+quickWins:[{title:"Network Environment Clarification",action:"Establish cellular vs non-cellular. If non-cellular, their strongest evidence becomes less relevant."},{title:"Edge Processing Requirement",action:"Ask if the system must function during outages. If yes, this favours our architecture."}],
+comparison:{bandwidth:"Single-digit kbps (proven, cellular)",deployments:"Major defence and international events",certs:"National security certified",network:"Cellular (3G/4G/5G)",backing:"PE-backed (portfolio group)"}},
+
+compactstream:{name:"CompactStream",formerly:"Also known as CSX",ticker:"OTC: CSMX",color:"#8E44AD",id:"compactstream",
+executiveSummary:"Most technically direct competitor. Their platform claims sub-10 kbps, demonstrated over military satellite systems and HF radio with special operations forces. Active research agreement with special operations command, existing contract vehicle access. But their product is an encoder, not a complete solution.",
+theirSweet:"US military tactical users needing video over specific military satellite systems and HF radio",
+ourSweet:"Non-US defence, maritime, and energy deployments where edge analytics and a complete platform matter",
+trapQuestions:[{q:"Beyond encoding, what edge analytics does your platform provide when the network is unavailable?",reveals:"Their product is an encoder, not an analytics platform."},{q:"Can you provide references from sustained operational deployments, not exercises?",reveals:"Strongest evidence is exercises, not sustained operations."},{q:"What is your deployment footprint outside the United States?",reveals:"International presence is minimal."}],
+objections:[{says:"CompactStream has demonstrated video over military satellite and HF, both firsts.",response:"Genuinely impressive demonstrations. Exercises differ from sustained operations. And their product is an encoder. Do you need edge analytics and a complete platform, or just an encoder?"},{says:"Their encoder runs on minimal hardware, making it more flexible.",response:"Hardware flexibility is real. The trade-off: integration burden is on you. You will need to source VMS, analytics, and edge storage separately."},{says:"They have a research agreement with special operations.",response:"A research agreement is a collaborative testing arrangement. The agency is evaluating the technology. It is not a procurement contract or programme of record."}],
+redFlags:["Mentions 'CompactStream' or 'CSX'","Asks about video over HF radio or tactical satellite","References military satellite systems","Asks about software-defined encoders","Mentions special operations command","Mentions affiliated technology partners"],
+quickWins:[{title:"Complete Solution Reframe",action:"Shift from 'which encoder is better' to 'which complete video solution meets operational needs.'"},{title:"Sustained Ops References",action:"Ask prospect to request operational deployment references (not exercise demos) from all vendors."}],
+comparison:{bandwidth:"Sub-10 kbps (demonstrated)",deployments:"20+ military exercises",certs:"Research agreement + contract vehicle",network:"Military SATCOM, tactical satellite, HF",backing:"OTC listed, credit facility"}}
+};
+
+const vc={bandwidth:"Sub-100 kbps (proven, SATCOM/BGAN)",deployments:"Defence, maritime, energy (operational)",certs:"[Industry certifications]",network:"SATCOM, BGAN, contested RF",backing:"Private"};
+
+function gs(id){const n=competitors[id].name;const d=winLossDeals.filter(x=>x.competitor===n);const w=d.filter(x=>x.outcome==="Won");const l=d.filter(x=>x.outcome==="Lost");const wr=d.length>0?Math.round((w.length/d.length)*100):0;const lr={};l.forEach(x=>{lr[x.factor]=(lr[x.factor]||0)+1;});const wd={};w.forEach(x=>{wd[x.factor]=(wd[x.factor]||0)+1;});return{deals:d,wins:w,losses:l,winRate:wr,lossReasons:lr,winDrivers:wd,count:d.length,totalValue:d.reduce((s,x)=>s+x.value,0)};}
+
+const ps=(a,c)=>({display:"inline-flex",alignItems:"center",gap:"6px",padding:"7px 14px",border:a?"2px solid "+(c||"#333"):"1px solid #ddd",borderRadius:"20px",background:a?(c||"#1a1a1a"):"transparent",color:a?"#fff":"#666",cursor:"pointer",fontSize:"12px",fontWeight:a?700:600,whiteSpace:"nowrap"});
+const cd=(e={})=>({background:"#fff",border:"1px solid #e0e0e0",borderRadius:"10px",padding:"16px",...e});
+const bg=(c)=>({display:"inline-block",padding:"2px 10px",borderRadius:"12px",fontSize:"11px",fontWeight:700,background:c+"18",color:c,textTransform:"uppercase",letterSpacing:".5px"});
+
+function App(){
+const[ac,setAc]=useState("novacast");
+const[sec,setSec]=useState("overview");
+const[qr,setQr]=useState(false);
+const[search,setSearch]=useState("");
+const[ss,setSs]=useState(false);
+const comp=competitors[ac];
+const stats=useMemo(()=>gs(ac),[ac]);
+const all=useMemo(()=>({novacast:gs("novacast"),secureview:gs("secureview"),compactstream:gs("compactstream")}),[]);
+const secs=qr?[{id:"objections",l:"Objections"},{id:"trap",l:"Trap Questions"},{id:"quickwins",l:"Quick Wins"}]:[{id:"overview",l:"Overview"},{id:"winloss",l:"Win/Loss"},{id:"comparison",l:"Head-to-Head"},{id:"trap",l:"Trap Qs"},{id:"objections",l:"Objections"},{id:"redflags",l:"Red Flags"},{id:"quickwins",l:"Quick Wins"}];
+const sr=useMemo(()=>{if(!search||search.length<2)return[];const q=search.toLowerCase();const r=[];Object.values(competitors).forEach(c=>{c.objections.forEach(o=>{if((o.says+o.response).toLowerCase().includes(q))r.push({comp:c.name,sec:"Objections",text:o.says,color:c.color});});c.trapQuestions.forEach(t=>{if((t.q+t.reveals).toLowerCase().includes(q))r.push({comp:c.name,sec:"Trap Qs",text:t.q.slice(0,80)+"...",color:c.color});});c.redFlags.forEach(f=>{if(f.toLowerCase().includes(q))r.push({comp:c.name,sec:"Red Flags",text:f,color:c.color});});});return r.slice(0,8);},[search]);
+
+return h("div",{style:{fontFamily:"'Inter',-apple-system,system-ui,sans-serif",maxWidth:"900px",margin:"0 auto",color:"#1a1a1a"}},
+h("div",{style:{textAlign:"center",padding:"24px 16px 16px",borderBottom:"1px solid #e0e0e0"}},
+h("div",{style:{fontSize:"11px",fontWeight:700,letterSpacing:"2px",color:"#888",textTransform:"uppercase"}},"Work Sample \u00b7 Sales Battlecards (Anonymized)"),
+h("div",{style:{background:"#fff3cd",border:"1px solid #ffc107",borderRadius:"8px",padding:"10px 16px",margin:"10px auto",maxWidth:"600px",fontSize:"12px",color:"#856404"}},"\u26a0\ufe0f This is an anonymized portfolio sample. All company names, deal values, competitor details, and quotes have been changed to protect confidential information."),
+h("div",{style:{display:"flex",justifyContent:"center",gap:"12px",marginTop:"10px",flexWrap:"wrap"}},
+h("button",{onClick:()=>setSs(!ss),style:{...ps(ss,"#333"),fontSize:"13px"}},"\ud83d\udd0d Search"),
+h("button",{onClick:()=>{setQr(!qr);setSec(qr?"overview":"objections");},style:{...ps(qr,"#e74c3c"),fontSize:"13px",background:qr?"#e74c3c":"transparent",color:qr?"#fff":"#666"}},qr?"\u2715 Exit Quick Reference":"\u26a1 Quick Reference")),
+qr&&h("div",{style:{marginTop:"8px",fontSize:"12px",color:"#e74c3c",fontWeight:600}},"QUICK REFERENCE \u2014 talk tracks, trap questions, quick wins only")),
+
+ss&&h("div",{style:{padding:"12px 16px",borderBottom:"1px solid #eee"}},
+h("input",{type:"text",value:search,onChange:e=>setSearch(e.target.value),placeholder:"Search across all competitors...",style:{width:"100%",padding:"10px 14px",border:"1px solid #ddd",borderRadius:"8px",fontSize:"14px",outline:"none",boxSizing:"border-box"}}),
+sr.length>0&&h("div",{style:{marginTop:"8px"}},sr.map((r,i)=>h("div",{key:i,style:{padding:"8px 12px",borderBottom:"1px solid #f0f0f0",display:"flex",alignItems:"center",gap:"10px",fontSize:"13px"}},h("span",{style:{...bg(r.color),fontSize:"10px"}},r.comp),h("span",{style:{color:"#888",fontSize:"11px"}},r.sec),h("span",null,r.text))))),
+
+h("div",{style:{display:"flex",justifyContent:"center",gap:"4px",padding:"12px 8px",borderBottom:"1px solid #e0e0e0",flexWrap:"wrap"}},Object.values(competitors).map(c=>h("button",{key:c.id,onClick:()=>{setAc(c.id);if(!qr)setSec("overview");},style:{padding:"10px 18px",border:"none",borderBottom:ac===c.id?"3px solid "+c.color:"3px solid transparent",background:ac===c.id?"#f8f9fa":"transparent",color:ac===c.id?c.color:"#666",cursor:"pointer",fontWeight:ac===c.id?700:500,fontSize:"14px"}},"\u25cf "+c.name))),
+
+h("div",{style:{display:"flex",gap:"6px",padding:"12px 8px",overflowX:"auto",borderBottom:"1px solid #eee"}},secs.map(s=>h("button",{key:s.id,onClick:()=>setSec(s.id),style:ps(sec===s.id,comp.color)},s.l))),
+
+h("div",{style:{padding:"16px 8px"}},
+
+sec==="overview"&&!qr&&h("div",null,
+h("div",{style:{display:"flex",alignItems:"center",gap:"12px",marginBottom:"16px",flexWrap:"wrap"}},
+h("div",{style:{width:"44px",height:"44px",borderRadius:"12px",background:comp.color+"20",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"20px",fontWeight:800,color:comp.color}},comp.name[0]),
+h("div",null,h("h2",{style:{margin:0,fontSize:"20px",fontWeight:700}},comp.name),h("div",{style:{fontSize:"12px",color:"#888"}},(comp.formerly?comp.formerly+" \u00b7 ":"")+comp.ticker)),
+h("div",{style:{marginLeft:"auto",textAlign:"center"}},h("div",{style:{fontSize:"28px",fontWeight:800,color:stats.winRate>=60?"#27ae60":stats.winRate>=40?"#f39c12":"#e74c3c"}},stats.winRate+"%"),h("div",{style:{fontSize:"10px",fontWeight:700,color:"#888",textTransform:"uppercase"}},"Win Rate ("+stats.count+" deals)"))),
+h("div",{style:{...cd({borderLeft:"4px solid "+comp.color,marginBottom:"16px"})}},h("div",{style:{fontSize:"11px",fontWeight:700,letterSpacing:"1px",color:comp.color,textTransform:"uppercase",marginBottom:"6px"}},"Executive Summary"),h("p",{style:{fontSize:"14px",lineHeight:1.6,margin:0,fontWeight:500}},comp.executiveSummary)),
+h("div",{style:{display:"grid",gridTemplateColumns:"repeat(auto-fit, minmax(250px, 1fr))",gap:"12px"}},
+h("div",{style:cd()},h("div",{style:{fontSize:"11px",fontWeight:700,color:"#27ae60",textTransform:"uppercase",marginBottom:"6px"}},"\u2713 Our Sweet Spot"),h("p",{style:{fontSize:"13px",lineHeight:1.5,margin:0}},comp.ourSweet)),
+h("div",{style:cd()},h("div",{style:{fontSize:"11px",fontWeight:700,color:"#e74c3c",textTransform:"uppercase",marginBottom:"6px"}},"\u2715 Their Sweet Spot"),h("p",{style:{fontSize:"13px",lineHeight:1.5,margin:0}},comp.theirSweet)))),
+
+sec==="winloss"&&!qr&&h("div",null,
+h("h3",{style:{fontSize:"18px",fontWeight:700,marginBottom:"4px"}},"Win/Loss vs "+comp.name),
+h("p",{style:{fontSize:"13px",color:"#666",marginBottom:"16px"}},stats.count+" deals \u00b7 "+stats.wins.length+"W \u2013 "+stats.losses.length+"L \u00b7 \u00a3"+(stats.totalValue/1000).toFixed(0)+"k"),
+h("div",{style:cd({marginBottom:"16px"})},
+h("div",{style:{display:"flex",height:"24px",borderRadius:"6px",overflow:"hidden",marginBottom:"12px"}},h("div",{style:{width:stats.winRate+"%",background:"#27ae60",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:"11px",fontWeight:700}},stats.winRate>10?stats.winRate+"% Won":""),h("div",{style:{width:(100-stats.winRate)+"%",background:"#e74c3c",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:"11px",fontWeight:700}},(100-stats.winRate)>10?(100-stats.winRate)+"% Lost":"")),
+h("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px"}},
+h("div",null,h("div",{style:{fontSize:"11px",fontWeight:700,color:"#27ae60",textTransform:"uppercase",marginBottom:"6px"}},"Why We Win"),Object.entries(stats.winDrivers).map(([k,v])=>h("div",{key:k,style:{fontSize:"13px",marginBottom:"4px"}},"\u2022 "+k+" ("+v+"x)"))),
+h("div",null,h("div",{style:{fontSize:"11px",fontWeight:700,color:"#e74c3c",textTransform:"uppercase",marginBottom:"6px"}},"Why We Lose"),Object.entries(stats.lossReasons).map(([k,v])=>h("div",{key:k,style:{fontSize:"13px",marginBottom:"4px"}},"\u2022 "+k+" ("+v+"x)"))))),
+stats.deals.sort((a,b)=>b.date.localeCompare(a.date)).map((d,i)=>h("div",{key:i,style:{...cd({marginBottom:"10px",borderLeft:"4px solid "+(d.outcome==="Won"?"#27ae60":"#e74c3c")})}},
+h("div",{style:{display:"flex",alignItems:"center",gap:"8px",flexWrap:"wrap",marginBottom:"6px"}},h("span",{style:bg(d.outcome==="Won"?"#27ae60":"#e74c3c")},d.outcome),h("span",{style:{fontWeight:700,fontSize:"14px"}},d.deal),h("span",{style:{fontSize:"12px",color:"#888",marginLeft:"auto"}},d.region+" \u00b7 "+d.vertical)),
+h("p",{style:{fontSize:"13px",margin:"0 0 6px",lineHeight:1.5}},h("strong",null,"Decision: "),d.factor+". "+d.detail),
+h("div",{style:{fontSize:"13px",fontStyle:"italic",color:"#555",background:"#f8f9fa",padding:"8px 12px",borderRadius:"6px"}},'"'+d.quote+'"')))),
+
+sec==="comparison"&&!qr&&h("div",null,
+h("h3",{style:{fontSize:"18px",fontWeight:700,marginBottom:"16px"}},"Head-to-Head Comparison"),
+h("div",{style:cd()},["Bandwidth","Deployments","Certifications","Network Focus","Backing"].map((label,i)=>{const keys=["bandwidth","deployments","certs","network","backing"];return h("div",{key:i,style:{display:"grid",gridTemplateColumns:"minmax(100px,1fr) 1fr 1fr",gap:"8px",marginBottom:"8px",fontSize:"13px"}},h("div",{style:{fontWeight:600,color:"#666",fontSize:"11px",textTransform:"uppercase",paddingTop:"8px"}},label),h("div",{style:{background:"#1a6b4a12",border:"1px solid #1a6b4a25",borderRadius:"6px",padding:"8px"}},h("span",{style:{fontSize:"10px",fontWeight:700,color:"#1a6b4a"}},"STREAMEDGE"),h("br"),vc[keys[i]]),h("div",{style:{background:comp.color+"10",border:"1px solid "+comp.color+"25",borderRadius:"6px",padding:"8px"}},h("span",{style:{fontSize:"10px",fontWeight:700,color:comp.color}},comp.name.toUpperCase()),h("br"),comp.comparison[keys[i]]));})),
+h("div",{style:{...cd({marginTop:"16px"})}},h("div",{style:{fontSize:"11px",fontWeight:700,textTransform:"uppercase",color:"#888",marginBottom:"12px"}},"All Competitors \u2014 Win Rate"),Object.values(competitors).map(c=>{const s=all[c.id];return h("div",{key:c.id,style:{display:"flex",alignItems:"center",gap:"12px",marginBottom:"10px"}},h("div",{style:{width:"120px",fontSize:"13px",fontWeight:600,color:c.color}},c.name),h("div",{style:{flex:1,height:"20px",borderRadius:"4px",background:"#eee",overflow:"hidden",display:"flex"}},h("div",{style:{width:s.winRate+"%",background:"#27ae60"}}),h("div",{style:{width:(100-s.winRate)+"%",background:"#e74c3c"}})),h("div",{style:{width:"80px",fontSize:"13px",fontWeight:700,textAlign:"right"}},s.winRate+"% ("+s.wins.length+"W-"+s.losses.length+"L)"));}))),
+
+sec==="trap"&&h("div",null,
+h("h3",{style:{fontSize:"18px",fontWeight:700,marginBottom:"16px"}},"Trap Questions"+(qr?" \u2014 ask these now":"")),
+comp.trapQuestions.map((t,i)=>h("div",{key:i,style:{...cd({marginBottom:"12px"})}},
+h("div",{style:{display:"flex",gap:"12px"}},
+h("div",{style:{width:"28px",height:"28px",borderRadius:"50%",background:comp.color+"15",color:comp.color,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:800,fontSize:"14px",flexShrink:0}},i+1),
+h("div",{style:{flex:1}},
+h("p",{style:{fontSize:"14px",fontWeight:600,lineHeight:1.5,margin:"0 0 6px",fontStyle:"italic"}},'"'+t.q+'"'),
+!qr&&h("div",{style:{fontSize:"12px",color:"#777",background:"#f5f5f5",borderRadius:"6px",padding:"8px 12px"}},h("strong",null,"Reveals: "),t.reveals)))))),
+
+sec==="objections"&&h("div",null,
+h("h3",{style:{fontSize:"18px",fontWeight:700,marginBottom:"16px"}},"Objection Handling"+(qr?" \u2014 your responses":"")),
+comp.objections.map((o,i)=>h("div",{key:i,style:{...cd({marginBottom:"16px"})}},
+h("div",{style:{background:"#e74c3c0c",borderRadius:"8px",padding:"10px 14px",marginBottom:"10px",border:"1px solid #e74c3c18"}},h("div",{style:{fontSize:"11px",fontWeight:700,color:"#e74c3c",textTransform:"uppercase",marginBottom:"3px"}},"They say"),h("div",{style:{fontSize:"15px",fontWeight:600}},'"'+o.says+'"')),
+h("div",{style:{background:"#27ae600a",borderRadius:"8px",padding:"10px 14px",border:"1px solid #27ae6020"}},h("div",{style:{fontSize:"11px",fontWeight:700,color:"#27ae60",textTransform:"uppercase",marginBottom:"3px"}},"Your response"),h("div",{style:{fontSize:"14px",lineHeight:1.6}},o.response))))),
+
+sec==="redflags"&&!qr&&h("div",null,
+h("h3",{style:{fontSize:"18px",fontWeight:700,marginBottom:"16px"}},comp.name+" Is in the Deal"),
+h("div",{style:cd()},comp.redFlags.map((f,i)=>h("div",{key:i,style:{display:"flex",alignItems:"flex-start",gap:"12px",padding:"10px 0",borderBottom:i<comp.redFlags.length-1?"1px solid #eee":"none"}},h("span",{style:{color:"#e74c3c",fontWeight:800,fontSize:"16px"}},"\u2691"),h("span",{style:{fontSize:"14px",lineHeight:1.5}},f))))),
+
+sec==="quickwins"&&h("div",null,
+h("h3",{style:{fontSize:"18px",fontWeight:700,marginBottom:"16px"}},"Quick Win Plays"+(qr?" \u2014 act now":"")),
+comp.quickWins.map((p,i)=>h("div",{key:i,style:{...cd({marginBottom:"12px",borderLeft:"4px solid "+comp.color})}},
+h("div",{style:{display:"flex",alignItems:"center",gap:"10px",marginBottom:"6px"}},h("div",{style:{width:"28px",height:"28px",borderRadius:"50%",background:comp.color,color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontWeight:800,fontSize:"14px"}},i+1),h("span",{style:{fontSize:"15px",fontWeight:700}},p.title)),
+h("p",{style:{fontSize:"14px",lineHeight:1.6,margin:0,paddingLeft:"38px"}},p.action))))),
+
+h("div",{style:{textAlign:"center",padding:"16px",borderTop:"1px solid #eee",fontSize:"11px",color:"#999"}},"Competitive Intelligence \u00b7 Work Sample (Anonymized) \u00b7 "+winLossDeals.length+" deals tracked"));
+}
+ReactDOM.render(h(App),document.getElementById("root"));
+</script>
+</body>
+</html>
