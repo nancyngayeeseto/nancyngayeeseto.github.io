@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nancy Seto — Senior PMM, for Clara at 44pixels</title>
+<meta name="description" content="A day-one product marketing hypothesis for Clara, built the way I'd build one on the job — from Nancy Seto, applying for Senior Product Marketing Manager.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-dark:#001408;
+    --bg-dark-2:#012c11;
+    --lime:#a6ff66;
+    --lime-dim:#7fd94a;
+    --cream:#f2f5ef;
+    --white:#ffffff;
+    --ink:#001408;
+    --muted-on-dark:rgba(255,255,255,0.68);
+    --muted-on-light:#4b5750;
+    --sky:#c6e6f0;
+    --butter:#fdefbf;
+    --lavender:#e2def1;
+    --mint:#edffdc;
+    --line-dark:rgba(255,255,255,0.14);
+    --line-light:rgba(0,20,8,0.12);
+    --radius-lg:28px;
+    --radius-md:18px;
+    --radius-pill:999px;
+    --maxw:1080px;
+    --space-1:8px;
+    --space-2:16px;
+    --space-3:24px;
+    --space-4:40px;
+    --space-5:64px;
+    --space-6:96px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
+  }
+
+  body{
+    margin:0;
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3{
+    font-family:'Space Grotesk','Inter',system-ui,sans-serif;
+    font-weight:700;
+    line-height:1.05;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+
+  p{margin:0;}
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+
+  .container{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding-left:var(--space-3);
+    padding-right:var(--space-3);
+  }
+  @media (min-width:768px){
+    .container{padding-left:var(--space-4); padding-right:var(--space-4);}
+  }
+
+  section{padding:var(--space-6) 0;}
+  @media (max-width:640px){
+    section{padding:var(--space-5) 0;}
+  }
+
+  .bg-dark{background:var(--bg-dark); color:var(--white);}
+  .bg-cream{background:var(--cream); color:var(--ink);}
+  .bg-white{background:var(--white); color:var(--ink);}
+
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    padding:8px 16px;
+    border-radius:var(--radius-pill);
+    background:rgba(166,255,102,0.12);
+    color:var(--lime);
+    border:1px solid rgba(166,255,102,0.35);
+  }
+  .bg-cream .eyebrow, .bg-white .eyebrow{
+    background:var(--mint);
+    color:#1f5c0f;
+    border:1px solid rgba(0,20,8,0.08);
+  }
+
+  /* Nav */
+  .nav-wrap{
+    position:sticky;
+    top:12px;
+    z-index:50;
+    display:flex;
+    justify-content:center;
+    padding:0 var(--space-3);
+  }
+  nav{
+    width:100%;
+    max-width:var(--maxw);
+    background:rgba(255,255,255,0.92);
+    backdrop-filter:blur(8px);
+    border-radius:var(--radius-pill);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 10px 10px 22px;
+    box-shadow:0 8px 30px rgba(0,20,8,0.18);
+  }
+  .nav-name{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:16px;
+    color:var(--ink);
+    white-space:nowrap;
+  }
+  .nav-links{display:flex; align-items:center; gap:6px;}
+  .nav-links a{
+    font-size:14px;
+    font-weight:600;
+    color:var(--ink);
+    text-decoration:none;
+    padding:10px 16px;
+    border-radius:var(--radius-pill);
+    transition:background 150ms ease-out;
+  }
+  .nav-links a:hover, .nav-links a:focus-visible{background:var(--mint);}
+  .nav-cta{
+    background:var(--ink) !important;
+    color:var(--white) !important;
+  }
+  .nav-cta:hover{background:#012c11 !important;}
+  @media (max-width:640px){
+    .nav-name{font-size:14px;}
+    .nav-links a{padding:9px 10px; font-size:13px;}
+    .nav-links a span.full{display:none;}
+  }
+
+  a:focus-visible, button:focus-visible{
+    outline:3px solid var(--lime);
+    outline-offset:3px;
+  }
+
+  /* Hero */
+  .hero{padding-top:var(--space-6); padding-bottom:var(--space-6);}
+  .hero h1{
+    font-size:clamp(2.1rem, 5.4vw, 3.9rem);
+    margin-top:var(--space-3);
+    max-width:24ch;
+  }
+  .hero .lime{color:var(--lime);}
+  .hero-sub{
+    margin-top:var(--space-3);
+    max-width:56ch;
+    font-size:clamp(1.05rem,2.2vw,1.25rem);
+    color:var(--muted-on-dark);
+  }
+  .hero-tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:var(--space-4);
+  }
+  .tag{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:13px;
+    font-weight:600;
+    padding:8px 14px;
+    border-radius:var(--radius-pill);
+    border:1px solid var(--line-dark);
+    color:var(--white);
+  }
+  .hero-actions{
+    margin-top:var(--space-4);
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:15px;
+    padding:14px 26px;
+    border-radius:var(--radius-pill);
+    text-decoration:none;
+    border:1px solid transparent;
+    transition:transform 150ms ease-out, background 150ms ease-out;
+    cursor:pointer;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{background:var(--lime); color:var(--ink);}
+  .btn-primary:hover{background:#bdff8c;}
+  .btn-ghost{background:transparent; color:var(--white); border-color:var(--line-dark);}
+  .btn-ghost:hover{background:rgba(255,255,255,0.08);}
+  .bg-cream .btn-ghost, .bg-white .btn-ghost{color:var(--ink); border-color:var(--line-light);}
+  .bg-cream .btn-ghost:hover, .bg-white .btn-ghost:hover{background:rgba(0,20,8,0.05);}
+
+  /* Section headers */
+  .section-head{max-width:64ch; margin-bottom:var(--space-4);}
+  .section-head h2{font-size:clamp(1.7rem,4vw,2.5rem); margin-top:var(--space-2);}
+  .section-head p{margin-top:var(--space-2); font-size:1.05rem; color:var(--muted-on-light);}
+  .bg-dark .section-head p{color:var(--muted-on-dark);}
+
+  .lede{
+    font-size:clamp(1.05rem,2.4vw,1.3rem);
+    line-height:1.65;
+    max-width:70ch;
+  }
+  .lede + .lede{margin-top:var(--space-3);}
+
+  .quote-block{
+    margin-top:var(--space-4);
+    padding:var(--space-3) var(--space-4);
+    border-left:4px solid var(--lime-dim);
+    background:var(--white);
+    border-radius:0 var(--radius-md) var(--radius-md) 0;
+    font-size:1.1rem;
+    font-weight:500;
+  }
+
+  /* Hypothesis cards */
+  .hyp-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:var(--space-3);
+    margin-top:var(--space-4);
+  }
+  @media (max-width:860px){.hyp-grid{grid-template-columns:1fr;}}
+  .hyp-card{
+    background:var(--bg-dark-2);
+    border:1px solid var(--line-dark);
+    border-radius:var(--radius-lg);
+    padding:var(--space-3);
+  }
+  .hyp-card .icon{
+    width:40px; height:40px;
+    border-radius:12px;
+    background:rgba(166,255,102,0.14);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:var(--space-2);
+  }
+  .hyp-card h3{font-size:1.05rem; color:var(--lime); margin-bottom:8px;}
+  .hyp-card p{color:var(--muted-on-dark); font-size:0.97rem; line-height:1.6;}
+  .caveat{
+    margin-top:var(--space-4);
+    padding:var(--space-3);
+    border-radius:var(--radius-md);
+    background:rgba(255,255,255,0.05);
+    border:1px dashed var(--line-dark);
+    color:var(--muted-on-dark);
+    font-size:0.95rem;
+    max-width:72ch;
+  }
+  .caveat strong{color:var(--white);}
+
+  /* Evidence cards */
+  .ev-grid{display:flex; flex-direction:column; gap:var(--space-3); margin-top:var(--space-4);}
+  .ev-card{
+    background:var(--white);
+    border-radius:var(--radius-lg);
+    padding:var(--space-3) var(--space-4);
+    border:1px solid var(--line-light);
+  }
+  .ev-head{display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;}
+  .ev-req{font-size:0.95rem; font-weight:700; max-width:60ch;}
+  .status-chip{
+    flex-shrink:0;
+    font-size:12px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    padding:6px 12px;
+    border-radius:var(--radius-pill);
+  }
+  .status-proven{background:var(--mint); color:#1f5c0f;}
+  .status-transfer{background:var(--butter); color:#7a5b06;}
+  .ev-body{margin-top:14px; color:var(--muted-on-light); font-size:0.98rem; line-height:1.65;}
+
+  /* AI native list */
+  .ai-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:var(--space-3); margin-top:var(--space-4);}
+  @media (max-width:860px){.ai-grid{grid-template-columns:1fr;}}
+  .ai-card{
+    background:var(--bg-dark-2);
+    border-radius:var(--radius-lg);
+    padding:var(--space-3);
+    border:1px solid var(--line-dark);
+    display:flex; flex-direction:column; gap:12px;
+  }
+  .ai-card .icon{
+    width:44px; height:44px;
+    border-radius:12px;
+    background:rgba(166,255,102,0.14);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .ai-card h3{font-size:1.05rem;}
+  .ai-card p{color:var(--muted-on-dark); font-size:0.95rem; line-height:1.6;}
+  .ai-card a.inline-link{color:var(--lime); font-weight:600; text-decoration:underline; text-underline-offset:3px;}
+  .meta-note{
+    margin-top:var(--space-4);
+    max-width:74ch;
+    color:var(--muted-on-dark);
+    font-size:0.98rem;
+    border-top:1px solid var(--line-dark);
+    padding-top:var(--space-3);
+  }
+  .meta-note strong{color:var(--white);}
+
+  /* 90 days timeline */
+  .timeline{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:var(--space-3);
+    margin-top:var(--space-4);
+  }
+  @media (max-width:860px){.timeline{grid-template-columns:1fr;}}
+  .tl-card{
+    background:var(--white);
+    border-radius:var(--radius-lg);
+    padding:var(--space-3);
+    border:1px solid var(--line-light);
+    border-top:5px solid var(--lime-dim);
+  }
+  .tl-card .tl-num{
+    display:inline-block;
+    font-size:12px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    color:#1f5c0f;
+    background:var(--mint);
+    padding:5px 12px;
+    border-radius:var(--radius-pill);
+    margin-bottom:14px;
+  }
+  .tl-card h3{font-size:1.15rem; margin-bottom:12px;}
+  .tl-card ul{margin:0; padding-left:20px; color:var(--muted-on-light); font-size:0.95rem; line-height:1.65;}
+  .tl-card li + li{margin-top:8px;}
+  .tl-foot{
+    margin-top:var(--space-3);
+    font-size:0.92rem;
+    color:var(--muted-on-light);
+    font-style:italic;
+  }
+
+  /* Close */
+  .close h2{font-size:clamp(1.9rem,5vw,3rem); max-width:20ch;}
+  .contact-row{
+    margin-top:var(--space-4);
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  footer{
+    background:var(--bg-dark);
+    color:var(--muted-on-dark);
+    text-align:center;
+    padding:var(--space-3) 0;
+    font-size:13px;
+  }
+
+  .reveal{
+    opacity:0;
+    transform:translateY(16px);
+    transition:opacity 400ms ease-out, transform 400ms ease-out;
+  }
+  .reveal.is-visible{opacity:1; transform:translateY(0);}
+
+  svg{display:block;}
+</style>
+</head>
+<body>
+
+<div class="nav-wrap">
+  <nav aria-label="Primary">
+    <span class="nav-name">Nancy Seto</span>
+    <div class="nav-links">
+      <a href="#hypothesis"><span class="full">Day-1 </span>Hypothesis</a>
+      <a href="#evidence">Evidence</a>
+      <a href="#90-days">90 Days</a>
+      <a href="#contact" class="nav-cta">Contact</a>
+    </div>
+  </nav>
+</div>
+
+<header class="hero bg-dark">
+  <div class="container">
+    <span class="eyebrow">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12h16M4 6h16M4 18h10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+      For 44pixels — Senior Product Marketing Manager, Clara
+    </span>
+    <h1>I translate what customers tell me<br><span class="lime">into positioning, enablement, and pipeline.</span></h1>
+    <p class="hero-sub">Fifteen-plus years doing the job itself: interviewing customers to find what's actually stopping them; shaping positioning and aligning Sales, Marketing, Product, and Design behind it; building the enablement that makes it land; and running the demand-gen engine that turns interest into qualified pipeline. I've done this as the first Product Marketing hire four times — building personas, segmentation, and ICP from nothing, with no playbook to inherit. I'd like to do it as your fifth.</p>
+    <div class="hero-tags">
+      <span class="tag">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2v20M2 12h20" stroke="var(--lime)" stroke-width="2" stroke-linecap="round"/></svg>
+        40% MQL lift, 50% MQL→SQL uplift
+      </span>
+      <span class="tag">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2v20M2 12h20" stroke="var(--lime)" stroke-width="2" stroke-linecap="round"/></svg>
+        20% shorter sales cycle, via enablement
+      </span>
+      <span class="tag">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2v20M2 12h20" stroke="var(--lime)" stroke-width="2" stroke-linecap="round"/></svg>
+        0% churn, 2 yrs — customer insight → roadmap
+      </span>
+      <span class="tag">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2v20M2 12h20" stroke="var(--lime)" stroke-width="2" stroke-linecap="round"/></svg>
+        First PMM hire, build structured PMM framework
+      </span>
+    </div>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#hypothesis">Read the hypothesis <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a class="btn btn-ghost" href="#contact">Get in touch</a>
+    </div>
+  </div>
+</header>
+
+<section class="bg-cream">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Why Clara</span>
+      <h2>The interesting part isn't the AI. It's the trust.</h2>
+    </div>
+    <div class="lede reveal">
+      Clara sits at an interesting inflection point: 2,000+ home-service businesses already trust it with over 10,000 calls a day — real usage, real stakes, not a beta. But the ambition is much bigger than call handling: an AI workforce that takes administrative and growth work off owner-operators who have neither the time nor the appetite for another piece of software.
+    </div>
+    <div class="lede reveal">
+      That's a genuinely different positioning problem than the SaaS I've sold before. HVAC, plumbing, and electrical business owners aren't buying "AI" — most have been burned by tools that promised to save time and just added another dashboard to check. They're buying "the phone gets answered and the job gets booked, without me hiring someone." The product marketing job here isn't explaining what Clara does — it's translating category-level AI hype into category-specific trust, one skilled trade at a time.
+    </div>
+    <div class="quote-block reveal">That gap — between what's technically true and what a busy tradesperson actually believes — is the part of this role I find most interesting.</div>
+  </div>
+</section>
+
+<section id="hypothesis" class="bg-dark">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Day-1 hypothesis · outside-in, to validate</span>
+      <h2>Understand → Hypothesis → Build → GTM → Observe → Learn</h2>
+      <p>That's the loop in your job description. In that spirit, here's a first hypothesis built from public information only — exactly the kind of starting point I'd bring to a real segmentation sprint in week one, and exactly the kind I'd expect to be wrong about in places until I'm inside the data.</p>
+    </div>
+
+    <div class="hyp-grid">
+      <div class="hyp-card reveal">
+        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="var(--lime)" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="var(--lime)" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <h3>Segment</h3>
+        <p>Not all "home-service SMBs" behave the same. A 1-person emergency plumber (unplannable, urgent, phone-is-the-business) has different call economics and different fear than a 5-person electrical firm running scheduled jobs. I'd bet positioning — and even packaging — should diverge by call <em>urgency profile</em>, not just trade vertical.</p>
+      </div>
+      <div class="hyp-card reveal">
+        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12h16M4 12l5-5M4 12l5 5" stroke="var(--lime)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>Positioning hypothesis</h3>
+        <p>The competitive frame isn't other AI tools — it's the status quo: missed calls, an answering service, or a family member covering the phone. Messaging that leads with "AI" competes with skepticism; messaging that leads with "every call becomes a booked job, even at 9pm" competes with the real alternative.</p>
+      </div>
+      <div class="hyp-card reveal">
+        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="var(--lime)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>What I'd test first</h3>
+        <p>Willingness to pay and trust threshold by segment — does a solo tradesperson trust and pay for this the same way a 5-person shop with an office manager does? That single question shapes pricing, onboarding, and messaging at once, and it's answerable fast with the win/loss and usage data Clara already has from 2,000+ live customers.</p>
+      </div>
+    </div>
+
+    <div class="caveat reveal"><strong>Stated plainly:</strong> I have zero visibility into Clara's actual funnel, churn, or segment performance. This is a hypothesis built the way I'd build one on day one — from the outside, cheap to be wrong about, and designed to be thrown out the moment real data disagrees with it.</div>
+  </div>
+</section>
+
+<section id="evidence" class="bg-white">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Evidence</span>
+      <h2>Mapped to what you actually said you need</h2>
+      <p>Not a re-run of the CV — each item below is matched to a line from the job description, including the ones I can't fully claim yet.</p>
+    </div>
+
+    <div class="ev-grid">
+      <div class="ev-card reveal">
+        <div class="ev-head">
+          <p class="ev-req">"Proven track record using customer research and data to shape positioning, with clear impact on activation, conversion, or retention"</p>
+          <span class="status-chip status-proven">Proven</span>
+        </div>
+        <div class="ev-body">At EnterpriseAlumni, I built a customer insight framework — AI-assisted analysis of advisory board sessions, interview transcripts, surveys, and webinar feedback — that surfaced recurring pain points and fed directly into positioning and product roadmap decisions. Result: 0% churn over two years, in a category where churn is usually the norm.</div>
+      </div>
+
+      <div class="ev-card reveal">
+        <div class="ev-head">
+          <p class="ev-req">"Influence What We Build: partner with Product, Design, User Research, and Data to bring customer evidence into roadmap discussions"</p>
+          <span class="status-chip status-proven">Proven</span>
+        </div>
+        <div class="ev-body">Positioning and personas don't stick if Sales, Marketing, Product, and Design aren't pulling in the same direction — getting them there is as much the job as the positioning itself. At EnterpriseAlumni, I led end-to-end GTM execution across Sales, Marketing, Customer Success, Product, and Engineering, setting shared KPIs and feeding customer insight straight into roadmap decisions — 25% year-over-year sales growth. I also led the UX team through a platform rebuild and day-to-day feature-enablement UX, and worked with Engineering to bring generative AI and LLM capabilities into the product, presenting the roadmap to C-suite. At Videosoft, I ran end-to-end GTM for multiple product launches, aligning Sales, Product, and Marketing to drive adoption — a 40% increase in MQLs within a quarter.</div>
+      </div>
+
+      <div class="ev-card reveal">
+        <div class="ev-head">
+          <p class="ev-req">"Ability to move fluidly between strategy and execution"</p>
+          <span class="status-chip status-proven">Proven</span>
+        </div>
+        <div class="ev-body">At Videosoft, I owned positioning across five different industries end-to-end — from messaging strategy through to the sales enablement material reps actually carried into calls (battlecards, datasheets, case studies), cutting sales cycle time by 20%. Strategy that doesn't survive contact with a sales call isn't strategy.</div>
+      </div>
+
+      <div class="ev-card reveal">
+        <div class="ev-head">
+          <p class="ev-req">"Strong communicator, comfortable establishing a function without a playbook"</p>
+          <span class="status-chip status-proven">Proven</span>
+        </div>
+        <div class="ev-body">This is the pattern across four companies, not one: Product Marketing Manager at Videosoft, Head of Product Marketing at EnterpriseAlumni, first PMM hire at Total Synergy (where I also stood up their first UK Customer Advisory Board from scratch), and Senior PMM at Dreamlogic, an early-stage ed-tech startup. I've never inherited a function — I've built the first version of it four times.</div>
+      </div>
+
+      <div class="ev-card reveal">
+        <div class="ev-head">
+          <p class="ev-req">"Help shape the commercial model"</p>
+          <span class="status-chip status-proven">Proven</span>
+        </div>
+        <div class="ev-body">At EnterpriseAlumni, I worked with the Sales team to review our pricing structure — proposing a freemium tier to expand market share, and leading development of a credit-point system for selling add-on services. At Videosoft, I proposed a one-day licence for a client running FPV drone research tied to the war in Ukraine, instead of forcing them into our standard annual licence. Same instinct both times: price to how the customer actually needs to use it, not how it's convenient to sell.</div>
+      </div>
+
+      <div class="ev-card reveal">
+        <div class="ev-head">
+          <p class="ev-req">"Deep experience in self-serve SMB or PLG models... background with micro-businesses, skilled trades, or AI-native products is a strong plus"</p>
+          <span class="status-chip status-transfer">Strong parallel</span>
+        </div>
+        <div class="ev-body">Dreamlogic and Clara are the same shape of business: B2B SaaS selling into small, resource-stretched operators. At Dreamlogic, our customers were small tuition companies and private tutors — micro-businesses making the same low-trust, high-stakes software decision Clara's customers make. Add direct-to-consumer growth for a small e-commerce business (100% YoY growth, 90% repeat purchase, real-time chat as the trust mechanism), and, during a career break, building GogoUni solo end-to-end with AI-assisted coding — market research, product definition, and a full working app (prediction dashboard, roadmap planner, personal statement tools) for a self-serve, non-technical user base, with no team and no playbook. The one nuance worth naming: none of these ran a pure self-serve or PLG motion — they were sales-led, so that specific muscle is the one I'd be building fresh here. Everything else about how micro-businesses decide to trust and pay for software, I've already lived.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-dark">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">AI-native, shown not claimed</span>
+      <h2>Four ways this shows up in how I actually work</h2>
+    </div>
+
+    <div class="ai-grid">
+      <div class="ai-card reveal">
+        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" stroke="var(--lime)" stroke-width="2" stroke-linejoin="round"/></svg></div>
+        <h3>A working AI pipeline, not a prompt</h3>
+        <p>At Videosoft I built an AI-automated competitive intelligence system — Google Alerts and win/loss data feeding AI-generated weekly summaries and monthly battlecard updates. <a class="inline-link" href="https://nancyngayeeseto.github.io/battlecard-sample-anonymized.html" target="_blank" rel="noopener">See an anonymized sample →</a></p>
+      </div>
+      <div class="ai-card reveal">
+        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 3v18M3 9h18" stroke="var(--lime)" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <h3>AI as analyst, not just writer</h3>
+        <p>The EnterpriseAlumni customer insight framework used AI to find patterns across hundreds of unstructured interview and survey responses — the kind of synthesis that's normally a week of manual tagging.</p>
+      </div>
+      <div class="ai-card reveal">
+        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 4L2 12l6 8M16 4l6 8-6 8" stroke="var(--lime)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>Built a product with AI, not just content</h3>
+        <p>During a career break, I built <strong>GogoUni</strong> solo — a live app with a prediction dashboard, roadmap planner, and personal statement tools — using AI-assisted coding, with no engineering background and no team. If "AI-native" means being comfortable directing AI to do work outside your formal training, this is the most literal example I have.</p>
+      </div>
+      <div class="ai-card reveal">
+        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" stroke="var(--lime)" stroke-width="2"/><path d="M3 9h18" stroke="var(--lime)" stroke-width="2"/></svg></div>
+        <h3>This page</h3>
+        <p>Built through the same loop described above: research your public materials, form a positioning hypothesis, draft, sanity-check for overclaiming, build. Claude was the working partner throughout — the segmentation logic, the honesty about gaps in the evidence section, and the decision to caveat rather than bluff, that's the judgment call an AI doesn't make for you.</p>
+      </div>
+    </div>
+
+    <p class="meta-note"><strong>That judgment is the actual skill the "AI-native" requirement is testing for.</strong> The certifications — Generative AI, LLMs, and AI fundamentals from Google, Wharton, and LinkedIn — are on the CV; the four examples above are the actual proof.</p>
+  </div>
+</section>
+
+<section id="90-days" class="bg-cream">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">First 90 days</span>
+      <h2>Framed through Clara's own loop</h2>
+      <p>Against what the JD defines as success: a clear view of highest-value customers, sharper positioning, faster experiments, and evidence-based pricing over time.</p>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-card reveal">
+        <span class="tl-num">Days 1–30 · Understand</span>
+        <h3>Get inside the real data</h3>
+        <ul>
+          <li>Build real relationships with the cross-functional team — Sales, Product, Design, and Growth — and set up a regular catch-up cadence with each, so feedback runs both ways and market signals or customer input turn into action fast, instead of piling up for a quarterly review.</li>
+          <li>Talk directly to 15–20 customers across HVAC, plumbing, and electrical, and across business sizes — build a first-hand view of who's highest-value today, not just who's easiest to sign.</li>
+          <li>Audit existing sales enablement material, positioning, messaging, and win/loss data against actual usage and revenue, to find where the story and the data disagree.</li>
+          <li>Get hands-on with Clara and the AI agents behind it, so nothing I write about the product is secondhand.</li>
+        </ul>
+      </div>
+      <div class="tl-card reveal">
+        <span class="tl-num">Days 30–60 · Hypothesize &amp; test</span>
+        <h3>Put a stake in the ground</h3>
+        <ul>
+          <li>Publish a first segmentation and positioning point of view, and pressure-test it with Product, Growth, and Creative.</li>
+          <li>Run one or two small, cheap experiments tied to activation or retention — not just top-of-funnel volume.</li>
+          <li>Start asking real customers what they'd actually pay and why — the same customer insight approach that shaped EnterpriseAlumni's positioning and roadmap, this time aimed at pricing.</li>
+        </ul>
+      </div>
+      <div class="tl-card reveal">
+        <span class="tl-num">Days 60–90 · Build &amp; show evidence</span>
+        <h3>Ship something measurable</h3>
+        <ul>
+          <li>Ship the first GTM asset for Sales — starting with a living competitive battlecard, refreshed on the same AI-assisted cadence I ran at Videosoft — tied to a measurable behavior change, not a launch-and-hope.</li>
+          <li>Report back on what the early experiments actually showed, and kill or double down accordingly.</li>
+          <li>Land on an evidence-backed point of view for where the next quarter's focus should go.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="tl-foot reveal">Same caveat as the hypothesis above: these are the moves I'd make on day one, held loosely until real data says otherwise.</p>
+  </div>
+</section>
+
+<section id="contact" class="bg-dark close">
+  <div class="container">
+    <span class="eyebrow reveal">Let's talk</span>
+    <h2 class="reveal" style="margin-top:16px;">If this sounds like the right first Senior PMM hire, I'd like to make the case in person.</h2>
+    <p class="reveal" style="margin-top:16px; max-width:60ch; color:var(--muted-on-dark); font-size:1.05rem;">CV attached with the application. Everything above is public-information-only thinking — happy to go deeper on any of it, or be told where it's wrong.</p>
+    <div class="contact-row reveal">
+      <a class="btn btn-primary" href="mailto:nancyngayee.seto@gmail.com">Email me <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a class="btn btn-ghost" href="https://www.linkedin.com/in/nancy-seto" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn btn-ghost" href="https://nancyngayeeseto.github.io/" target="_blank" rel="noopener">Full portfolio</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">Nancy Seto — built for the 44pixels Senior Product Marketing Manager role, August 2026.</div>
+</footer>
+
+<script>
+  (function(){
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var items = document.querySelectorAll('.reveal');
+    if(reduced || !('IntersectionObserver' in window)){
+      items.forEach(function(el){ el.classList.add('is-visible'); });
+      return;
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry, i){
+        if(entry.isIntersecting){
+          setTimeout(function(){ entry.target.classList.add('is-visible'); }, i * 40);
+          io.unobserve(entry.target);
+        }
+      });
+    }, {threshold:0.12});
+    items.forEach(function(el){ io.observe(el); });
+  })();
+</script>
+
+</body>
+</html>
