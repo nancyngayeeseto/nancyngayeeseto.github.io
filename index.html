@@ -276,12 +276,20 @@
 
   /* Testimonials */
   .voices h2 { margin-bottom: clamp(40px, 6vw, 64px); }
-  .quotes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(32px, 6vw, 96px); }
-  .quote:nth-child(2) { margin-top: clamp(0px, 8vw, 104px); }
-  .quote blockquote { margin-bottom: 22px; font-family: var(--display); font-size: clamp(1.35rem, 2.2vw, 1.75rem); line-height: 1.3; letter-spacing: -0.015em; font-weight: 400; text-indent: -0.42em; }
+  .quotes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: stretch; }
+  .quote {
+    display: flex; flex-direction: column; padding: clamp(28px, 4vw, 48px); border-radius: 18px;
+    background: var(--panel); border: 1px solid var(--line);
+  }
+  .quote-mark {
+    width: 48px; height: 48px; border-radius: 999px; display: grid; place-items: center; margin-bottom: 24px;
+    background: var(--accent); color: var(--on-accent); font-size: 1.5rem;
+  }
+  .quote blockquote { margin-bottom: 32px; font-family: var(--display); font-size: clamp(1.3rem, 2vw, 1.65rem); line-height: 1.32; letter-spacing: -0.015em; font-weight: 400; }
+  .quote figcaption { margin-top: auto; padding-top: 22px; border-top: 1px solid var(--line); }
   .quote figcaption strong { display: block; }
   .quote figcaption span { color: var(--muted); font-size: 0.95rem; }
-  @media (max-width: 767px) { .quotes { grid-template-columns: 1fr; } .quote:nth-child(2) { margin-top: 0; } }
+  @media (max-width: 767px) { .quotes { grid-template-columns: 1fr; } }
 
   /* Skills band */
   .skills { padding-bottom: clamp(64px, 8vw, 104px); }
@@ -629,11 +637,13 @@
       <h2 id="voices-title">What leaders say.</h2>
       <div class="quotes">
         <figure class="quote reveal">
-          <blockquote>“Her ability to plot a product roadmap into the future and align it with our strategic goals has significantly enhanced our overall strategy.”</blockquote>
+          <span class="quote-mark" aria-hidden="true"><i class="ph ph-quotes"></i></span>
+          <blockquote>Her ability to plot a product roadmap into the future and align it with our strategic goals has significantly enhanced our overall strategy.</blockquote>
           <figcaption><strong>Owen Geddes</strong><span>CTO and COO, EnterpriseAlumni</span></figcaption>
         </figure>
         <figure class="quote reveal" style="--i:1">
-          <blockquote>“Nancy brought a wealth of analytical and research-driven experience. I would seriously consider rehiring her.”</blockquote>
+          <span class="quote-mark" aria-hidden="true"><i class="ph ph-quotes"></i></span>
+          <blockquote>Nancy brought a wealth of analytical and research-driven experience. I would seriously consider rehiring her.</blockquote>
           <figcaption><strong>Daniel Cran</strong><span>Chief Customer Officer, Total Synergy</span></figcaption>
         </figure>
       </div>
