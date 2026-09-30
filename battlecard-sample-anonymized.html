@@ -2,259 +2,1684 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sales Battlecards - Work Sample (Anonymized)</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2028%2024%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%231FC3E3%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%232F6FEB%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20x%3D%221%22%20y%3D%227.6%22%20width%3D%227.5%22%20height%3D%222.8%22%20rx%3D%221.4%22%20fill%3D%22%231FC3E3%22/%3E%3Crect%20x%3D%223.8%22%20y%3D%2213.6%22%20width%3D%224.7%22%20height%3D%222.8%22%20rx%3D%221.4%22%20fill%3D%22%231FC3E3%22%20fill-opacity%3D%22.65%22/%3E%3Cpath%20d%3D%22M11%203.9c0-1.25%201.38-2%202.43-1.33l12.3%208.1c.95.63.95%202.03%200%202.66l-12.3%208.1C12.38%2022.1%2011%2021.35%2011%2020.1z%22%20fill%3D%22url%28%23g%29%22/%3E%3C/svg%3E">
+<title>StreamEdge Battlecards</title>
+<meta name="description" content="Interactive sales battlecard and win/loss dashboard covering three competitors, 17 deals and four buyer personas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&display=swap">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',-apple-system,system-ui,sans-serif;color:#1a1a1a;background:#fff}
+/* Light, single theme (reference: bottom panel). Shape rule: cards 20px, inner panels 14px, controls full pill. */
+:root{
+  --bg:#E8ECF6;
+  --card:#FFFFFF; --card-2:#F4F6FB; --card-3:#ECF0F8;
+  --ink:#0F1B3D; --ink-2:#394766; --muted:#5F6B87; --line:#E2E7F1; --line-2:#CDD5E4;
+  --navy:#0E1F4D; --on-navy-2:rgba(255,255,255,.74);
+  --blue:#2F6FEB; --blue-ink:#1F55C7; --blue-soft:#E7EEFD;
+  --cyan:#1FC3E3;
+  --coral:#EE7B52; --coral-ink:#B5471F; --coral-soft:#FDEEE7;
+  --onair:#E5484D; --focus:#2F6FEB; --scrim:rgba(15,27,61,.34);
+  --shadow:0 1px 2px rgba(28,48,105,.05),0 12px 32px -16px rgba(28,48,105,.24);
+  --shadow-lg:0 2px 6px rgba(28,48,105,.08),0 32px 72px -24px rgba(28,48,105,.40);
+  --shadow-navy:0 14px 30px -14px rgba(14,31,77,.65);
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Geist","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --font-display:-apple-system,BlinkMacSystemFont,"SF Pro Display","Geist","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --ease-out:cubic-bezier(.22,1,.36,1); --ease-in:cubic-bezier(.4,0,1,1);
+  --r-card:20px; --r-inner:14px;
+  --gutter:clamp(16px,2.4vw,28px);
+  color-scheme:light;
+}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+html.lock{overflow:hidden}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;min-height:100%;color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.5;letter-spacing:-.006em;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(900px 520px at 0% -10%,#F6F8FE 0%,rgba(246,248,254,0) 60%),radial-gradient(900px 600px at 100% 0%,#DCE5FA 0%,rgba(220,229,250,0) 60%),var(--bg)}
+h1,h2,h3,h4,p,ul,ol,figure,blockquote,fieldset{margin:0;padding:0}
+ul,ol{list-style:none}
+fieldset{border:0;min-width:0}
+button{font:inherit;color:inherit;letter-spacing:inherit;background:none;border:0;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:10px}
+.i{width:18px;height:18px;flex:none;display:block}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip{position:absolute;left:16px;top:-60px;z-index:200;background:var(--navy);color:#fff;padding:10px 16px;border-radius:999px;font-weight:600;text-decoration:none}
+.skip:focus{top:12px}
+.num{font-variant-numeric:tabular-nums}
+kbd{font-family:var(--font);font-size:12px;font-weight:500;line-height:1;padding:3px 6px;border-radius:6px;border:1px solid var(--line-2);background:var(--card);color:var(--muted)}
+
+/* Won = filled blue, lost = coral ring. Shape carries the meaning as well as colour. */
+.mk-won,.mk-lost{display:inline-block;width:9px;height:9px;border-radius:50%;flex:none}
+.mk-won{background:var(--blue)}
+.mk-lost{border:2px solid var(--coral)}
+
+/* ---------- Top bar (frosted glass) ---------- */
+.top-wrap{position:sticky;top:calc(env(safe-area-inset-top,0px) + 10px);z-index:40;max-width:1320px;margin:10px auto 0;padding-inline:var(--gutter)}
+.topbar{min-height:64px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:10px 12px 10px 20px;border-radius:var(--r-card);
+  background:rgba(255,255,255,.72);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);
+  border:1px solid rgba(255,255,255,.9);box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.9)}
+@media (prefers-reduced-transparency:reduce){.topbar{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}}
+.brand{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+.logo{display:block;flex:none;width:30px;height:26px;overflow:visible}
+.logo .tri,.logo .spd{transform-box:fill-box;transform-origin:center}
+.mono-lg .logo{width:32px;height:28px;margin-left:2px}
+.brand-name{font-family:var(--font-display);font-size:17px;font-weight:650;letter-spacing:-.02em;white-space:nowrap}
+.brand-name span{font-weight:450;color:var(--muted)}
+
+.tabs{position:relative;display:flex;gap:2px;padding:4px;border-radius:999px;background:var(--card-3)}
+.tab{position:relative;z-index:1;height:36px;padding:0 16px;border-radius:999px;font-size:14px;font-weight:500;color:var(--ink-2);white-space:nowrap;transition:color .25s}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:#fff}
+.tab:focus-visible{outline-offset:-2px;border-radius:999px}
+.tab-ind{position:absolute;top:4px;left:0;height:36px;width:0;border-radius:999px;background:var(--blue);box-shadow:0 6px 14px -6px rgba(47,111,235,.7);transition:transform .42s var(--ease-out),width .42s var(--ease-out)}
+
+.top-actions{display:flex;align-items:center;gap:8px;flex:1;justify-content:flex-end}
+.pill-btn{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink-2);font-size:14px;font-weight:500;white-space:nowrap;transition:border-color .15s,color .15s,background-color .2s,transform .15s}
+.pill-btn:hover{border-color:var(--line-2);color:var(--ink)}
+.pill-btn:active{transform:scale(.97)}
+.search-btn{min-width:200px;color:var(--muted)}
+.search-btn .search-lbl{flex:1;text-align:left}
+.icon-pill{width:40px;padding:0;justify-content:center}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--line-2);transition:background-color .2s}
+.live-ico{display:none}
+.live-btn[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.live-btn[aria-pressed="true"] .live-dot{background:var(--onair);animation:onair 1.8s ease-out infinite}
+@keyframes onair{0%{box-shadow:0 0 0 0 rgba(229,72,77,.6)}70%,100%{box-shadow:0 0 0 7px rgba(229,72,77,0)}}
+
+/* ---------- Layout ---------- */
+.layout{max-width:1320px;margin:0 auto;padding:20px var(--gutter) 40px;display:grid;grid-template-columns:300px minmax(0,1fr);gap:20px;align-items:start}
+.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 96px);display:flex;flex-direction:column;gap:16px}
+.card{background:var(--card);border-radius:var(--r-card);box-shadow:var(--shadow);border:1px solid rgba(226,231,241,.8)}
+.pad{padding:18px 20px 20px}
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px 16px;margin-bottom:14px}
+.card-title{font-family:var(--font-display);font-size:16px;font-weight:650;letter-spacing:-.015em;color:var(--ink)}
+.card-sub{font-size:13.5px;color:var(--muted);margin-top:2px}
+
+/* Competitors: a navy card slides between rows */
+.comp-list{position:relative;display:flex;flex-direction:column;gap:4px}
+.comp-ind{position:absolute;left:0;top:0;border-radius:16px;pointer-events:none;
+  background:radial-gradient(120% 140% at 100% 0%,rgba(31,195,227,.28) 0%,rgba(31,195,227,0) 45%),linear-gradient(140deg,#17337A 0%,#0E1F4D 60%,#0A1840 100%);
+  box-shadow:var(--shadow-navy),inset 0 1px 0 rgba(255,255,255,.08);transition:transform .5s var(--ease-out)}
+.comp-opt{position:relative;z-index:1;display:grid;grid-template-columns:40px minmax(0,1fr) auto;grid-template-areas:"mono name spark" "mono meta spark";column-gap:12px;align-items:center;padding:12px;border-radius:16px;cursor:pointer;color:var(--ink);transition:color .3s,background-color .2s}
+.comp-opt:hover{background:var(--card-2)}
+.comp-opt:has(input:checked){color:#fff;background:transparent}
+.comp-opt:has(input:focus-visible){outline:2px solid var(--focus);outline-offset:2px}
+.mono{grid-area:mono;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--card-3);color:var(--ink);font-family:var(--font-display);font-weight:700;font-size:16px;transition:background-color .3s,color .3s}
+.comp-opt:has(input:checked) .mono{background:rgba(255,255,255,.12);color:#fff}
+.comp-name{grid-area:name;font-size:15px;font-weight:600;letter-spacing:-.012em;line-height:1.25}
+.comp-meta{grid-area:meta;font-size:13px;color:var(--muted);transition:color .3s}
+.comp-opt:has(input:checked) .comp-meta{color:var(--on-navy-2)}
+.spark{grid-area:spark;display:block;color:var(--blue);transition:color .3s}
+.comp-opt:has(input:checked) .spark{color:var(--cyan)}
+.spark-line{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+.spark-area{fill:currentColor;opacity:.14}
+.spark circle{fill:currentColor}
+
+.persona-list{display:flex;flex-direction:column;gap:2px}
+.persona-opt{display:flex;align-items:center;gap:12px;padding:7px 10px 7px 7px;border-radius:12px;cursor:pointer;font-size:14.5px;color:var(--ink-2);transition:background-color .2s,color .2s}
+.persona-opt:hover{background:var(--card-2)}
+.persona-opt:has(input:checked){background:var(--blue-soft);color:var(--ink);font-weight:600}
+.persona-opt:has(input:focus-visible){outline:2px solid var(--focus);outline-offset:1px}
+.p-tile{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:var(--card-3);color:var(--ink-2);flex:none;transition:background-color .25s,color .25s}
+.p-tile .i{width:17px;height:17px}
+.persona-opt:has(input:checked) .p-tile{background:var(--navy);color:#fff}
+.persona-opt .tick{margin-left:auto;color:var(--blue);opacity:0;transform:scale(.6);transition:opacity .2s,transform .25s var(--ease-out)}
+.persona-opt:has(input:checked) .tick{opacity:1;transform:none}
+
+.totals-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.big{font-family:var(--font-display);font-weight:700;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.totals-top .big{font-size:30px}
+.totals-rate{font-size:15px;font-weight:600;color:var(--blue-ink)}
+.bar{height:8px;border-radius:999px;background:var(--card-3);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--blue),var(--cyan));transform-origin:left;transition:transform .8s var(--ease-out)}
+.bar.thin{height:5px}
+.totals-rows{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+.t-row{display:grid;grid-template-columns:28px minmax(0,1fr) auto;column-gap:10px;row-gap:5px;align-items:center;font-size:13.5px}
+.t-row .mono{grid-area:auto;grid-row:span 2;width:28px;height:28px;border-radius:8px;font-size:12px}
+.t-row .t-name{font-weight:500;color:var(--ink)}
+.t-row .t-val{color:var(--muted);font-variant-numeric:tabular-nums}
+.t-row .bar{grid-column:2/4}
+.t-money{display:flex;gap:16px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted)}
+.t-money span{display:inline-flex;align-items:center;gap:7px}
+.t-money strong{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+
+/* ---------- Views ---------- */
+main{min-width:0;outline:none}
+.view{scroll-margin-top:100px}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:20px;align-items:stretch}
+/* Cards on one row share a height; the last block in each card sits on the bottom edge. */
+.grid > .card.pad{display:flex;flex-direction:column}
+.grid > .card.pad > .card-head{flex:none}
+.bycomp,#spots{margin-top:auto}
+.span-12{grid-column:span 12}.span-7{grid-column:span 7}.span-5{grid-column:span 5}.span-6{grid-column:span 6}
+
+/* Dossier */
+.dos-top{display:flex;align-items:center;gap:16px}
+.mono-lg{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;flex:none;color:#fff;font-family:var(--font-display);font-weight:700;font-size:24px;
+  background:radial-gradient(120% 140% at 100% 0%,rgba(31,195,227,.35) 0%,rgba(31,195,227,0) 50%),linear-gradient(140deg,#17337A,#0E1F4D);box-shadow:var(--shadow-navy)}
+.dos-id{flex:1;min-width:0}
+.comp-title{font-family:var(--font-display);font-size:clamp(26px,3vw,32px);font-weight:700;letter-spacing:-.03em;line-height:1.1}
+.comp-sub{font-size:14px;color:var(--muted);margin-top:4px}
+.ring{position:relative;width:84px;height:84px;flex:none}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:8;stroke-linecap:round}
+.ring-track{stroke:var(--card-3)}
+.ring-val{stroke:url(#ringGrad);transition:stroke-dashoffset .9s var(--ease-out)}
+.ring-txt{position:absolute;inset:0;display:grid;place-content:center;text-align:center;line-height:1.05}
+.ring-txt .big{font-size:20px}
+.ring-txt small{font-size:11.5px;color:var(--muted);margin-top:2px}
+.rec-row{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 16px}
+.rec-chip{display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 12px;border-radius:999px;background:var(--card-2);font-size:13.5px;font-weight:500;color:var(--ink-2)}
+.rec-chip strong{color:var(--ink);font-weight:650;font-variant-numeric:tabular-nums}
+.alert{display:grid;grid-template-columns:20px minmax(0,1fr);gap:10px;padding:12px 14px;border-radius:var(--r-inner);background:var(--coral-soft);margin-bottom:14px}
+.alert .i{color:var(--coral-ink);margin-top:1px}
+.alert-title{font-weight:600;color:var(--ink)}
+.alert p+p{color:var(--ink-2);font-size:14.5px}
+.lede{font-size:15.5px;line-height:1.6;color:var(--ink-2);max-width:68ch;margin-bottom:16px;text-wrap:pretty}
+.spots{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.spot{padding:14px 16px;border-radius:var(--r-inner);background:var(--card-2)}
+.spot h3{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:6px}
+.spot p{font-size:14.5px;color:var(--ink-2)}
+
+/* Donut */
+.donut-card{container-type:inline-size}
+.donut-body{flex:1;display:grid;grid-template-columns:minmax(140px,172px) minmax(0,1fr);gap:20px;align-items:center;align-content:center}
+@container (max-width:390px){.donut-body{grid-template-columns:1fr;justify-items:center}.donut{width:172px}.legend{width:100%}}
+.donut{position:relative;width:100%;max-width:172px;aspect-ratio:1}
+.donut svg{width:100%;height:100%;overflow:visible}
+.seg{fill:none;stroke-width:22;transition:opacity .25s,stroke-width .25s var(--ease-out);cursor:pointer}
+.donut-center{position:absolute;inset:0;display:grid;place-content:center;text-align:center;pointer-events:none;line-height:1.1}
+.donut-center .big{font-size:30px}
+.donut-center small{font-size:12.5px;color:var(--muted);margin-top:3px}
+.legend{display:flex;flex-direction:column;gap:2px}
+.lg-group{font-size:12.5px;font-weight:500;color:var(--muted);padding:6px 8px 2px}
+.lg-row{width:100%;display:grid;grid-template-columns:12px minmax(0,1fr) auto;align-items:center;gap:10px;padding:7px 8px;border-radius:10px;text-align:left;font-size:14px;color:var(--ink);transition:background-color .2s,opacity .25s}
+.lg-row:hover,.lg-row.lit{background:var(--card-2)}
+.lg-dot{width:11px;height:11px;border-radius:50%}
+.lg-dot.lost{background:transparent!important;border:3px solid}
+.lg-pct{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:500}
+.lg-name{line-height:1.3}
+
+/* Line chart */
+.line-card{position:relative}
+.line-stats{display:flex;align-items:baseline;gap:10px}
+.line-stats .big{font-size:28px}
+.delta{font-size:13px;font-weight:600;padding:3px 8px;border-radius:999px}
+.delta.up{background:var(--blue-soft);color:var(--blue-ink)}
+.delta.down{background:var(--coral-soft);color:var(--coral-ink)}
+.toggles{display:flex;flex-wrap:wrap;gap:14px}
+.switch{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:500;color:var(--ink-2);min-height:32px}
+.sw-track{position:relative;width:34px;height:20px;border-radius:999px;background:var(--line-2);transition:background-color .25s}
+.sw-knob{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(15,27,61,.3);transition:transform .3s var(--ease-out)}
+.switch[aria-checked="true"] .sw-knob{transform:translateX(14px)}
+.switch[data-series="cur"][aria-checked="true"] .sw-track{background:var(--blue)}
+.switch[data-series="all"][aria-checked="true"] .sw-track{background:var(--cyan)}
+.switch:focus-visible{border-radius:999px}
+.line-canvas{position:relative;min-height:200px}
+.line-canvas svg{display:block;overflow:visible}
+.ax{font-size:11.5px;fill:var(--muted);font-family:var(--font)}
+.gl{stroke:var(--line);stroke-width:1}
+.ln-cur{fill:none;stroke:var(--blue);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.ln-all{fill:none;stroke:var(--cyan);stroke-width:2;stroke-linecap:round;opacity:.9}
+.area{fill:url(#areaGrad)}
+.series{transition:opacity .35s}
+.hide-cur .s-cur,.hide-all .s-all{opacity:0;pointer-events:none}
+.drop{stroke:var(--line-2);stroke-width:1;stroke-dasharray:2 3;transition:opacity .25s}
+.pt{cursor:pointer;outline:none;transition:opacity .25s}
+.pt .halo{fill:transparent}
+.pt .mk{transform-box:fill-box;transform-origin:center;transition:transform .3s var(--ease-out)}
+.pt.won .mk{fill:var(--blue);stroke:#fff;stroke-width:2}
+.pt.lost .mk{fill:#fff;stroke:var(--coral);stroke-width:2.6}
+.pt:hover .mk,.pt:focus-visible .mk,.pt.lit .mk{transform:scale(1.4)}
+.pt:focus-visible .halo{stroke:var(--focus);stroke-width:2}
+.bubble rect{fill:var(--navy)}
+.bubble text{fill:#fff;font-size:12px;font-weight:600;font-family:var(--font)}
+.months{display:flex;margin-top:8px}
+.month{flex:1;min-width:0;margin:0 2px;text-align:center;font-size:12px;font-weight:500;color:var(--muted);padding:5px 0;border-radius:999px;transition:background-color .35s,color .35s}
+.month.on{background:var(--blue-soft);color:var(--blue-ink)}
+.tip{position:absolute;z-index:5;pointer-events:none;max-width:260px;padding:10px 12px;border-radius:12px;background:var(--navy);color:#fff;font-size:13px;line-height:1.4;box-shadow:var(--shadow-lg);transform:translate(-50%,calc(-100% - 16px));opacity:0;transition:opacity .15s}
+.tip.show{opacity:1}
+.tip strong{display:block;font-weight:600;margin-bottom:2px}
+.tip span{display:block;color:rgba(255,255,255,.78)}
+
+/* Linked highlighting across donut, legend and chart */
+.linking .seg:not(.lit){opacity:.22}
+.linking .seg.lit{stroke-width:26}
+.linking .lg-row:not(.lit){opacity:.45}
+.linking .pt:not(.lit){opacity:.28}
+.linking .drop:not(.lit){opacity:.15}
+
+/* Head-to-head */
+.table-wrap{overflow-x:auto;border-radius:var(--r-inner);background:var(--card-2)}
+.cmp{width:100%;border-collapse:collapse;font-size:14.5px}
+.cmp th,.cmp td{padding:13px 16px;text-align:left;vertical-align:top}
+.cmp thead th{font-size:13px;font-weight:600;color:var(--muted)}
+.cmp thead th span{display:inline-flex;align-items:center;gap:8px}
+.cmp tbody th{font-weight:600;color:var(--ink);width:22%}
+.cmp tbody td{color:var(--ink-2)}
+.cmp tbody tr{border-top:1px solid var(--line)}
+.cmp .col-us{background:rgba(47,111,235,.06)}
+.cmp td::before{display:none}
+
+/* Deals */
+.seg-ctl{position:relative;display:inline-flex;padding:3px;border-radius:999px;background:var(--card-3)}
+.seg-ctl button{position:relative;z-index:1;height:32px;padding:0 14px;border-radius:999px;font-size:13.5px;font-weight:500;color:var(--ink-2);transition:color .2s,background-color .2s}
+.seg-ctl button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(15,27,61,.12)}
+.filter-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.chip{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 6px 0 12px;border-radius:999px;background:var(--blue-soft);color:var(--blue-ink);font-size:13.5px;font-weight:600}
+.chip .i{width:15px;height:15px}
+.chip button{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;color:inherit}
+.chip button:hover{background:rgba(47,111,235,.14)}
+.chip button .i{width:14px;height:14px}
+.deals{display:flex;flex-direction:column;gap:6px}
+.deal{border-radius:var(--r-inner);background:var(--card-2);transition:background-color .2s}
+.deal:hover,.deal.lit{background:var(--card-3)}
+.deal-row{width:100%;display:grid;grid-template-columns:30px minmax(0,1fr) auto 18px;align-items:center;gap:14px;padding:13px 16px;text-align:left;border-radius:var(--r-inner)}
+.deal-row:focus-visible{outline-offset:-2px}
+.res{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;font-size:12px;font-weight:700}
+.res.won{background:var(--blue);color:#fff}
+.res.lost{background:var(--card);color:var(--coral-ink);box-shadow:inset 0 0 0 2px var(--coral)}
+.deal-name{display:block;font-size:15px;font-weight:600;letter-spacing:-.012em;line-height:1.35}
+.deal-meta{display:block;font-size:13.5px;color:var(--muted);margin-top:1px}
+.deal-val{font-size:14.5px;font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+.deal-val.na{color:var(--muted);font-weight:500;font-size:13.5px}
+.chev{color:var(--muted);transition:transform .3s var(--ease-out)}
+.deal-row[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.collapse{display:grid;grid-template-rows:0fr;transition:grid-template-rows .32s var(--ease-out)}
+.collapse.open{grid-template-rows:1fr}
+.collapse-in{overflow:hidden;min-height:0}
+.deal-more{padding:0 16px 16px 60px;display:flex;flex-direction:column;gap:10px;max-width:780px}
+.deal-more p{font-size:14.5px;color:var(--ink-2)}
+.deal-more strong{color:var(--ink);font-weight:600}
+.deal-more blockquote{font-size:16px;line-height:1.5;color:var(--ink);font-weight:500;padding:12px 14px;border-radius:12px;background:var(--card)}
+.deal-more .stage{font-size:13px;color:var(--muted)}
+.empty{padding:24px;text-align:center;color:var(--muted);font-size:14.5px}
+
+/* Talk tracks */
+.brief-card{padding:18px 20px 20px}
+.brief-head{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.brief-head .p-tile{width:44px;height:44px;border-radius:14px;background:var(--navy);color:#fff}
+.brief-head .p-tile .i{width:20px;height:20px}
+.brief-head h3{font-family:var(--font-display);font-size:18px;font-weight:650;letter-spacing:-.02em}
+.brief-head .pill-btn{margin-left:auto;height:34px;font-size:13.5px}
+.brief-style{font-size:15px;color:var(--ink-2);max-width:74ch;margin-bottom:14px}
+.brief-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.brief-cols > div{padding:14px 16px;border-radius:var(--r-inner);background:var(--card-2)}
+.brief-cols h4{font-size:13.5px;font-weight:600;margin-bottom:6px}
+.brief-cols li{display:flex;gap:10px;align-items:baseline;font-size:14px;color:var(--ink-2);padding:2px 0}
+.brief-cols li::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--blue);flex:none;transform:translateY(-2px)}
+.brief-empty{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding:14px 16px}
+.brief-empty > span{font-size:14.5px;color:var(--ink-2);margin-right:4px}
+.pchip{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px 0 6px;border-radius:999px;background:var(--card-2);color:var(--ink-2);font-size:14px;font-weight:500;transition:background-color .15s,color .15s,transform .15s}
+.pchip:hover{background:var(--card-3);color:var(--ink)}
+.pchip:active{transform:scale(.97)}
+.pchip .p-tile{width:26px;height:26px;border-radius:50%;background:var(--card)}
+.pchip .p-tile .i{width:15px;height:15px}
+.head-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px}
+
+.stack{display:flex;flex-direction:column;gap:10px}
+.obj{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:6px;padding:6px;border-radius:var(--r-inner);background:var(--card-2)}
+.obj-say{padding:14px 16px}
+.obj-resp{padding:14px 16px;border-radius:10px;background:var(--card);display:flex;flex-direction:column;gap:6px;box-shadow:0 1px 2px rgba(28,48,105,.05)}
+.lbl{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;margin-bottom:6px}
+.lbl.them{color:var(--coral-ink)}.lbl.us{color:var(--blue-ink)}
+.quote{font-size:16px;font-weight:600;letter-spacing:-.015em;line-height:1.45;text-wrap:pretty}
+.obj-resp p{font-size:15px;line-height:1.6;color:var(--ink-2);text-wrap:pretty}
+.row-end{display:flex;justify-content:flex-end;margin-top:auto}
+.copy{position:relative;display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:999px;font-size:13px;font-weight:500;color:var(--muted);transition:background-color .15s,color .15s}
+.copy::before{content:"";position:absolute;inset:-6px}
+.copy:hover{background:var(--card-3);color:var(--ink)}
+.copy .i{width:15px;height:15px}
+.copy.done{color:var(--blue-ink)}
+.qgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.q{display:flex;flex-direction:column;gap:10px;padding:16px;border-radius:var(--r-inner);background:var(--card-2)}
+.q-text{font-size:15.5px;font-weight:600;letter-spacing:-.012em;line-height:1.45;text-wrap:pretty}
+.q-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-top:auto}
+.q-reveals{font-size:14px;color:var(--muted)}
+.q-reveals strong{color:var(--ink-2);font-weight:600}
+
+/* Plays */
+.flags{display:flex;flex-direction:column;gap:6px}
+.flags li{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-radius:var(--r-inner);background:var(--card-2);font-size:15px}
+.flags .f-ico{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:var(--coral-soft);color:var(--coral-ink);flex:none}
+.flags .f-ico .i{width:16px;height:16px}
+.flags li span:last-child{padding-top:4px}
+.plays{display:flex;flex-direction:column;gap:10px}
+.play{padding:16px;border-radius:var(--r-inner);background:var(--card-2)}
+.play-head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.play-head .p-tile{background:var(--navy);color:#fff}
+.play h3{font-size:15.5px;font-weight:650;letter-spacing:-.015em}
+.play p{font-size:15px;color:var(--ink-2)}
+
+.flash{animation:flash 1.8s var(--ease-out)}
+@keyframes flash{0%,30%{box-shadow:0 0 0 3px var(--blue)}100%{box-shadow:0 0 0 3px rgba(47,111,235,0)}}
+
+/* Live call mode */
+body.live .tabs,body.live .totals-card{display:none}
+body.live #view-plays[hidden]{display:grid!important;margin-top:20px}
+body.live .quote{font-size:18px}
+body.live .obj-resp p{font-size:16.5px}
+body.live .q-text{font-size:17.5px}
+body.live .q-reveals{display:none}
+body.live .flags li,body.live .play p{font-size:16px}
+.live-banner{display:none;align-items:center;gap:10px;padding:12px 16px;margin-bottom:20px;border-radius:var(--r-card);background:var(--navy);color:#fff;font-size:14.5px;box-shadow:var(--shadow-navy)}
+.live-banner .live-dot{background:var(--onair);animation:onair 1.8s ease-out infinite}
+.live-banner kbd{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2);color:#fff}
+body.live .live-banner{display:flex}
+
+/* Footer */
+.foot{max-width:1320px;margin:0 auto;padding:0 var(--gutter) 36px}
+.keys{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 24px;font-size:13.5px;color:var(--muted)}
+.keys li{display:flex;align-items:center;gap:6px}
+
+/* Command palette */
+.palette{position:fixed;inset:0;z-index:100;display:grid;justify-items:center;align-items:start;padding:12vh 16px 16px}
+.palette-scrim{position:absolute;inset:0;background:var(--scrim);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.palette-panel{position:relative;width:min(660px,100%);max-height:min(580px,78vh);display:flex;flex-direction:column;background:var(--card);border-radius:var(--r-card);box-shadow:var(--shadow-lg);overflow:hidden}
+.palette-field{display:flex;align-items:center;gap:10px;padding:0 12px 0 18px;border-bottom:1px solid var(--line);color:var(--muted)}
+.palette-field input{flex:1;min-width:0;height:58px;border:0;background:transparent;font:inherit;font-size:17px;color:var(--ink);outline:none}
+.palette-field input::placeholder{color:var(--muted)}
+.kbd-btn{font-size:12px;font-weight:500;padding:6px 10px;border-radius:999px;background:var(--card-2);color:var(--muted)}
+.p-list{overflow:auto;padding:6px 8px 10px;flex:1;overscroll-behavior:contain}
+.p-group{padding:12px 10px 6px;font-size:12.5px;font-weight:600;color:var(--muted)}
+.p-item{display:grid;grid-template-columns:32px minmax(0,1fr);gap:12px;align-items:start;padding:10px;border-radius:12px;cursor:pointer}
+.p-item[aria-selected="true"]{background:var(--blue-soft)}
+.p-ico{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:var(--card-2);color:var(--ink-2)}
+.p-item[aria-selected="true"] .p-ico{background:var(--navy);color:#fff}
+.p-ico .i{width:16px;height:16px}
+.p-title{font-size:14.5px;font-weight:550;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.p-meta{font-size:12.5px;color:var(--muted);margin-top:2px}
+.p-item mark{background:rgba(47,111,235,.18);color:inherit;border-radius:4px;padding:0 1px}
+.p-empty{padding:28px 12px;text-align:center;font-size:14.5px;color:var(--muted)}
+.p-try{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:6px 10px 8px;font-size:13.5px;color:var(--muted)}
+.p-try button{font-size:13px;padding:5px 11px;border-radius:999px;background:var(--card-2);color:var(--ink-2)}
+.p-try button:hover{background:var(--card-3);color:var(--ink)}
+.palette-foot{display:flex;gap:16px;align-items:center;padding:10px 18px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+.palette-foot span{display:inline-flex;align-items:center;gap:5px}
+.palette-foot .count{margin-left:auto}
+
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));z-index:120;display:flex;align-items:center;gap:8px;padding:11px 16px;border-radius:999px;background:var(--navy);color:#fff;font-size:14px;box-shadow:var(--shadow-lg);transform:translate(-50%,16px);opacity:0;pointer-events:none;transition:transform .3s var(--ease-out),opacity .2s}
+.toast.show{transform:translate(-50%,0);opacity:1}
+.toast .i{width:16px;height:16px}
+
+/* ---------- Company view ---------- */
+.mono-all{font-size:12.5px}
+.ctoggle-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.ctoggle{--c:var(--blue);display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 14px 0 12px;border-radius:999px;background:var(--card-2);border:1px solid transparent;font-size:14px;font-weight:500;color:var(--muted);transition:background-color .2s,color .2s,border-color .2s,box-shadow .2s,transform .15s}
+.ctoggle:hover{color:var(--ink)}
+.ctoggle:active{transform:scale(.97)}
+.ctoggle .c-dot{width:11px;height:11px;border-radius:50%;border:2px solid var(--c);background:transparent;transition:background-color .2s}
+.ctoggle[aria-pressed="true"]{background:var(--card);border-color:var(--line);color:var(--ink);box-shadow:0 1px 3px rgba(15,27,61,.1)}
+.ctoggle[aria-pressed="true"] .c-dot{background:var(--c)}
+.ctoggle[data-cid="overall"] .c-dot{border-style:dashed}
+.ctoggle[data-cid="overall"][aria-pressed="true"] .c-dot{border-style:solid}
+.ctoggle .c-val{color:var(--muted);font-weight:500}
+.ctoggle.sm{height:32px;padding:0 12px 0 10px;font-size:13px}
+.cl{fill:none;stroke:var(--c);stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round;transition:stroke-width .25s}
+.ln-ov{fill:none;stroke:var(--navy);stroke-width:2.6;stroke-linecap:round;stroke-dasharray:7 5}
+.area-ov{fill:url(#areaNavy)}
+.cgrp,.c-ov,.cseg,.clg-row,.bc-row{transition:opacity .25s}
+.cpt.won .mk{fill:var(--c);stroke:#fff;stroke-width:2}
+.cpt.lost .mk{fill:#fff;stroke:var(--c);stroke-width:2.4}
+.clinking .cgrp:not(.lit){opacity:.14}
+.clinking .cgrp.lit .cl{stroke-width:3.4}
+.clinking .c-ov{opacity:.3}
+.clinking .cseg:not(.lit){opacity:.2}
+.clinking .clg-row:not(.lit),.clinking .bc-row:not(.lit){opacity:.45}
+.bycomp{display:flex;flex-direction:column;gap:6px}
+.bc-row{--c:var(--blue);width:100%;display:grid;grid-template-columns:10px minmax(0,1fr) auto minmax(60px,120px) 42px 16px;align-items:center;gap:12px;padding:11px 12px;border-radius:12px;background:var(--card-2);text-align:left;font-size:14.5px;transition:background-color .2s,opacity .25s}
+.bc-row:hover{background:var(--card-3)}
+.bc-row .c-dot{width:10px;height:10px;border-radius:50%;background:var(--c)}
+.bc-row.off .c-dot{background:transparent;border:2px solid var(--c)}
+.bc-row.off .bc-name,.bc-row.off .bc-pct{color:var(--muted)}
+.bc-name{font-weight:600}
+.bc-rec{color:var(--muted);font-variant-numeric:tabular-nums}
+.bc-pct{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.bc-row .bar i{background:var(--c)}
+.bc-chev{width:16px;height:16px;color:var(--muted);transform:rotate(-90deg)}
+.fcols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fcol{padding:14px 16px;border-radius:var(--r-inner);background:var(--card-2)}
+.fcol h4{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;margin-bottom:4px}
+.fcol li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:8px 0;font-size:14.5px}
+.fcol li+li{border-top:1px solid var(--line)}
+.fcol .empty{padding:10px 0;text-align:left}
+.fdots{display:inline-flex;gap:4px}
+.fdot{width:11px;height:11px;border-radius:50%;background:var(--c)}
+.fdot.lost{background:transparent;border:2.5px solid var(--c)}
+.deal-comp{display:inline-flex;align-items:center;gap:5px;font-weight:600;color:var(--ink-2)}
+.deal-comp::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c)}
+.pick-card{display:none}
+.pick-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.pchip .c-dot{width:10px;height:10px;border-radius:50%;background:var(--c);margin-left:8px}
+body.mode-all .pick-card{display:block}
+body.mode-all #view-talk > :not(.pick-card),body.mode-all #view-plays > :not(.pick-card){display:none}
+body.live.mode-all #view-plays[hidden]{display:none!important}
+@media (max-width:720px){
+  .fcols{grid-template-columns:1fr}
+  .bc-row{grid-template-columns:10px minmax(0,1fr) auto 42px}
+  .bc-row .bar,.bc-row .bc-chev{display:none}
+  .ctoggle .c-val{display:none}
+}
+
+/* Certifications */
+.certs{display:flex;flex-direction:column;gap:6px}
+.cert{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:14px;align-items:start;padding:14px 16px;border-radius:var(--r-inner);background:var(--card-2)}
+.cert .p-tile{width:40px;height:40px;border-radius:12px;background:var(--navy);color:#fff}
+.cert .p-tile .i{width:19px;height:19px}
+.cert h4{font-size:15px;font-weight:600;letter-spacing:-.012em;line-height:1.35}
+.cert p{font-size:14.5px;color:var(--ink-2);margin-top:2px;max-width:80ch}
+.cert-tag{font-size:12.5px;font-weight:600;color:var(--blue-ink);background:var(--blue-soft);padding:4px 10px;border-radius:999px;white-space:nowrap}
+.brief-proof{margin-top:12px;padding:14px 16px;border-radius:var(--r-inner);background:var(--blue-soft)}
+.brief-proof h4{font-size:13.5px;font-weight:600;color:var(--ink)}
+.brief-proof > p{font-size:13.5px;color:var(--ink-2);margin:2px 0 10px}
+.proof-list{display:flex;flex-wrap:wrap;gap:8px}
+.proof-list li{display:inline-flex;align-items:center;gap:8px;padding:5px 12px 5px 5px;border-radius:999px;background:var(--card);font-size:14px;font-weight:500;color:var(--ink)}
+.proof-list .p-tile{width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff}
+.proof-list .p-tile .i{width:14px;height:14px}
+@media (max-width:720px){
+  .cert{grid-template-columns:40px minmax(0,1fr)}
+  .cert-tag{grid-column:2;justify-self:start}
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width:1180px){
+  .span-7,.span-5,#ovCompany > .span-6{grid-column:span 12}
+  .search-btn{min-width:0}
+}
+@media (max-width:1040px){
+  .topbar{padding:10px 10px 10px 16px}
+  .tabs{order:3;flex-basis:100%;overflow-x:auto;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:1}
+  .top-actions{flex:0 0 auto}
+  .side{top:auto}
+}
+@media (max-width:960px){
+  body{font-size:16px}
+  .layout{grid-template-columns:minmax(0,1fr)}
+  .side{position:static}
+  .comp-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  .comp-opt{grid-template-columns:minmax(0,1fr);grid-template-areas:"name" "meta" "spark";row-gap:4px;padding:12px}
+  .comp-opt .mono{display:none}
+  .comp-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .spark{width:100%;height:28px;margin-top:4px}
+  .persona-list{flex-direction:row;flex-wrap:wrap;gap:6px}
+  .persona-opt{padding:5px 12px 5px 5px;border-radius:999px;background:var(--card-2);font-size:14px}
+  .persona-opt .p-tile{width:28px;height:28px;border-radius:50%}
+  .persona-opt .tick{display:none}
+  .totals-card{display:none}
+  .search-btn .search-lbl,.search-btn kbd{display:none}
+  .search-btn{width:40px;padding:0;justify-content:center}
+}
+@media (max-width:720px){
+  .span-6{grid-column:span 12}
+  .spots,.brief-cols{grid-template-columns:1fr}
+  .obj{grid-template-columns:1fr}
+  .deal-row{grid-template-columns:30px minmax(0,1fr) auto;gap:12px;padding:12px}
+  .deal-row .chev{display:none}
+  .deal-more{padding:0 12px 14px 54px}
+  .palette-foot{display:none}
+  .palette{padding-top:16px}
+  .month{margin:0 1px;font-size:11px}
+  .cmp thead{display:none}
+  .cmp,.cmp tbody,.cmp tr,.cmp th,.cmp td{display:block;width:auto}
+  .cmp tbody tr:first-child{border-top:0}
+  .cmp tbody th{padding:14px 16px 4px}
+  .cmp td{padding:6px 16px 8px}
+  .cmp td:last-child{padding-bottom:14px}
+  .cmp .col-us{background:none}
+  .cmp td::before{content:attr(data-label);display:flex;font-size:12.5px;font-weight:600;color:var(--muted);margin-bottom:1px}
+  .qgrid{grid-template-columns:1fr}
+}
+@media (max-width:520px){
+  .brand-name span{display:none}
+  .live-lbl,.live-btn .live-dot{display:none}
+  .live-btn .live-ico{display:block}
+  .live-btn{width:40px;padding:0;justify-content:center}
+  .live-btn[aria-pressed="true"] .live-ico{color:var(--onair)}
+  .tab{padding:0 10px;font-size:13.5px}
+  .comp-opt{padding:10px}
+  .comp-name{font-size:14px}
+  .ring{width:72px;height:72px}
+  .ring-txt .big{font-size:17px}
+  .pad{padding:16px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-delay:0ms!important}
+}
 </style>
 </head>
 <body>
-<div id="root"></div>
+<a class="skip" href="#main">Skip to content</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1FC3E3"/><stop offset="1" stop-color="#2F6FEB"/></linearGradient>
+    <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2F6FEB" stop-opacity=".22"/><stop offset="1" stop-color="#2F6FEB" stop-opacity="0"/></linearGradient>
+    <linearGradient id="seGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1FC3E3"/><stop offset="1" stop-color="#2F6FEB"/></linearGradient>
+    <linearGradient id="seGradOn" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6FE6F7"/><stop offset="1" stop-color="#A9C2FF"/></linearGradient>
+    <linearGradient id="areaNavy" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0E1F4D" stop-opacity=".10"/><stop offset="1" stop-color="#0E1F4D" stop-opacity="0"/></linearGradient>
+  </defs>
+</svg>
+
+<div class="top-wrap">
+  <header class="topbar" id="topbar">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 28 24" aria-hidden="true" focusable="false"><rect class="spd" x="1" y="7.6" width="7.5" height="2.8" rx="1.4" fill="#1FC3E3"/><rect class="spd" x="3.8" y="13.6" width="4.7" height="2.8" rx="1.4" fill="#1FC3E3" fill-opacity=".65"/><path class="tri" d="M11 3.9c0-1.25 1.38-2 2.43-1.33l12.3 8.1c.95.63.95 2.03 0 2.66l-12.3 8.1C12.38 22.1 11 21.35 11 20.1z" fill="url(#seGrad)"/></svg>
+      <h1 class="brand-name">StreamEdge <span>Battlecards</span></h1>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Battlecard views" id="tabs"><span class="tab-ind" id="tabInd" aria-hidden="true"></span></div>
+    <div class="top-actions">
+      <button class="pill-btn search-btn" id="searchBtn" type="button" aria-haspopup="dialog" aria-label="Search talk tracks"><span data-icon="search"></span><span class="search-lbl">Search</span><kbd id="kbdHint">⌘K</kbd></button>
+      <button class="pill-btn live-btn" id="liveBtn" type="button" aria-pressed="false" aria-label="Live call view"><span class="live-dot" aria-hidden="true"></span><span class="live-ico" data-icon="radio"></span><span class="live-lbl">Live call</span></button>
+    </div>
+  </header>
+</div>
+
+<div class="layout">
+  <aside class="side" aria-label="Filters">
+    <section class="card pad">
+      <div class="card-head"><div><h2 class="card-title" id="compTitle">Competitors</h2><p class="card-sub">Win rate trend since Aug 2025</p></div></div>
+      <div class="comp-list" id="compList" role="radiogroup" aria-labelledby="compTitle"><span class="comp-ind" aria-hidden="true"></span></div>
+    </section>
+    <section class="card pad">
+      <div class="card-head"><div><h2 class="card-title" id="personaTitle">Buyer in the room</h2><p class="card-sub">Tailors objections and trap questions</p></div></div>
+      <div class="persona-list" id="personaList" role="radiogroup" aria-labelledby="personaTitle"></div>
+    </section>
+    <section class="card pad totals-card" id="totals" aria-labelledby="totalsTitle"></section>
+  </aside>
+
+  <main id="main" tabindex="-1">
+    <p class="live-banner"><span class="live-dot" aria-hidden="true"></span><span>Live call view. Talk tracks, red flags and plays in one place. Press <kbd>L</kbd> to exit.</span></p>
+
+    <section class="view" id="view-overview" role="tabpanel" aria-labelledby="tab-overview">
+      <div class="grid" id="ovCompany">
+        <article class="card pad span-12" aria-labelledby="ctTitle" data-swap="comp">
+          <div class="card-head"><div><h2 class="card-title" id="ctTitle">Competitors in view</h2><p class="card-sub">Turn competitors on or off. Every chart and the deal list update together.</p></div></div>
+          <div class="ctoggle-bar" id="ctoggles" role="group" aria-labelledby="ctTitle"></div>
+        </article>
+        <article class="card pad span-12 line-card" id="cLineCard" aria-labelledby="cLineTitle" data-swap="comp">
+          <div class="card-head">
+            <div><h3 class="card-title" id="cLineTitle">Win rate over time, by competitor</h3><p class="card-sub">Cumulative win rate after each decision, Aug 2025 to Jun 2026. Select a point to open the deal.</p></div>
+            <div class="line-stats"><span class="big"><span id="cLineVal">0</span>%</span><span class="delta up">overall in view</span></div>
+          </div>
+          <div class="line-canvas" id="cLineCanvas"></div>
+          <div class="months" id="cMonths" aria-hidden="true"></div>
+          <div class="tip" id="cTip" hidden></div>
+        </article>
+        <article class="card pad span-6" aria-labelledby="coTitle" data-swap="comp">
+          <div class="dos-top">
+            <span class="mono-lg" aria-hidden="true"><svg class="logo" viewBox="0 0 28 24" aria-hidden="true" focusable="false"><rect class="spd" x="1" y="7.6" width="7.5" height="2.8" rx="1.4" fill="#6FE6F7"/><rect class="spd" x="3.8" y="13.6" width="4.7" height="2.8" rx="1.4" fill="#6FE6F7" fill-opacity=".65"/><path class="tri" d="M11 3.9c0-1.25 1.38-2 2.43-1.33l12.3 8.1c.95.63.95 2.03 0 2.66l-12.3 8.1C12.38 22.1 11 21.35 11 20.1z" fill="url(#seGradOn)"/></svg></span>
+            <div class="dos-id"><h2 class="comp-title" id="coTitle">StreamEdge</h2><p class="comp-sub">Company view · win/loss against every competitor</p></div>
+            <div class="ring" aria-hidden="true">
+              <svg viewBox="0 0 84 84"><circle class="ring-track" cx="42" cy="42" r="34"/><circle class="ring-val" id="cRingVal" cx="42" cy="42" r="34"/></svg>
+              <span class="ring-txt"><span class="big"><span id="cRingNum">0</span>%</span><small>win rate</small></span>
+            </div>
+          </div>
+          <p class="rec-row">
+            <span class="rec-chip"><span class="mk-won"></span><strong id="cW">0</strong> won</span>
+            <span class="rec-chip"><span class="mk-lost"></span><strong id="cL">0</strong> lost</span>
+            <span class="rec-chip"><strong id="cValue">£0</strong> won in total</span>
+          </p>
+          <p class="lede" id="cLede"></p>
+          <div class="bycomp" id="byComp"></div>
+        </article>
+        <article class="card pad span-6 donut-card" aria-labelledby="cdTitle" data-swap="comp">
+          <div class="card-head"><div><h3 class="card-title" id="cdTitle">Where the value went</h3><p class="card-sub">Deal value won and lost, by competitor. Select one to open it.</p></div></div>
+          <div class="donut-body"><div class="donut" id="cDonut"></div><div class="legend" id="cLegend"></div></div>
+        </article>
+        <article class="card pad span-12" aria-labelledby="cfTitle" data-swap="comp">
+          <div class="card-head"><div><h3 class="card-title" id="cfTitle">Why we win and lose</h3><p class="card-sub">Deciding factor per deal. Each dot is one deal, coloured by competitor.</p></div></div>
+          <div class="fcols" id="cFactors"></div>
+        </article>
+        <article class="card pad span-12" aria-labelledby="certTitle" data-swap="comp">
+          <div class="card-head"><div><h3 class="card-title" id="certTitle">Certifications &amp; compliance</h3><p class="card-sub">Proof points to share when security, integration or standards come up.</p></div></div>
+          <ul class="certs" id="certList"></ul>
+        </article>
+      </div>
+
+      <div class="grid" id="ovComp" hidden>
+      <article class="card pad span-7" aria-labelledby="compName">
+        <div class="dos-top">
+          <span class="mono-lg" id="compMono" aria-hidden="true"></span>
+          <div class="dos-id" data-swap="comp"><h2 class="comp-title" id="compName"></h2><p class="comp-sub" id="compMeta"></p></div>
+          <div class="ring" aria-hidden="true">
+            <svg viewBox="0 0 84 84"><circle class="ring-track" cx="42" cy="42" r="34"/><circle class="ring-val" id="ringVal" cx="42" cy="42" r="34"/></svg>
+            <span class="ring-txt"><span class="big"><span id="ringNum">0</span>%</span><small>win rate</small></span>
+          </div>
+        </div>
+        <p class="rec-row">
+          <span class="rec-chip"><span class="mk-won"></span><strong id="recW">0</strong> won</span>
+          <span class="rec-chip"><span class="mk-lost"></span><strong id="recL">0</strong> lost</span>
+          <span class="rec-chip"><strong id="recValue">£0</strong> won in total</span>
+        </p>
+        <div id="alertSlot" data-swap="comp"></div>
+        <p class="lede" id="lede" data-swap="comp"></p>
+        <div class="spots" id="spots" data-swap="comp"></div>
+      </article>
+
+      <article class="card pad span-5 donut-card" id="donutCard" aria-labelledby="donutTitle">
+        <div class="card-head"><div><h3 class="card-title" id="donutTitle">How deals were decided</h3><p class="card-sub">Deciding factor per deal. Select one to see those deals.</p></div></div>
+        <div class="donut-body" id="donutBody">
+          <div class="donut" id="donut"></div>
+          <div class="legend" id="legend" data-swap="comp"></div>
+        </div>
+      </article>
+
+      <article class="card pad span-12 line-card" id="lineCard" aria-labelledby="lineTitle">
+        <div class="card-head">
+          <div><h3 class="card-title" id="lineTitle">Win rate over time</h3><p class="card-sub">Cumulative win rate after each decision, Aug 2025 to Jun 2026</p></div>
+          <div class="line-stats"><span class="big"><span id="lineVal">0</span>%</span><span class="delta" id="lineDelta"></span></div>
+          <div class="toggles">
+            <button class="switch" type="button" role="switch" aria-checked="true" data-series="cur"><span class="sw-track"><span class="sw-knob"></span></span><span>vs <span class="js-cname"></span></span></button>
+            <button class="switch" type="button" role="switch" aria-checked="true" data-series="all"><span class="sw-track"><span class="sw-knob"></span></span><span>All competitors</span></button>
+          </div>
+        </div>
+        <div class="line-canvas" id="lineCanvas"></div>
+        <div class="months" id="months" aria-hidden="true"></div>
+        <div class="tip" id="tip" hidden></div>
+      </article>
+
+      <article class="card pad span-12" aria-labelledby="cmpTitle">
+        <div class="card-head"><div><h3 class="card-title" id="cmpTitle">Head-to-head</h3><p class="card-sub">StreamEdge against <span class="js-cname"></span> on the criteria buyers compare</p></div></div>
+        <div class="table-wrap" id="compareWrap" data-swap="comp"></div>
+      </article>
+      </div>
+    </section>
+
+    <section class="view" id="view-deals" role="tabpanel" aria-labelledby="tab-deals" hidden>
+      <article class="card pad" aria-labelledby="dealsTitle">
+        <div class="card-head">
+          <div><h2 class="card-title" id="dealsTitle">Deals vs <span class="js-cname"></span></h2><p class="card-sub">Newest first. Open a deal for the buyer's own words.</p></div>
+          <div class="filter-row" id="dealFilters"></div>
+        </div>
+        <ul class="deals" id="dealList" data-swap="comp deals" aria-label="Deals"></ul>
+      </article>
+    </section>
+
+    <section class="view grid" id="view-talk" role="tabpanel" aria-labelledby="tab-talk" hidden>
+      <div class="card pad span-12 pick-card"></div>
+      <div class="card span-12" id="brief" data-swap="persona"></div>
+      <article class="card pad span-12" aria-labelledby="objTitle">
+        <div class="card-head"><div><div class="head-row"><h2 class="card-title" id="objTitle">Objections</h2><span class="js-pchip"></span></div><p class="card-sub" id="objSub"></p></div></div>
+        <div class="stack" id="objList" data-swap="comp persona"></div>
+      </article>
+      <article class="card pad span-12" aria-labelledby="qTitle">
+        <div class="card-head"><div><div class="head-row"><h2 class="card-title" id="qTitle">Trap questions</h2><span class="js-pchip"></span></div><p class="card-sub" id="qSub"></p></div></div>
+        <div class="qgrid" id="qList" data-swap="comp persona"></div>
+      </article>
+    </section>
+
+    <section class="view grid" id="view-plays" role="tabpanel" aria-labelledby="tab-plays" hidden>
+      <div class="card pad span-12 pick-card"></div>
+      <article class="card pad span-6" aria-labelledby="flagTitle">
+        <div class="card-head"><div><h2 class="card-title" id="flagTitle">Red flags</h2><p class="card-sub">Signs <span class="js-cname"></span> is in the deal. Listen for these in discovery.</p></div></div>
+        <ul class="flags" id="flagList" data-swap="comp"></ul>
+      </article>
+      <article class="card pad span-6" aria-labelledby="playTitle">
+        <div class="card-head"><div><h2 class="card-title" id="playTitle">Quick-win plays</h2><p class="card-sub">Moves that shift the evaluation onto StreamEdge's strongest ground.</p></div></div>
+        <div class="plays" id="playList" data-swap="comp"></div>
+      </article>
+    </section>
+  </main>
+</div>
+
+<footer class="foot">
+  <h2 class="sr-only">Keyboard shortcuts</h2>
+  <ul class="keys">
+    <li><kbd>/</kbd> or <kbd class="js-mod">⌘K</kbd> Search talk tracks</li>
+    <li><kbd>0</kbd> Company view</li>
+    <li><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> Switch competitor</li>
+    <li><kbd>L</kbd> Live call view</li>
+  </ul>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="palette-scrim" data-close></div>
+  <div class="palette-panel" role="dialog" aria-modal="true" aria-label="Search talk tracks">
+    <div class="palette-field">
+      <span data-icon="search"></span>
+      <label for="pq" class="sr-only">Search objections, questions, red flags, plays and deals</label>
+      <input id="pq" type="text" role="combobox" aria-expanded="true" aria-controls="pres" aria-autocomplete="list" autocomplete="off" spellcheck="false" placeholder="Search objections, questions, deals…">
+      <button class="kbd-btn" type="button" data-close aria-label="Close search">Esc</button>
+    </div>
+    <div class="p-list" id="plist"><ul id="pres" role="listbox" aria-label="Results"></ul></div>
+    <div class="palette-foot"><span><kbd>↑</kbd><kbd>↓</kbd> Move</span><span><kbd>↵</kbd> Open</span><span><kbd>Esc</kbd> Close</span><span class="count" id="pcount"></span></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="sr-only" id="announcer" aria-live="polite"></div>
+
 <script>
-const {useState,useMemo,createElement:h}=React;
+(() => {
+'use strict';
 
-const personas={
-ciso:{id:"ciso",label:"CISO / Security Lead",icon:"\ud83d\udee1\ufe0f",color:"#c0392b",
-priorities:["Certifications and compliance","Data encryption and sovereignty","Threat resilience and anti-tamper","Audit trail and access controls"],
-buyingStyle:"Risk-averse. Needs evidence that the solution meets security standards. Will block a deal if compliance gaps exist. Values independent testing over vendor claims.",
-keyMetrics:["Encryption standard (AES-256)","Certification status","Vulnerability assessment history","Data residency controls"],
-objectionFocus:"security"},
-ops:{id:"ops",label:"Head of Operations",icon:"\u2699\ufe0f",color:"#2980B9",
-priorities:["Uptime and reliability in field conditions","Deployment speed and simplicity","Total cost of ownership over 3-5 years","Interoperability with existing systems"],
-buyingStyle:"Pragmatic. Wants proof it works in their specific environment. Influenced by references from similar deployments. Will champion internally if convinced on operational fit.",
-keyMetrics:["Mean time to deploy","System availability (%)","Maintenance overhead","Integration complexity"],
-objectionFocus:"operational"},
-procurement:{id:"procurement",label:"Procurement Officer",icon:"\ud83d\udcca",color:"#27ae60",
-priorities:["Contract vehicle access and procurement pathway","Pricing and total cost transparency","Vendor financial stability and longevity","Regional support and SLA guarantees"],
-buyingStyle:"Process-driven. Evaluates vendor risk as much as product capability. Needs clear procurement pathways and will favour vendors already on approved lists. Price-sensitive but not price-only.",
-keyMetrics:["Contract vehicle availability","Total contract value vs budget","Vendor financial health","SLA terms and penalties"],
-objectionFocus:"commercial"},
-tech:{id:"tech",label:"Technical Evaluator / CTO",icon:"\ud83d\udd27",color:"#8E44AD",
-priorities:["Bandwidth performance under real conditions","Edge processing and analytics capabilities","API and integration architecture","Scalability and future roadmap"],
-buyingStyle:"Evidence-driven. Will run POCs and benchmarks. Sceptical of marketing claims. Wants to see performance data, architecture diagrams, and API documentation. Often the strongest internal advocate or blocker.",
-keyMetrics:["Sustained bandwidth (kbps)","Latency (ms)","Edge compute capability","API coverage"],
-objectionFocus:"technical"}
+/* ================= Data (anonymised) ================= */
+const PERSONAS = {
+  ciso:{label:"CISO / Security Lead",short:"CISO / Security",icon:"shield",
+    priorities:["Certifications and compliance","Data encryption and sovereignty","Threat resilience and anti-tamper","Audit trail and access controls"],
+    buyingStyle:"Risk-averse. Needs evidence that the solution meets security standards and will block a deal if compliance gaps exist. Values independent testing over vendor claims.",
+    keyMetrics:["Encryption standard (AES-256)","Certification status","Vulnerability assessment history","Data residency controls"]},
+  ops:{label:"Head of Operations",short:"Operations",icon:"sliders",
+    priorities:["Uptime and reliability in field conditions","Deployment speed and simplicity","Total cost of ownership over 3–5 years","Interoperability with existing systems"],
+    buyingStyle:"Pragmatic. Wants proof it works in their specific environment and is influenced by references from similar deployments. Will champion internally if convinced on operational fit.",
+    keyMetrics:["Mean time to deploy","System availability (%)","Maintenance overhead","Integration complexity"]},
+  procurement:{label:"Procurement Officer",short:"Procurement",icon:"file",
+    priorities:["Contract vehicle access and procurement pathway","Pricing and total cost transparency","Vendor financial stability and longevity","Regional support and SLA guarantees"],
+    buyingStyle:"Process-driven. Weighs vendor risk as heavily as product capability, needs clear procurement pathways and favours vendors already on approved lists. Price-sensitive but not price-only.",
+    keyMetrics:["Contract vehicle availability","Total contract value vs budget","Vendor financial health","SLA terms and penalties"]},
+  tech:{label:"Technical Evaluator / CTO",short:"Technical / CTO",icon:"cpu",
+    priorities:["Bandwidth performance under real conditions","Edge processing and analytics capabilities","API and integration architecture","Scalability and future roadmap"],
+    buyingStyle:"Evidence-driven. Runs POCs and benchmarks, is sceptical of marketing claims, and wants performance data, architecture diagrams and API documentation. Often the strongest internal advocate or blocker.",
+    keyMetrics:["Sustained bandwidth (kbps)","Latency (ms)","Edge compute capability","API coverage"]}
+};
+const PERSONA_ORDER = ["ciso","ops","procurement","tech"];
+
+const PERSONA_OBJECTIONS = {
+  novacast:{
+    ciso:[{says:"NovaCast has passed security testing in allied nation environments.",response:"Ask which specific certifications they hold and whether those are recognised by your national authority. Partnership-phase testing and formal certification are different. Request their certification documentation."},{says:"Their platform encrypts all data end-to-end.",response:"End-to-end encryption is table stakes. The question is whether their encryption meets your specific national standard and whether it has been independently validated, not just vendor-asserted."}],
+    ops:[{says:"NovaCast offers video, voice, and telemetry in one platform, simplifying operations.",response:"A unified platform sounds simpler, but ask how many of those capabilities you actually need deployed. Most operations already have voice and data comms. Adding unused modules increases complexity, training burden, and failure points."},{says:"NovaCast can transmit at lower bandwidth than StreamEdge.",response:"Ask them to demonstrate sustained performance in conditions that match your operational environment, including packet loss, link drops, and variable bandwidth. A claimed minimum under lab conditions differs from what you will see in the field."}],
+    procurement:[{says:"NovaCast recently raised significant funding, showing market confidence.",response:"Funding shows investor interest, but ask about revenue sustainability and customer concentration. Their deployment base is concentrated, with approximately 60 units at a single customer. Diversified revenue is a stronger indicator of long-term vendor viability."},{says:"NovaCast can offer competitive pricing on the full platform.",response:"Evaluate total cost including modules you will not use. A lower headline price on a broader platform may not be cheaper than a purpose-built solution once you factor in training, integration, and maintenance of unused features."}],
+    tech:[{says:"NovaCast can transmit at single-digit kbps.",response:"Request the test methodology. Was this sustained over hours or a peak demo figure? What codec, resolution, and frame rate? What packet loss was simulated? Our sub-100 kbps figure reflects sustained operational deployments over SATCOM with real packet loss."},{says:"Their platform handles video, voice, and telemetry natively.",response:"Ask about the architecture trade-offs. A multi-function platform typically means shared processing resources. Under bandwidth pressure, how does the system prioritise video vs telemetry? Can you configure quality of service per stream?"}]
+  },
+  secureview:{
+    ciso:[{says:"SecureView has national security certification.",response:"Certification is significant and worth understanding in detail. Ask whether it covers the specific deployment environment you need, particularly non-cellular networks. A product certified for cellular may not carry the same assurance over SATCOM."},{says:"They are part of a larger portfolio group with more resources for security.",response:"A larger parent group can mean more resources, but also more complexity. Ask who owns the security roadmap for this specific product within the 13-company portfolio, and whether security updates are prioritised by the product team or the group."}],
+    ops:[{says:"SecureView has proven deployments across major international events.",response:"A strong track record in event security usually means urban, cellular-connected, temporary deployments. Ask how many of those operated over non-cellular networks or as sustained, permanent installations matching your environment."},{says:"Their product is mature and battle-tested.",response:"Maturity in cellular environments is real. The question is whether that maturity extends to your network type. A product optimised for 4G behaves differently over SATCOM. Request a POC in your actual network conditions."}],
+    procurement:[{says:"SecureView is backed by a PE group, ensuring long-term stability.",response:"PE backing provides capital, but the parent group has 13 portfolio companies. Ask about the specific investment roadmap for this product line. PE-backed companies can also face pressure to cut costs or consolidate products that miss return targets."},{says:"They have established channel partners in your region.",response:"Regional presence matters for support. Ask what the SLA is for your deployment type, and whether the channel partner has supported non-cellular deployments or only the urban surveillance product line."}],
+    tech:[{says:"SecureView achieves single-digit kbps over cellular.",response:"Impressive over cellular, where network behaviour is predictable. Ask them to demonstrate the same performance over SATCOM or BGAN, where latency, jitter, and packet loss are fundamentally different. Their architecture is optimised for cellular characteristics."},{says:"They have been deployed across critical infrastructure.",response:"Ask specifically about non-cellular critical infrastructure: pipeline monitoring over SATCOM, offshore platforms, remote facilities. If the references are mostly urban CCTV and transport, their relevance to your use case may be limited."}]
+  },
+  compactstream:{
+    ciso:[{says:"CompactStream has a research agreement with special operations, proving security trust.",response:"A research agreement is a testing arrangement, not a security certification. The agency is evaluating the technology, which is different from certifying it. Ask whether CompactStream holds any formal security certification independent of the research relationship."},{says:"Their encoder is software-defined, reducing hardware attack surface.",response:"A smaller hardware footprint can reduce some vectors, but the encoder is one component. Ask about the security of the complete solution you would build around it, including VMS, analytics, and storage, since CompactStream provides only the encoder."}],
+    ops:[{says:"CompactStream runs on minimal hardware, making deployment easier.",response:"Lower hardware requirements are a real advantage for tactical scenarios. The trade-off is that you are deploying an encoder only, and must source, integrate, and maintain VMS, analytics, and edge storage separately. Ask about the total operational burden of the complete system."},{says:"They have demonstrated in 20+ military exercises.",response:"Exercise demonstrations validate capability in controlled conditions. Ask for references from sustained operational deployments, meaning months or years of continuous use rather than multi-day exercises. The reliability profile is different."}],
+    procurement:[{says:"CompactStream is on existing contract vehicles, making procurement faster.",response:"Contract vehicle access is a genuine speed advantage. If you are not constrained to those vehicles, weigh procurement convenience against solution completeness, and factor in the cost of separately procuring VMS, analytics, and storage."},{says:"Their price point is lower than StreamEdge.",response:"Compare like for like. CompactStream provides an encoder; StreamEdge provides a complete platform. Add VMS, analytics, edge storage, and integration labour to the encoder price and the total may be comparable or higher."}],
+    tech:[{says:"CompactStream has demonstrated video over military satellite and HF radio.",response:"Genuinely impressive demonstrations. Ask for the test parameters: resolution, frame rate, sustained duration, and packet loss tolerance. Also ask whether the demonstration included edge analytics during network blackouts, or encoding only."},{says:"Their software-defined encoder is more flexible than hardware solutions.",response:"Software flexibility is real, but an encoder is one layer of a video solution. Ask about their roadmap for edge analytics, on-device storage during outages, and integration APIs. If you need a platform, you will be building the rest yourself."}]
+  }
 };
 
-const personaObjestions={
-novacast:{
-ciso:[{says:"NovaCast has passed security testing in allied nation environments.",response:"Ask which specific certifications they hold and whether those are recognised by your national authority. Partnership-phase testing and formal certification are different. Request their certification documentation."},{says:"Their platform encrypts all data end-to-end.",response:"End-to-end encryption is table stakes. The question is whether their encryption meets your specific national standard and whether it has been independently validated, not just vendor-asserted."}],
-ops:[{says:"NovaCast offers video, voice, and telemetry in one platform, simplifying operations.",response:"A unified platform sounds simpler, but ask how many of those capabilities you actually need deployed. Most operations already have voice and data comms. Adding unused modules increases complexity, training burden, and failure points."},{says:"NovaCast can transmit at lower bandwidth than StreamEdge.",response:"Ask them to demonstrate sustained performance in conditions that match your operational environment, including packet loss, link drops, and variable bandwidth. A claimed minimum under lab conditions differs from what you will see in the field."}],
-procurement:[{says:"NovaCast recently raised significant funding, showing market confidence.",response:"Funding shows investor interest, but ask about revenue sustainability and customer concentration. Their deployment base is concentrated with approximately 60 units to a single customer. Diversified revenue is a stronger indicator of long-term vendor viability."},{says:"NovaCast can offer competitive pricing on the full platform.",response:"Evaluate total cost including modules you will not use. A lower headline price on a broader platform may not be cheaper than a purpose-built solution when you factor in training, integration, and maintenance of unused features."}],
-tech:[{says:"NovaCast can transmit at single-digit kbps.",response:"Request the test methodology. Was this sustained over hours or a peak demo figure? What codec, resolution, and frame rate? What packet loss was simulated? Our sub-100 kbps figure reflects sustained operational deployments over SATCOM with real packet loss."},{says:"Their platform handles video, voice, and telemetry natively.",response:"Ask about the architecture trade-offs. A multi-function platform typically means shared processing resources. Under bandwidth pressure, how does the system prioritise video vs telemetry? Can you configure quality of service per stream?"}]
-},
-secureview:{
-ciso:[{says:"SecureView has national security certification.",response:"Certification is significant and worth understanding in detail. Ask whether the certification covers the specific deployment environment you need, particularly non-cellular networks. A product certified for cellular may not carry the same assurance over SATCOM."},{says:"They are part of a larger portfolio group with more resources for security.",response:"A larger parent group can mean more resources, but also more complexity. Ask who owns the security roadmap for this specific product within the 13-company portfolio, and whether security updates are prioritised by the product team or the group."}],
-ops:[{says:"SecureView has proven deployments across major international events.",response:"Strong track record in event security, which typically means urban, cellular-connected environments with temporary deployments. Ask how many of those deployments operated over non-cellular networks or in sustained, permanent installations matching your environment."},{says:"Their product is mature and battle-tested.",response:"Maturity in cellular environments is real. The question is whether that maturity extends to your network type. A product optimised for 4G will behave differently over SATCOM. Request a POC in your actual network conditions."}],
-procurement:[{says:"SecureView is backed by a PE group, ensuring long-term stability.",response:"PE backing provides capital, but the parent group has 13 portfolio companies. Ask about the specific investment roadmap for this product line. PE-backed companies can also face pressure to cut costs or consolidate products that do not meet return targets."},{says:"They have established channel partners in your region.",response:"Regional presence matters for support. Ask what the SLA is for your specific deployment type, and whether the channel partner has experience supporting non-cellular deployments or only their urban surveillance product line."}],
-tech:[{says:"SecureView achieves single-digit kbps over cellular.",response:"Impressive over cellular, where network behaviour is predictable. Ask them to demonstrate the same performance over SATCOM or BGAN, where latency, jitter, and packet loss are fundamentally different. Their architecture is optimised for cellular characteristics."},{says:"They have been deployed across critical infrastructure.",response:"Ask specifically about non-cellular critical infrastructure. Pipeline monitoring over SATCOM, offshore platform monitoring, remote facility surveillance. If the references are primarily urban CCTV and transport, the relevance to your use case may be limited."}]
-},
-compactstream:{
-ciso:[{says:"CompactStream has a research agreement with special operations, proving security trust.",response:"A research agreement is a testing arrangement, not a security certification. The agency is evaluating the technology, which is different from certifying it. Ask whether CompactStream holds any formal security certification independently of the research relationship."},{says:"Their encoder is software-defined, reducing hardware attack surface.",response:"A smaller hardware footprint can reduce some vectors, but the encoder is one component. Ask about the security of the complete solution you would need to build around it, including VMS, analytics, and storage, since CompactStream provides only the encoder."}],
-ops:[{says:"CompactStream runs on minimal hardware, making deployment easier.",response:"Lower hardware requirements are a real advantage for tactical scenarios. The trade-off is that you are deploying an encoder only. You will need to source, integrate, and maintain VMS, analytics, and edge storage separately. Ask about the total operational burden of the complete system."},{says:"They have demonstrated in 20+ military exercises.",response:"Exercise demonstrations validate capability in controlled conditions. Ask for references from sustained operational deployments, meaning months or years of continuous use, not multi-day exercises. The reliability profile is different."}],
-procurement:[{says:"CompactStream is on existing contract vehicles, making procurement faster.",response:"Contract vehicle access is a genuine advantage for speed. If you are not constrained to those specific vehicles, evaluate whether procurement convenience should outweigh solution completeness. Factor in the cost of separately procuring VMS, analytics, and storage."},{says:"Their price point is lower than StreamEdge.",response:"Compare like for like. CompactStream provides an encoder. StreamEdge provides a complete platform. When you add the cost of VMS, analytics, edge storage, and integration labour to the encoder price, the total may be comparable or higher."}],
-tech:[{says:"CompactStream has demonstrated video over military satellite and HF radio.",response:"Genuinely impressive demonstrations. Ask for the test parameters: resolution, frame rate, sustained duration, and packet loss tolerance. Also ask whether the demonstration included edge analytics during network blackouts, or encoding only."},{says:"Their software-defined encoder is more flexible than hardware solutions.",response:"Software flexibility is real. But an encoder is one layer of a video solution. Ask about their roadmap for edge analytics, on-device storage during outages, and integration APIs. If you need a platform, you will be building the rest yourself."}]
+const PERSONA_QUESTIONS = {
+  novacast:{
+    ciso:[{q:"Can you provide your current certification documentation and the scope of environments it covers?",reveals:"Certification gaps for non-standard environments."},{q:"Has your encryption implementation been independently audited, and by which body?",reveals:"Vendor-asserted vs independently validated encryption."}],
+    ops:[{q:"Walk us through a deployment where your platform operated continuously for 6+ months in a SATCOM environment.",reveals:"Limited sustained operational deployments."},{q:"If we only need video, what is the overhead of carrying the voice and telemetry modules?",reveals:"Platform bloat for single-function requirements."}],
+    procurement:[{q:"What is your customer concentration? How many distinct organisations use your platform operationally?",reveals:"Revenue concentrated with very few customers."},{q:"Can we procure the video component independently, or must we license the full platform?",reveals:"Pricing flexibility limitations."}],
+    tech:[{q:"What independent third-party testing has validated your single-digit kbps claim under sustained packet loss?",reveals:"If only internal testing, that is a gap."},{q:"What is your sustained frame rate and resolution at your claimed minimum bandwidth?",reveals:"Trade-offs between bandwidth and usable video quality."}]
+  },
+  secureview:{
+    ciso:[{q:"Does your national security certification cover deployments over SATCOM and BGAN, or only cellular networks?",reveals:"Certification scope may not cover the prospect's environment."},{q:"Since the acquisition, has the security certification been re-validated under the new corporate structure?",reveals:"Potential certification continuity risk post-acquisition."}],
+    ops:[{q:"What percentage of your current deployments operate over non-cellular networks?",reveals:"Deployments are overwhelmingly cellular."},{q:"If our network link drops for 30+ minutes, what happens to video analytics at the edge?",reveals:"Extended disconnection impairs their model."}],
+    procurement:[{q:"Within the 13-company portfolio, what is the specific investment commitment to this product line over the next 3 years?",reveals:"Risk of deprioritisation within a diversified portfolio."},{q:"Does your regional channel partner have experience supporting SATCOM deployments, or primarily cellular installations?",reveals:"Support capability gaps for non-cellular environments."}],
+    tech:[{q:"Can you demonstrate your claimed bandwidth performance over a SATCOM link with 600 ms+ latency and 5% packet loss?",reveals:"Performance is optimised for cellular, not satellite."},{q:"What edge processing continues during complete network disconnection?",reveals:"Architecture depends on connectivity for analytics."}]
+  },
+  compactstream:{
+    ciso:[{q:"What formal security certifications does CompactStream hold independently of the research agreement?",reveals:"A research agreement is not a certification."},{q:"Since your product is an encoder, who is responsible for the security of the VMS, analytics, and storage we would need to add?",reveals:"Security responsibility fragments across a multi-vendor solution."}],
+    ops:[{q:"Can you provide references from sustained operational deployments of 6+ months, not exercises?",reveals:"Strongest evidence is short-duration exercises."},{q:"What is the total integration effort to build a complete video solution around your encoder?",reveals:"Significant hidden operational burden."}],
+    procurement:[{q:"When we add VMS, analytics, and edge storage to your encoder price, what is the total solution cost?",reveals:"Headline encoder price understates total cost."},{q:"What is your deployment footprint outside the United States?",reveals:"Minimal international presence and support."}],
+    tech:[{q:"Beyond encoding, what edge analytics does your platform provide when the network is unavailable?",reveals:"Encoder only, no analytics platform."},{q:"What is your sustained performance over 24 hours at your claimed minimum bandwidth, not a short demonstration?",reveals:"Demo vs sustained operational performance."}]
+  }
+};
+
+const DEALS = [
+  {date:"2026-06-15",deal:"European Defence Forward Surveillance",outcome:"Won",competitor:"SecureView",vertical:"Defence",region:"Europe",value:275000,factor:"Bandwidth performance",detail:"StreamEdge maintained usable video at 64 kbps on BGAN. SecureView degraded below 200 kbps.",quote:"Your solution performed where theirs could not. On satellite it was clear which worked.",stage:"Technical evaluation"},
+  {date:"2026-05-28",deal:"Nordic Maritime Monitoring",outcome:"Won",competitor:"NovaCast",vertical:"Maritime",region:"Scandinavia",value:180000,factor:"Deployment evidence",detail:"StreamEdge provided three operational maritime references. NovaCast had only commercial streaming customers.",quote:"We needed a vendor who has done this in our environment before.",stage:"Procurement"},
+  {date:"2026-05-10",deal:"APAC Border Surveillance",outcome:"Lost",competitor:"SecureView",vertical:"Government",region:"APAC",value:400000,factor:"Certification gap",detail:"The prospect required national security certification. SecureView had it; StreamEdge's was in progress.",quote:"Your technology tested well but we cannot proceed without the accreditation.",stage:"Procurement"},
+  {date:"2026-04-22",deal:"US Special Ops Tactical Video",outcome:"Lost",competitor:"CompactStream",vertical:"Defence",region:"USA",value:290000,factor:"Existing partnership",detail:"The agency was already testing CompactStream's encoder under a research agreement. Switching would have added six months.",quote:"We liked your edge analytics but the existing pathway was already underway.",stage:"Technical evaluation"},
+  {date:"2026-04-08",deal:"Middle East Energy Platform",outcome:"Won",competitor:"NovaCast",vertical:"Energy",region:"Middle East",value:165000,factor:"Edge processing",detail:"The satellite link drops three to four times a day. StreamEdge's edge processing continued during outages.",quote:"We needed something that keeps working when the satellite link drops.",stage:"Technical evaluation"},
+  {date:"2026-03-30",deal:"UK Urban Rapid Deployment",outcome:"Lost",competitor:"SecureView",vertical:"Government",region:"UK",value:90000,factor:"Cellular environment fit",detail:"Urban 4G/5G environment. SecureView was purpose-built for this, and StreamEdge's advantages were irrelevant.",quote:"Your solution is more than we need. We have 4G coverage everywhere.",stage:"Discovery"},
+  {date:"2026-03-15",deal:"NATO Exercise Integration",outcome:"Won",competitor:"CompactStream",vertical:"Defence",region:"Europe",value:220000,factor:"Complete solution vs encoder",detail:"The alliance needed a complete video solution. CompactStream was encoder-only and required separate analytics.",quote:"We do not have the resources to integrate an encoder into a full platform.",stage:"Technical evaluation"},
+  {date:"2026-02-28",deal:"European Navy Shore-to-Ship",outcome:"Won",competitor:"SecureView",vertical:"Maritime",region:"Europe",value:320000,factor:"SATCOM performance",detail:"StreamEdge delivered at 80 kbps. SecureView could not sustain below 300 kbps on the same link.",quote:"On our satellite connection the difference was immediately obvious.",stage:"Technical evaluation"},
+  {date:"2026-02-10",deal:"US Army Programme Office",outcome:"Lost",competitor:"CompactStream",vertical:"Defence",region:"USA",value:0,factor:"US procurement pathway",detail:"The programme office preferred CompactStream because of existing contract vehicle access. StreamEdge was not on any US vehicle.",quote:"We need to procure through existing channels. Onboarding a new vendor would take a year.",stage:"Discovery"},
+  {date:"2026-01-05",deal:"APAC Port Authority",outcome:"Lost",competitor:"SecureView",vertical:"Maritime",region:"APAC",value:260000,factor:"Regional support presence",detail:"SecureView had APAC channel partners. StreamEdge had no local support.",quote:"We need local support. If something fails overnight we need someone in our timezone.",stage:"Procurement"},
+  {date:"2025-12-15",deal:"European Federal Police",outcome:"Lost",competitor:"SecureView",vertical:"Government",region:"Europe",value:145000,factor:"Cellular environment fit",detail:"Urban LTE border monitoring. SecureView's cellular product was the right fit.",quote:"Their cellular product does exactly what we need at the right price point.",stage:"Discovery"},
+  {date:"2025-11-28",deal:"UK Special Forces ISR",outcome:"Won",competitor:"CompactStream",vertical:"Defence",region:"UK",value:360000,factor:"Edge analytics",detail:"On-device analytics during network blackouts. CompactStream had no equivalent capability.",quote:"The edge analytics sealed it. When connectivity drops we still need the system working.",stage:"Technical evaluation"},
+  {date:"2025-11-10",deal:"Canadian Navy Arctic Patrol",outcome:"Won",competitor:"NovaCast",vertical:"Maritime",region:"Canada",value:250000,factor:"Extreme environment references",detail:"HF/SATCOM in Arctic conditions. StreamEdge had Arctic deployment references; NovaCast had none.",quote:"You have actually done this in the Arctic before. That matters more than any demo.",stage:"Procurement"},
+  {date:"2025-10-25",deal:"US Marine Expeditionary",outcome:"Lost",competitor:"CompactStream",vertical:"Defence",region:"USA",value:185000,factor:"Specific integration",detail:"CompactStream had demonstrated over the required military satellite system. StreamEdge could not meet this requirement.",quote:"We need this to work over that specific system. CompactStream has already proven it.",stage:"Technical evaluation"},
+  {date:"2025-09-20",deal:"European MOD Vehicle Surveillance",outcome:"Won",competitor:"SecureView",vertical:"Defence",region:"Europe",value:210000,factor:"Contested RF performance",detail:"In simulated jamming, StreamEdge adapted and SecureView degraded.",quote:"In the jamming scenario your system adapted and theirs failed.",stage:"Technical evaluation"},
+  {date:"2025-09-05",deal:"Middle East Defence Procurement",outcome:"Lost",competitor:"NovaCast",vertical:"Defence",region:"Middle East",value:330000,factor:"Price",detail:"NovaCast came in at nearly half the price, with existing regional relationships.",quote:"Your technology won the evaluation but the price difference was too significant.",stage:"Procurement"},
+  {date:"2025-08-18",deal:"UK Maritime Coastguard",outcome:"Won",competitor:"SecureView",vertical:"Maritime",region:"UK",value:175000,factor:"Maritime SATCOM performance",detail:"Proven maritime SATCOM capability. SecureView struggled with maritime link characteristics.",quote:"We have been let down by solutions that work on land but not at sea. Yours works at sea.",stage:"Technical evaluation"}
+].map((d,i) => ({...d, id:i}));
+
+const COMPETITORS = {
+  novacast:{name:"NovaCast",aka:"Signal Relay Group",akaLabel:"Formerly",ticker:"ASX: NVC",
+    alert:{title:"Rebranded in mid-2026",body:"Signal Relay Group is now NovaCast Ltd. If a prospect mentions either name, it is the same competitor."},
+    summary:"Claims single-digit kbps bandwidth and is pursuing defence validation through international partnerships. A broader platform (video, voice and telemetry) with few defence deployments. Recently raised significant funding.",
+    theirSweet:"Defence buyers evaluating integrated multi-sensor platforms, especially within allied nation corridors.",
+    ourSweet:"Operations that need proven, deployed ultra-low-bandwidth video in SATCOM, maritime and BGAN environments.",
+    questions:[{q:"Walk us through a specific operational deployment where your platform maintained video under sustained packet loss in a SATCOM environment.",reveals:"Defence validation is at partnership or test phase only."},{q:"What independent third-party testing has validated your single-digit kbps claim?",reveals:"If only internal testing, that is a gap."},{q:"Can we procure just the video component without the full voice and telemetry stack?",reveals:"Platform complexity adds overhead."}],
+    objections:[{says:"NovaCast can transmit at lower bandwidth than StreamEdge.",response:"There is a difference between a claimed minimum under ideal conditions and sustained operational performance. Our sub-100 kbps reflects proven SATCOM and maritime deployments with real packet loss."},{says:"NovaCast offers video, voice, and telemetry in one platform.",response:"Most customers already have voice and data comms. What they are missing is video that works at extreme bandwidths. We solve that specific problem with a purpose-built approach."},{says:"NovaCast is being tested in conflict zones.",response:"The partnership is a non-binding agreement covering planned testing, not completed testing. No independent data has been published yet."}],
+    redFlags:["Mentions “NovaCast” or “Signal Relay Group”","Asks about integrated video, voice and telemetry","References unmanned systems or drone comms","Mentions allied nation corridors","Asks about single-digit kbps performance"],
+    quickWins:[{title:"Deployment evidence challenge",action:"Ask: “How many operational deployments has each vendor demonstrated in conditions equivalent to yours?”"},{title:"Focused POC",action:"Propose testing video performance in the prospect's actual network conditions."}],
+    comparison:{bandwidth:"Single-digit kbps (claimed)",deployments:"~60 units (1 customer)",certs:"Commercial readiness level",network:"Low-bandwidth (general)",backing:"Public market, recently funded"}},
+  secureview:{name:"SecureView",aka:null,ticker:"Private (PE-backed)",alert:null,
+    summary:"The most established competitor. National security certified, with proven defence deployments and single-digit kbps over cellular. The product is mature but cellular-optimised, and now sits inside a 13-company portfolio group.",
+    theirSweet:"Surveillance over cellular (3G/4G/5G) in urban, transport and critical infrastructure contexts.",
+    ourSweet:"Mission-critical deployments where bandwidth falls below cellular: SATCOM, BGAN and contested RF.",
+    questions:[{q:"What percentage of your deployments operate over non-cellular networks such as SATCOM, BGAN, or HF?",reveals:"Deployments are overwhelmingly cellular."},{q:"If our network link drops for 30+ minutes, what happens to video analytics at the edge?",reveals:"Extended disconnection impairs their model."},{q:"Now that you are part of a larger group, who is our contact for roadmap influence?",reveals:"Acquisition integration risk and diluted focus."}],
+    objections:[{says:"SecureView has national security certification.",response:"Certification is important for government procurement. Consider whether it covers your specific network environment: certification validates the product, not its performance over SATCOM."},{says:"They have been deployed across major defence exercises and international events.",response:"A strong track record in event security over 4G. Securing a venue over 4G is different from contested SATCOM, so ask about non-cellular deployments specifically."},{says:"They are part of a larger group with more stability.",response:"The parent group has 13 portfolio companies. The question is whether your requirement gets the same roadmap priority in a diversified portfolio as it would from a focused specialist."}],
+    redFlags:["Mentions “SecureView” or their product name","Asks about national security certification","References cellular bandwidth savings","Primary use case is urban surveillance","Mentions telecom carrier partnerships","References the parent portfolio group"],
+    quickWins:[{title:"Network environment clarification",action:"Establish cellular vs non-cellular early. If non-cellular, their strongest evidence becomes less relevant."},{title:"Edge processing requirement",action:"Ask whether the system must function during outages. If yes, this favours our architecture."}],
+    comparison:{bandwidth:"Single-digit kbps (proven, cellular)",deployments:"Major defence and international events",certs:"National security certified",network:"Cellular (3G/4G/5G)",backing:"PE-backed (portfolio group)"}},
+  compactstream:{name:"CompactStream",aka:"CSX",akaLabel:"Also known as",ticker:"OTC: CSMX",alert:null,
+    summary:"The most technically direct competitor. Claims sub-10 kbps, demonstrated over military satellite systems and HF radio with special operations forces. Holds an active research agreement with special operations command and existing contract vehicle access. The product is an encoder, not a complete solution.",
+    theirSweet:"US military tactical users needing video over specific military satellite systems and HF radio.",
+    ourSweet:"Non-US defence, maritime and energy deployments where edge analytics and a complete platform matter.",
+    questions:[{q:"Beyond encoding, what edge analytics does your platform provide when the network is unavailable?",reveals:"Their product is an encoder, not an analytics platform."},{q:"Can you provide references from sustained operational deployments, not exercises?",reveals:"Strongest evidence is exercises, not sustained operations."},{q:"What is your deployment footprint outside the United States?",reveals:"International presence is minimal."}],
+    objections:[{says:"CompactStream has demonstrated video over military satellite and HF, both firsts.",response:"Genuinely impressive demonstrations, but exercises differ from sustained operations, and their product is an encoder. Do you need edge analytics and a complete platform, or just an encoder?"},{says:"Their encoder runs on minimal hardware, making it more flexible.",response:"Hardware flexibility is real. The trade-off is that the integration burden is on you: you will need to source VMS, analytics and edge storage separately."},{says:"They have a research agreement with special operations.",response:"A research agreement is a collaborative testing arrangement in which the agency evaluates the technology. It is not a procurement contract or programme of record."}],
+    redFlags:["Mentions “CompactStream” or “CSX”","Asks about video over HF radio or tactical satellite","References military satellite systems","Asks about software-defined encoders","Mentions special operations command","Mentions affiliated technology partners"],
+    quickWins:[{title:"Complete solution reframe",action:"Shift the conversation from “which encoder is better” to “which complete video solution meets operational needs”."},{title:"Sustained ops references",action:"Ask the prospect to request operational deployment references, not exercise demos, from every vendor."}],
+    comparison:{bandwidth:"Sub-10 kbps (demonstrated)",deployments:"20+ military exercises",certs:"Research agreement + contract vehicle",network:"Military SATCOM, tactical satellite, HF",backing:"OTC listed, credit facility"}}
+};
+const ORDER = ["novacast","secureview","compactstream"];
+const US_COMPARISON = {bandwidth:"Sub-100 kbps (proven, SATCOM/BGAN)",deployments:"Defence, maritime, energy (operational)",certs:"OrbitaNet satellite network certified · FIPS AES-256 · STANAG 4609 · IEC 62443",network:"SATCOM, BGAN, contested RF",backing:"Private"};
+const COMPARE_ROWS = [["bandwidth","Bandwidth"],["deployments","Deployments"],["certs","Certifications"],["network","Network focus"],["backing","Backing"]];
+const NAV = [["overview","Overview"],["winloss","Win/loss"],["compare","Head-to-head"],["objections","Objections"],["questions","Trap questions"],["flags","Red flags"],["plays","Plays"]];
+
+
+/* ================= Helpers ================= */
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+const EASE_OUT = "cubic-bezier(.22,1,.36,1)", EASE_IN = "cubic-bezier(.4,0,1,1)", SPRING = "cubic-bezier(.34,1.56,.64,1)";
+const idByName = Object.fromEntries(ORDER.map(id => [COMPETITORS[id].name, id]));
+const TABS = [["overview","Overview"],["deals","Deals"],["talk","Talk tracks"],["plays","Plays"]];
+const TAB_FOR = {Objection:"talk", Question:"talk", "Red flag":"plays", Play:"plays", Deal:"deals", Certification:"overview"};
+const CCOLOR = {novacast:"#7B61FF", secureview:"#0E9DBF", compactstream:"#D97706"};
+const COMP_KEYS = ["all", ...ORDER];
+
+const ICONS = {
+  search:'<circle cx="11" cy="11" r="7.5"/><path d="m20.5 20.5-4.2-4.2"/>',
+  info:'<circle cx="12" cy="12" r="9.5"/><path d="M12 16v-4.5"/><path d="M12 8h.01"/>',
+  shield:'<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>',
+  sliders:'<path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/>',
+  file:'<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/>',
+  cpu:'<rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/>',
+  users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+  flag:'<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22v-7"/>',
+  copy:'<rect width="13" height="13" x="9" y="9" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+  check:'<path d="M20 6 9 17l-5-5"/>',
+  chevron:'<path d="m6 9 6 6 6-6"/>',
+  x:'<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+  alert:'<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
+  message:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  crosshair:'<circle cx="12" cy="12" r="9.5"/><path d="M22 12h-4"/><path d="M6 12H2"/><path d="M12 6V2"/><path d="M12 22v-4"/>',
+  target:'<circle cx="12" cy="12" r="9.5"/><circle cx="12" cy="12" r="5.5"/><circle cx="12" cy="12" r="1.5"/>',
+  briefcase:'<path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/>',
+  arrow:'<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
+  filter:'<path d="M3 6h18"/><path d="M7 12h10"/><path d="M10 18h4"/>',
+  lock:'<rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  satellite:'<path d="M13 7 9 3 5 7l4 4"/><path d="m17 11 4 4-4 4-4-4"/><path d="m8 12 4 4 6-6-4-4Z"/><path d="m16 8 3-3"/><path d="M9 21a6 6 0 0 0-6-6"/>',
+  plane:'<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>',
+  factory:'<path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M17 18h1"/><path d="M12 18h1"/><path d="M7 18h1"/>',
+  radio:'<path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/>'
+};
+const icon = (n, c="") => `<svg class="i ${c}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${ICONS[n]}</svg>`;
+
+const fmtMoney = v => v === 0 ? "Undisclosed" : v >= 1e6 ? "£" + (v/1e6).toFixed(2).replace(/\.?0+$/, "") + "M" : "£" + Math.round(v/1000) + "k";
+const fmtDate = d => new Date(d + "T00:00:00").toLocaleDateString("en-GB", {day:"numeric", month:"short", year:"numeric"});
+const sum = list => list.reduce((s, d) => s + d.value, 0);
+/* Position on an Aug 2025 (0) to Jul 2026 (11) month axis. */
+const monthPos = ds => { const d = new Date(ds + "T00:00:00"); const dim = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate(); return (d.getFullYear() - 2025) * 12 + d.getMonth() - 7 + (d.getDate() - 1) / dim; };
+
+function statsFor(id){
+  const name = COMPETITORS[id].name;
+  const deals = DEALS.filter(d => d.competitor === name).sort((a, b) => b.date.localeCompare(a.date));
+  const wins = deals.filter(d => d.outcome === "Won"), losses = deals.filter(d => d.outcome === "Lost");
+  const tally = list => Object.entries(list.reduce((m, d) => ((m[d.factor] = m[d.factor] || {n:0, v:0}).n++, m[d.factor].v += d.value, m), {})).sort((a, b) => b[1].n - a[1].n || b[1].v - a[1].v);
+  return {deals, wins, losses, rate: deals.length ? Math.round(wins.length / deals.length * 100) : 0, winFactors: tally(wins), lossFactors: tally(losses), wonValue: sum(wins), lostValue: sum(losses)};
 }
-};
-
-const personaTrapQs={
-novacast:{
-ciso:[{q:"Can you provide your current certification documentation and the scope of environments it covers?",reveals:"Certification gaps for non-standard environments."},{q:"Has your encryption implementation been independently audited, and by which body?",reveals:"Vendor-asserted vs independently validated encryption."}],
-ops:[{q:"Walk us through a deployment where your platform operated continuously for 6+ months in a SATCOM environment.",reveals:"Limited sustained operational deployments."},{q:"If we only need video, what is the overhead of carrying the voice and telemetry modules?",reveals:"Platform bloat for single-function requirements."}],
-procurement:[{q:"What is your customer concentration? How many distinct organisations are using your platform operationally?",reveals:"Revenue concentrated with very few customers."},{q:"Can we procure the video component independently, or must we license the full platform?",reveals:"Pricing flexibility limitations."}],
-tech:[{q:"What independent third-party testing has validated your single-digit kbps claim under sustained packet loss?",reveals:"If only internal testing, that is a gap."},{q:"What is your sustained frame rate and resolution at your claimed minimum bandwidth?",reveals:"Trade-offs between bandwidth and usable video quality."}]
-},
-secureview:{
-ciso:[{q:"Does your national security certification cover deployments over SATCOM and BGAN, or only cellular networks?",reveals:"Certification scope may not cover the prospect's environment."},{q:"Since the acquisition, has the security certification been re-validated under the new corporate structure?",reveals:"Potential certification continuity risk post-acquisition."}],
-ops:[{q:"What percentage of your current deployments operate over non-cellular networks?",reveals:"Deployments are overwhelmingly cellular."},{q:"If our network link drops for 30+ minutes, what happens to video analytics at the edge?",reveals:"Extended disconnection impairs their model."}],
-procurement:[{q:"Within the 13-company portfolio, what is the specific investment commitment to this product line over the next 3 years?",reveals:"Risk of deprioritisation within a diversified portfolio."},{q:"Does your regional channel partner have experience supporting SATCOM deployments, or primarily cellular installations?",reveals:"Support capability gaps for non-cellular environments."}],
-tech:[{q:"Can you demonstrate your claimed bandwidth performance over a SATCOM link with 600ms+ latency and 5% packet loss?",reveals:"Performance is optimised for cellular, not satellite."},{q:"What edge processing continues during complete network disconnection?",reveals:"Architecture depends on connectivity for analytics."}]
-},
-compactstream:{
-ciso:[{q:"What formal security certifications does CompactStream hold independently of the research agreement?",reveals:"Research agreement is not a certification."},{q:"Since your product is an encoder, who is responsible for the security of the VMS, analytics, and storage we would need to add?",reveals:"Security responsibility fragmentation in a multi-vendor solution."}],
-ops:[{q:"Can you provide references from sustained operational deployments of 6+ months, not exercises?",reveals:"Strongest evidence is short-duration exercises."},{q:"What is the total integration effort to build a complete video solution around your encoder?",reveals:"Significant hidden operational burden."}],
-procurement:[{q:"When we add VMS, analytics, and edge storage to your encoder price, what is the total solution cost?",reveals:"Headline encoder price understates total cost."},{q:"What is your deployment footprint outside the United States?",reveals:"Minimal international presence and support."}],
-tech:[{q:"Beyond encoding, what edge analytics does your platform provide when the network is unavailable?",reveals:"Encoder only, no analytics platform."},{q:"What is your sustained performance over 24 hours at your claimed minimum bandwidth, not a short demonstration?",reveals:"Demo vs sustained operational performance."}]
+function cumulative(deals){
+  let w = 0;
+  return deals.slice().sort((a, b) => a.date.localeCompare(b.date)).map((d, i) => { if (d.outcome === "Won") w++; return {deal:d, x:monthPos(d.date), rate:Math.round(w / (i + 1) * 100)}; });
 }
-};
+const STATS = Object.fromEntries(ORDER.map(id => [id, statsFor(id)]));
+const SERIES = Object.fromEntries([["all", cumulative(DEALS)], ...ORDER.map(id => [id, cumulative(STATS[id].deals)])]);
+const OVERALL = Math.round(DEALS.filter(d => d.outcome === "Won").length / DEALS.length * 100);
 
-const winLossDeals=[
-{date:"2026-06-15",deal:"European Defence Forward Surveillance",outcome:"Won",competitor:"SecureView",vertical:"Defence",region:"Europe",value:275000,factor:"Bandwidth performance",detail:"StreamEdge maintained usable video at 64 kbps on BGAN. SecureView degraded below 200 kbps.",quote:"Your solution performed where theirs could not. On satellite it was clear which worked.",stage:"Technical Evaluation"},
-{date:"2026-05-28",deal:"Nordic Maritime Monitoring",outcome:"Won",competitor:"NovaCast",vertical:"Maritime",region:"Scandinavia",value:180000,factor:"Deployment evidence",detail:"StreamEdge provided three operational maritime references. NovaCast had only commercial streaming customers.",quote:"We needed a vendor who has done this in our environment before.",stage:"Procurement"},
-{date:"2026-05-10",deal:"APAC Border Surveillance",outcome:"Lost",competitor:"SecureView",vertical:"Government",region:"APAC",value:400000,factor:"Certification gap",detail:"Prospect required national security certification. SecureView had it; StreamEdge's was in progress.",quote:"Your technology tested well but we cannot proceed without the accreditation.",stage:"Procurement"},
-{date:"2026-04-22",deal:"US Special Ops Tactical Video",outcome:"Lost",competitor:"CompactStream",vertical:"Defence",region:"USA",value:290000,factor:"Existing partnership",detail:"The agency was already testing CompactStream's encoder under a research agreement. Switching would have added six months.",quote:"We liked your edge analytics but the existing pathway was already underway.",stage:"Technical Evaluation"},
-{date:"2026-04-08",deal:"Middle East Energy Platform",outcome:"Won",competitor:"NovaCast",vertical:"Energy",region:"Middle East",value:165000,factor:"Edge processing",detail:"Satellite link drops 3-4x daily. StreamEdge's edge processing continued during outages.",quote:"We needed something that keeps working when the satellite link drops.",stage:"Technical Evaluation"},
-{date:"2026-03-30",deal:"UK Urban Rapid Deployment",outcome:"Lost",competitor:"SecureView",vertical:"Government",region:"UK",value:90000,factor:"Cellular environment fit",detail:"Urban 4G/5G environment. SecureView was purpose-built for this. StreamEdge's advantages were irrelevant.",quote:"Your solution is more than we need. We have 4G coverage everywhere.",stage:"Discovery"},
-{date:"2026-03-15",deal:"NATO Exercise Integration",outcome:"Won",competitor:"CompactStream",vertical:"Defence",region:"Europe",value:220000,factor:"Complete solution vs encoder",detail:"The alliance needed a complete video solution. CompactStream was encoder-only requiring separate analytics.",quote:"We do not have the resources to integrate an encoder into a full platform.",stage:"Technical Evaluation"},
-{date:"2026-02-28",deal:"European Navy Shore-to-Ship",outcome:"Won",competitor:"SecureView",vertical:"Maritime",region:"Europe",value:320000,factor:"SATCOM performance",detail:"StreamEdge delivered at 80 kbps. SecureView could not sustain below 300 kbps on the same link.",quote:"On our satellite connection the difference was immediately obvious.",stage:"Technical Evaluation"},
-{date:"2026-02-10",deal:"US Army Programme Office",outcome:"Lost",competitor:"CompactStream",vertical:"Defence",region:"USA",value:0,factor:"US procurement pathway",detail:"The programme office preferred CompactStream due to existing contract vehicle access. StreamEdge was not on any US vehicle.",quote:"We need to procure through existing channels. Onboarding a new vendor would take a year.",stage:"Discovery"},
-{date:"2026-01-05",deal:"APAC Port Authority",outcome:"Lost",competitor:"SecureView",vertical:"Maritime",region:"APAC",value:260000,factor:"Regional support presence",detail:"SecureView had APAC channel partners. StreamEdge had no local support.",quote:"We need local support. If something fails overnight we need someone in our timezone.",stage:"Procurement"},
-{date:"2025-12-15",deal:"European Federal Police",outcome:"Lost",competitor:"SecureView",vertical:"Government",region:"Europe",value:145000,factor:"Cellular environment fit",detail:"Urban LTE border monitoring. SecureView's cellular product was the right fit.",quote:"Their cellular product does exactly what we need at the right price point.",stage:"Discovery"},
-{date:"2025-11-28",deal:"UK Special Forces ISR",outcome:"Won",competitor:"CompactStream",vertical:"Defence",region:"UK",value:360000,factor:"Edge analytics",detail:"On-device analytics during network blackouts. CompactStream had no equivalent capability.",quote:"The edge analytics sealed it. When connectivity drops we still need the system working.",stage:"Technical Evaluation"},
-{date:"2025-11-10",deal:"Canadian Navy Arctic Patrol",outcome:"Won",competitor:"NovaCast",vertical:"Maritime",region:"Canada",value:250000,factor:"Extreme environment references",detail:"HF/SATCOM in Arctic conditions. StreamEdge had Arctic deployment references; NovaCast had none.",quote:"You have actually done this in the Arctic before. That matters more than any demo.",stage:"Procurement"},
-{date:"2025-10-25",deal:"US Marine Expeditionary",outcome:"Lost",competitor:"CompactStream",vertical:"Defence",region:"USA",value:185000,factor:"Specific integration",detail:"CompactStream had demonstrated over the required military satellite system. StreamEdge could not meet this requirement.",quote:"We need this to work over that specific system. CompactStream has already proven it.",stage:"Technical Evaluation"},
-{date:"2025-09-20",deal:"European MOD Vehicle Surveillance",outcome:"Won",competitor:"SecureView",vertical:"Defence",region:"Europe",value:210000,factor:"Contested RF performance",detail:"In simulated jamming, StreamEdge adapted; SecureView degraded.",quote:"In the jamming scenario your system adapted and theirs failed.",stage:"Technical Evaluation"},
-{date:"2025-09-05",deal:"Middle East Defence Procurement",outcome:"Lost",competitor:"NovaCast",vertical:"Defence",region:"Middle East",value:330000,factor:"Price",detail:"NovaCast came in at nearly half the price with existing regional relationships.",quote:"Your technology won the evaluation but the price difference was too significant.",stage:"Procurement"},
-{date:"2025-08-18",deal:"UK Maritime Coastguard",outcome:"Won",competitor:"SecureView",vertical:"Maritime",region:"UK",value:175000,factor:"Maritime SATCOM performance",detail:"Proven maritime SATCOM capability. SecureView struggled with maritime link characteristics.",quote:"We have been let down by solutions that work on land but not at sea. Yours works at sea.",stage:"Technical Evaluation"}
+/* Monotone cubic interpolation: smooth curve that never overshoots 0–100%. */
+function monotone(P){
+  const n = P.length; if (!n) return ""; if (n === 1) return `M${P[0].x},${P[0].y}`;
+  const dx = [], m = [], t = [];
+  for (let i = 0; i < n - 1; i++){ dx[i] = P[i+1].x - P[i].x; m[i] = dx[i] ? (P[i+1].y - P[i].y) / dx[i] : 0; }
+  t[0] = m[0]; t[n-1] = m[n-2];
+  for (let i = 1; i < n - 1; i++) t[i] = m[i-1] * m[i] <= 0 ? 0 : (m[i-1] + m[i]) / 2;
+  for (let i = 0; i < n - 1; i++){
+    if (m[i] === 0){ t[i] = 0; t[i+1] = 0; continue; }
+    const a = t[i] / m[i], b = t[i+1] / m[i], s = a*a + b*b;
+    if (s > 9){ const k = 3 / Math.sqrt(s); t[i] = k * a * m[i]; t[i+1] = k * b * m[i]; }
+  }
+  const f = v => v.toFixed(1);
+  let d = `M${f(P[0].x)},${f(P[0].y)}`;
+  for (let i = 0; i < n - 1; i++){ const h = dx[i] / 3; d += ` C${f(P[i].x + h)},${f(P[i].y + t[i]*h)} ${f(P[i+1].x - h)},${f(P[i+1].y - t[i+1]*h)} ${f(P[i+1].x)},${f(P[i+1].y)}`; }
+  return d;
+}
+
+const state = {comp:"all", persona:"", tab:"overview", live:false, outcome:"all", factor:null, series:{cur:true, all:true}, show:{novacast:true, secureview:true, compactstream:true}, showOverall:true};
+let swapToken = 0, tabToken = 0, chartsDirty = true;
+
+function anim(el, frames, opts){ if (reduce.matches || !el || !el.animate) return null; return el.animate(frames, opts); }
+function announce(msg){ const a = $("#announcer"); a.textContent = ""; setTimeout(() => { a.textContent = msg; }, 30); }
+let toastTimer;
+function toast(msg, ico = "check"){
+  const t = $("#toast"); t.innerHTML = icon(ico) + "<span>" + esc(msg) + "</span>"; t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2600);
+}
+function tween(el, to, {dur = 620, fmt = v => v} = {}){
+  const from = el.dataset.v === undefined ? 0 : +el.dataset.v; el.dataset.v = to;
+  cancelAnimationFrame(el._raf);
+  if (reduce.matches || from === to){ el.textContent = fmt(to); return; }
+  const t0 = performance.now();
+  const step = now => { const p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+    el.textContent = fmt(Math.round(from + (to - from) * e)); if (p < 1) el._raf = requestAnimationFrame(step); };
+  el._raf = requestAnimationFrame(step);
+}
+
+/* ================= Sidebar ================= */
+function sparkSVG(id, W = 84, H = 34){
+  const pts = SERIES[id], pad = 3, xs = pts.map(p => p.x), lo = Math.min(...xs), hi = Math.max(...xs);
+  const P = pts.map(q => ({x: pad + (hi === lo ? .5 : (q.x - lo) / (hi - lo)) * (W - 2*pad), y: pad + (1 - q.rate / 100) * (H - 2*pad)}));
+  const d = monotone(P), last = P[P.length - 1];
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" preserveAspectRatio="none" aria-hidden="true"><path class="spark-area" d="${d} L${last.x.toFixed(1)},${H} L${P[0].x.toFixed(1)},${H} Z"/><path class="spark-line" d="${d}" vector-effect="non-scaling-stroke"/><circle cx="${last.x.toFixed(1)}" cy="${last.y.toFixed(1)}" r="2.6"/></svg>`;
+}
+function renderSide(){
+  $("#compList").insertAdjacentHTML("beforeend", allOptionHTML() + ORDER.map(id => {
+    const c = COMPETITORS[id], s = STATS[id];
+    return `<label class="comp-opt" data-comp="${id}">
+      <input class="sr-only" type="radio" name="comp" value="${id}"${id === state.comp ? " checked" : ""}>
+      <span class="mono" aria-hidden="true">${c.name[0]}</span>
+      <span class="comp-name">${c.name}</span>
+      <span class="comp-meta num"><span aria-hidden="true">${s.wins.length}–${s.losses.length} · ${s.rate}%</span><span class="sr-only">${s.wins.length} wins, ${s.losses.length} losses, ${s.rate}% win rate</span></span>
+      ${sparkSVG(id)}
+    </label>`;
+  }).join(""));
+  const opts = [{id:"", label:"Any buyer", icon:"users"}, ...PERSONA_ORDER.map(p => ({id:p, label:PERSONAS[p].short, icon:PERSONAS[p].icon}))];
+  $("#personaList").innerHTML = opts.map(o => `<label class="persona-opt"><input class="sr-only" type="radio" name="persona" value="${o.id}"${o.id === state.persona ? " checked" : ""}><span class="p-tile">${icon(o.icon)}</span><span>${o.label}</span>${icon("check", "tick")}</label>`).join("");
+
+  const w = DEALS.filter(d => d.outcome === "Won"), l = DEALS.filter(d => d.outcome === "Lost");
+  $("#totals").innerHTML = `<div class="card-head"><div><h2 class="card-title" id="totalsTitle">All tracked deals</h2><p class="card-sub">${DEALS.length} decisions across 3 competitors</p></div></div>
+    <div class="totals-top"><span class="big num">${w.length}–${l.length}</span><span class="totals-rate num">${OVERALL}% win rate</span></div>
+    <div class="bar" style="margin-top:10px" aria-hidden="true"><i style="transform:scaleX(${OVERALL / 100})"></i></div>
+    <div class="totals-rows">${ORDER.map(id => { const s = STATS[id]; return `<div class="t-row"><span class="mono" aria-hidden="true">${COMPETITORS[id].name[0]}</span><span class="t-name">${COMPETITORS[id].name}</span><span class="t-val">${s.wins.length} of ${s.deals.length} · ${s.rate}%</span><span class="bar thin" aria-hidden="true"><i style="transform:scaleX(${s.rate / 100})"></i></span></div>`; }).join("")}</div>
+    <p class="t-money"><span><span class="mk-won"></span>Won <strong>${fmtMoney(sum(w))}</strong></span><span><span class="mk-lost"></span>Lost <strong>${fmtMoney(sum(l))}</strong></span></p>`;
+}
+function placeCompInd(animate = true){
+  const lab = $(`.comp-opt[data-comp="${state.comp}"]`), ind = $(".comp-ind"); if (!lab) return;
+  if (!animate) ind.style.transition = "none";
+  ind.style.width = lab.offsetWidth + "px"; ind.style.height = lab.offsetHeight + "px";
+  ind.style.transform = `translate(${lab.offsetLeft}px, ${lab.offsetTop}px)`;
+  if (!animate){ void ind.offsetWidth; ind.style.transition = ""; }
+}
+function syncControls(){
+  $$('input[name="comp"]').forEach(i => { i.checked = i.value === state.comp; });
+  $$('input[name="persona"]').forEach(i => { i.checked = i.value === state.persona; });
+  placeCompInd();
+}
+
+/* ================= Overview: dossier ================= */
+const RING_C = 2 * Math.PI * 34;
+function renderDossier(){
+  const id = state.comp, c = COMPETITORS[id], s = STATS[id];
+  $("#compMono").textContent = c.name[0];
+  $("#compName").textContent = c.name;
+  $("#compMeta").textContent = [c.aka ? `${c.akaLabel} ${c.aka}` : null, c.ticker].filter(Boolean).join(" · ");
+  $$(".js-cname").forEach(e => { e.textContent = c.name; });
+  const ring = $("#ringVal"); ring.style.strokeDasharray = RING_C; ring.style.strokeDashoffset = RING_C * (1 - s.rate / 100);
+  tween($("#ringNum"), s.rate); tween($("#recW"), s.wins.length); tween($("#recL"), s.losses.length);
+  tween($("#recValue"), Math.round(s.wonValue / 1000), {fmt: v => "£" + v + "k"});
+  $("#alertSlot").innerHTML = c.alert ? `<div class="alert" role="note">${icon("alert")}<div><p class="alert-title">${esc(c.alert.title)}</p><p>${esc(c.alert.body)}</p></div></div>` : "";
+  $("#lede").textContent = c.summary;
+  $("#spots").innerHTML = `<div class="spot"><h3><span class="mk-won"></span>Where we win</h3><p>${esc(c.ourSweet)}</p></div><div class="spot"><h3><span class="mk-lost"></span>Where ${esc(c.name)} wins</h3><p>${esc(c.theirSweet)}</p></div>`;
+  $("#compareWrap").innerHTML = `<table class="cmp">
+    <thead><tr><th scope="col">Criterion</th><th scope="col" class="col-us"><span><span class="mk-won"></span>StreamEdge</span></th><th scope="col"><span><span class="mk-lost"></span>${esc(c.name)}</span></th></tr></thead>
+    <tbody>${COMPARE_ROWS.map(([k, label]) => `<tr><th scope="row">${label}</th><td class="col-us" data-label="StreamEdge">${esc(US_COMPARISON[k])}</td><td data-label="${esc(c.name)}">${esc(c.comparison[k])}</td></tr>`).join("")}</tbody>
+  </table>`;
+}
+
+/* ================= Overview: donut ================= */
+const WON_COLORS = ["#1E3A8A", "#2F6FEB", "#5B9BF5", "#1FC3E3"];
+const LOST_COLORS = ["#EE7B52", "#F4A27E", "#C9562F", "#F7C4A9"];
+function factorList(){
+  const s = STATS[state.comp];
+  return [...s.winFactors.map(([f, o], i) => ({f, n:o.n, v:o.v, out:"Won", color:WON_COLORS[i % 4]})),
+          ...s.lossFactors.map(([f, o], i) => ({f, n:o.n, v:o.v, out:"Lost", color:LOST_COLORS[i % 4]}))];
+}
+function drawDonut(animate){
+  const s = STATS[state.comp], segs = factorList(), total = s.deals.length;
+  const r = 64, C = 2 * Math.PI * r, gap = segs.length > 1 ? 3 : 0;
+  let off = 0, circles = "";
+  segs.forEach((g, i) => {
+    const len = Math.max(0, g.n / total * C - gap);
+    circles += `<circle class="seg" data-factor="${esc(g.f)}" data-i="${i}" cx="86" cy="86" r="${r}" stroke="${g.color}" stroke-dasharray="${len.toFixed(2)} ${C.toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}" transform="rotate(-90 86 86)"><title>${esc(g.f)}: ${g.n} ${g.out.toLowerCase()}</title></circle>`;
+    g.len = len; g.start = off; off += g.n / total * C;
+  });
+  $("#donut").innerHTML = `<svg viewBox="0 0 172 172" role="img" aria-label="${esc(COMPETITORS[state.comp].name)}: ${segs.map(g => `${g.f}, ${g.n} ${g.out.toLowerCase()}`).join("; ")}"><circle cx="86" cy="86" r="${r}" fill="none" stroke="#ECF0F8" stroke-width="22"/>${circles}</svg><div class="donut-center"><span class="big num" id="donutNum">${total}</span><small>deals decided</small></div>`;
+  if (animate) $$("#donut .seg").forEach((el, i) => { const g = segs[i];
+    anim(el, [{strokeDasharray:`0 ${C}`}, {strokeDasharray:`${g.len} ${C}`}], {duration:Math.max(260, g.len / C * 900), delay:120 + g.start / C * 700, easing:EASE_OUT, fill:"backwards"}); });
+
+  const group = (label, list, cls) => list.length ? `<p class="lg-group">${label} · ${list.reduce((a, g) => a + g.n, 0)}</p>` + list.map(g => `<button type="button" class="lg-row" data-factor="${esc(g.f)}" aria-label="${esc(g.f)}: ${g.n} ${g.out.toLowerCase()}, ${fmtMoney(g.v)}. Show these deals"><span class="lg-dot ${cls}" style="background:${g.color};border-color:${g.color}"></span><span class="lg-name">${esc(g.f)}</span><span class="lg-pct num">${Math.round(g.n / total * 100)}%</span></button>`).join("") : "";
+  $("#legend").innerHTML = group("Won", segs.filter(g => g.out === "Won"), "won") + group("Lost", segs.filter(g => g.out === "Lost"), "lost");
+}
+
+/* ================= Overview: line chart ================= */
+const LM = {l:44, r:18, t:28, b:8};
+function drawLine(animate){
+  const box = $("#lineCanvas"), w = Math.max(280, box.clientWidth), h = w < 560 ? 210 : 250;
+  const X = x => LM.l + x / 11 * (w - LM.l - LM.r), Y = r => LM.t + (1 - r / 100) * (h - LM.t - LM.b);
+  const cur = SERIES[state.comp], all = SERIES.all;
+  const Pc = cur.map(p => ({x:X(p.x), y:Y(p.rate)})), Pa = all.map(p => ({x:X(p.x), y:Y(p.rate)}));
+  const dc = monotone(Pc), base = Y(0), last = Pc[Pc.length - 1];
+  let s = `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" class="${state.series.cur ? "" : "hide-cur"} ${state.series.all ? "" : "hide-all"}" role="group" aria-label="Cumulative win rate over time">`;
+  [0, 25, 50, 75, 100].forEach(v => { s += `<line class="gl" x1="${LM.l}" x2="${w - LM.r}" y1="${Y(v)}" y2="${Y(v)}"/><text class="ax" x="${LM.l - 10}" y="${Y(v)}" dy="0.32em" text-anchor="end">${v}%</text>`; });
+  s += `<g class="series s-all"><path class="ln-all" d="${monotone(Pa)}"/></g>`;
+  s += `<g class="series s-cur"><path class="area" d="${dc} L${last.x.toFixed(1)},${base} L${Pc[0].x.toFixed(1)},${base} Z"/><path class="ln-cur" d="${dc}"/>`;
+  cur.forEach((p, i) => { const q = Pc[i]; s += `<line class="drop" data-factor="${esc(p.deal.factor)}" x1="${q.x.toFixed(1)}" x2="${q.x.toFixed(1)}" y1="${(q.y + 7).toFixed(1)}" y2="${base}"/>`; });
+  cur.forEach((p, i) => { const q = Pc[i], d = p.deal;
+    s += `<g class="pt ${d.outcome === "Won" ? "won" : "lost"}" data-factor="${esc(d.factor)}" data-deal="${d.id}" data-rate="${p.rate}" tabindex="0" role="button" aria-label="${esc(d.deal)}, ${d.outcome}, ${fmtDate(d.date)}. Win rate ${p.rate}%. Open deal" transform="translate(${q.x.toFixed(1)} ${q.y.toFixed(1)})"><circle class="halo" r="13"/><circle class="mk" r="5.5"/></g>`; });
+  const bx = Math.min(Math.max(last.x, LM.l + 26), w - 26);
+  s += `<g class="bubble" transform="translate(${bx.toFixed(1)} ${(last.y - 14).toFixed(1)})"><rect x="-24" y="-24" width="48" height="24" rx="12"/><text y="-7.5" text-anchor="middle">${cur[cur.length - 1].rate}%</text></g></g></svg>`;
+  box.innerHTML = s;
+
+  const on = new Set(cur.map(p => Math.floor(p.x)));
+  const names = ["Aug","Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun"];
+  const mo = $("#months"); mo.style.paddingLeft = LM.l + "px"; mo.style.paddingRight = LM.r + "px";
+  mo.innerHTML = names.map((n, i) => `<span class="month${on.has(i) ? " on" : ""}">${n}</span>`).join("");
+
+  if (animate && !reduce.matches){
+    const ln = $(".ln-cur", box), L = ln.getTotalLength();
+    ln.animate([{strokeDasharray:`${L} ${L}`, strokeDashoffset:L}, {strokeDasharray:`${L} ${L}`, strokeDashoffset:0}], {duration:900, easing:EASE_OUT});
+    anim($(".area", box), [{opacity:0}, {opacity:1}], {duration:700, delay:250, easing:"ease-out", fill:"backwards"});
+    $$(".pt .mk", box).forEach((el, i) => anim(el, [{transform:"scale(0)"}, {transform:"scale(1)"}], {duration:320, delay:200 + i * 70, easing:SPRING, fill:"backwards"}));
+    $$(".drop", box).forEach((el, i) => anim(el, [{opacity:0}, {opacity:1}], {duration:300, delay:250 + i * 70, fill:"backwards"}));
+    anim($(".bubble", box), [{opacity:0, transform:`translate(${bx}px, ${last.y - 6}px)`}, {opacity:1, transform:`translate(${bx}px, ${last.y - 14}px)`}], {duration:360, delay:750, easing:EASE_OUT, fill:"backwards"});
+  }
+  const s0 = STATS[state.comp];
+  tween($("#lineVal"), s0.rate);
+  const diff = s0.rate - OVERALL, dEl = $("#lineDelta");
+  dEl.className = "delta " + (diff >= 0 ? "up" : "down");
+  dEl.textContent = (diff >= 0 ? "+" : "−") + Math.abs(diff) + " pts vs " + OVERALL + "% overall";
+}
+function drawCharts(animate){ drawDonut(animate); drawLine(animate); chartsDirty = false; }
+
+/* Linked highlighting: a factor lights up in the donut, legend and chart together. */
+function linkHL(factor){
+  const root = $("#ovComp");
+  root.classList.toggle("linking", !!factor);
+  $$("[data-factor]", root).forEach(el => el.classList.toggle("lit", !!factor && el.dataset.factor === factor));
+}
+function showTip(g){
+  const d = DEALS[+g.dataset.deal], card = $("#lineCard"), tip = $("#tip");
+  const cr = card.getBoundingClientRect(), gr = g.querySelector(".mk").getBoundingClientRect();
+  tip.innerHTML = `<strong>${esc(d.deal)}</strong><span>${d.outcome} · ${fmtMoney(d.value)} · ${fmtDate(d.date)}</span><span>${esc(d.factor)} · win rate now ${g.dataset.rate}%</span>`;
+  tip.hidden = false;
+  const half = tip.offsetWidth / 2;
+  tip.style.left = Math.max(half + 10, Math.min(cr.width - half - 10, gr.left + gr.width / 2 - cr.left)) + "px";
+  tip.style.top = (gr.top - cr.top) + "px";
+  requestAnimationFrame(() => tip.classList.add("show"));
+  linkHL(d.factor);
+}
+function hideTip(){ const t = $("#tip"); t.classList.remove("show"); t.hidden = true; linkHL(null); }
+
+/* ================= Certifications (anonymised) ================= */
+const CERTS = [
+  {icon:"satellite", title:"OrbitaNet value-added developer", tag:"Satellite network", short:"OrbitaNet network certified",
+   body:"Certified by OrbitaNet to run StreamEdge's ultra-low-bandwidth video streaming and tracking solutions over its global LEO satellite network."},
+  {icon:"plane", title:"OrbitaNet-certified UAV terminal integration", tag:"Unmanned systems", short:"Certified UAV terminal",
+   body:"Powers a partner's UAV satellite terminal that holds combined 5G and OrbitaNet certification for unmanned aerial vehicles."},
+  {icon:"lock", title:"FIPS compliance", tag:"Encryption", short:"FIPS AES-256",
+   body:"FIPS-compliant AES-128 and AES-256 encryption for secure, mission-critical video transmission."},
+  {icon:"factory", title:"IEC 62443 alignment", tag:"Industrial", short:"IEC 62443",
+   body:"Energy and industrial solutions are aligned with IEC 62443 for industrial communication networks and cybersecurity."},
+  {icon:"shield", title:"STANAG 4609 support", tag:"Defence ISR", short:"STANAG 4609",
+   body:"Optimised for the NATO STANAG 4609 digital motion imagery architecture used in defence intelligence, surveillance and reconnaissance (ISR)."}
 ];
-
-const competitors={
-novacast:{name:"NovaCast",formerly:"Signal Relay Group",ticker:"ASX: NVC",color:"#E67E22",id:"novacast",
-executiveSummary:"ALERT: Signal Relay Group rebranded to NovaCast Ltd in mid-2026. If a prospect mentions either name, this is the same competitor. They claim single-digit kbps bandwidth and are pursuing defence validation via international partnerships. Broader platform (video + voice + telemetry) but limited defence deployments. Recently raised significant funding.",
-theirSweet:"Defence buyers evaluating integrated multi-sensor platforms, especially within allied nation corridors",
-ourSweet:"Operations requiring proven, deployed ultra-low-bandwidth video in SATCOM, maritime, and BGAN environments",
-trapQuestions:[{q:"Walk us through a specific operational deployment where your platform maintained video under sustained packet loss in a SATCOM environment.",reveals:"Defence validation is partnership/test phase only."},{q:"What independent third-party testing has validated your single-digit kbps claim?",reveals:"If only internal testing, that is a gap."},{q:"Can we procure just the video component without the full voice/telemetry stack?",reveals:"Platform complexity adds overhead."}],
-objections:[{says:"NovaCast can transmit at lower bandwidth than StreamEdge.",response:"There is a difference between a claimed minimum under ideal conditions and sustained operational performance. Our sub-100 kbps reflects proven SATCOM/maritime deployments with real packet loss."},{says:"NovaCast offers video, voice, and telemetry in one platform.",response:"Most customers already have voice and data comms. What they are missing is video that works at extreme bandwidths. We solve that specific problem with a purpose-built approach."},{says:"NovaCast is being tested in conflict zones.",response:"The partnership is a non-binding agreement covering planned testing, not completed testing. No independent data has been published yet."}],
-redFlags:["Mentions 'NovaCast' or 'Signal Relay Group'","Asks about integrated video/voice/telemetry","References unmanned systems or drone comms","Mentions allied nation corridors","Asks about single-digit kbps performance"],
-quickWins:[{title:"Deployment Evidence Challenge",action:"Ask: 'How many operational deployments has each vendor demonstrated in conditions equivalent to yours?'"},{title:"Focused POC",action:"Propose testing video performance in the prospect's actual network conditions."}],
-comparison:{bandwidth:"Single-digit kbps (claimed)",deployments:"~60 units (1 customer)",certs:"Commercial readiness level",network:"Low-bandwidth (general)",backing:"Public market, recently funded"}},
-
-secureview:{name:"SecureView",formerly:null,ticker:"Private (PE-backed)",color:"#2980B9",id:"secureview",
-executiveSummary:"Most established competitor. National security certified, proven defence deployments, single-digit kbps over cellular. Their product is mature but cellular-optimised. Now part of a larger portfolio group (13 companies).",
-theirSweet:"Surveillance over cellular (3G/4G/5G) in urban, transport, and critical infrastructure contexts",
-ourSweet:"Mission-critical deployments where bandwidths are below cellular (SATCOM, BGAN, contested RF)",
-trapQuestions:[{q:"What percentage of your deployments operate over non-cellular networks such as SATCOM, BGAN, or HF?",reveals:"Deployments are overwhelmingly cellular."},{q:"If our network link drops for 30+ minutes, what happens to video analytics at the edge?",reveals:"Extended disconnection impairs their model."},{q:"Now that you are part of a larger group, who is our contact for roadmap influence?",reveals:"Acquisition integration risk and diluted focus."}],
-objections:[{says:"SecureView has national security certification.",response:"Certification is important for government procurement. Consider whether the certification covers your specific network environment. Certification validates the product, not performance in SATCOM."},{says:"They have been deployed across major defence exercises and international events.",response:"Strong track record in event security over 4G. But securing a venue over 4G is different from contested SATCOM. Ask about non-cellular deployments specifically."},{says:"They are part of a larger group with more stability.",response:"The parent group has 13 portfolio companies. The question is whether your requirement gets the same roadmap priority in a diversified portfolio as it would from a focused specialist."}],
-redFlags:["Mentions 'SecureView' or their product name","Asks about national security certification","References cellular bandwidth savings","Primary use case is urban surveillance","Mentions telecom carrier partnerships","References the parent portfolio group"],
-quickWins:[{title:"Network Environment Clarification",action:"Establish cellular vs non-cellular. If non-cellular, their strongest evidence becomes less relevant."},{title:"Edge Processing Requirement",action:"Ask if the system must function during outages. If yes, this favours our architecture."}],
-comparison:{bandwidth:"Single-digit kbps (proven, cellular)",deployments:"Major defence and international events",certs:"National security certified",network:"Cellular (3G/4G/5G)",backing:"PE-backed (portfolio group)"}},
-
-compactstream:{name:"CompactStream",formerly:"Also known as CSX",ticker:"OTC: CSMX",color:"#8E44AD",id:"compactstream",
-executiveSummary:"Most technically direct competitor. Their platform claims sub-10 kbps, demonstrated over military satellite systems and HF radio with special operations forces. Active research agreement with special operations command, existing contract vehicle access. But their product is an encoder, not a complete solution.",
-theirSweet:"US military tactical users needing video over specific military satellite systems and HF radio",
-ourSweet:"Non-US defence, maritime, and energy deployments where edge analytics and a complete platform matter",
-trapQuestions:[{q:"Beyond encoding, what edge analytics does your platform provide when the network is unavailable?",reveals:"Their product is an encoder, not an analytics platform."},{q:"Can you provide references from sustained operational deployments, not exercises?",reveals:"Strongest evidence is exercises, not sustained operations."},{q:"What is your deployment footprint outside the United States?",reveals:"International presence is minimal."}],
-objections:[{says:"CompactStream has demonstrated video over military satellite and HF, both firsts.",response:"Genuinely impressive demonstrations. Exercises differ from sustained operations. And their product is an encoder. Do you need edge analytics and a complete platform, or just an encoder?"},{says:"Their encoder runs on minimal hardware, making it more flexible.",response:"Hardware flexibility is real. The trade-off: integration burden is on you. You will need to source VMS, analytics, and edge storage separately."},{says:"They have a research agreement with special operations.",response:"A research agreement is a collaborative testing arrangement. The agency is evaluating the technology. It is not a procurement contract or programme of record."}],
-redFlags:["Mentions 'CompactStream' or 'CSX'","Asks about video over HF radio or tactical satellite","References military satellite systems","Asks about software-defined encoders","Mentions special operations command","Mentions affiliated technology partners"],
-quickWins:[{title:"Complete Solution Reframe",action:"Shift from 'which encoder is better' to 'which complete video solution meets operational needs.'"},{title:"Sustained Ops References",action:"Ask prospect to request operational deployment references (not exercise demos) from all vendors."}],
-comparison:{bandwidth:"Sub-10 kbps (demonstrated)",deployments:"20+ military exercises",certs:"Research agreement + contract vehicle",network:"Military SATCOM, tactical satellite, HF",backing:"OTC listed, credit facility"}}
-};
-
-const vc={bandwidth:"Sub-100 kbps (proven, SATCOM/BGAN)",deployments:"Defence, maritime, energy (operational)",certs:"[Industry certifications]",network:"SATCOM, BGAN, contested RF",backing:"Private"};
-
-function gs(id){const n=competitors[id].name;const d=winLossDeals.filter(x=>x.competitor===n);const w=d.filter(x=>x.outcome==="Won");const l=d.filter(x=>x.outcome==="Lost");const wr=d.length>0?Math.round((w.length/d.length)*100):0;const lr={};l.forEach(x=>{lr[x.factor]=(lr[x.factor]||0)+1;});const wd={};w.forEach(x=>{wd[x.factor]=(wd[x.factor]||0)+1;});return{deals:d,wins:w,losses:l,winRate:wr,lossReasons:lr,winDrivers:wd,count:d.length,totalValue:d.reduce((s,x)=>s+x.value,0)};}
-
-const ps=(a,c)=>({display:"inline-flex",alignItems:"center",gap:"6px",padding:"7px 14px",border:a?"2px solid "+(c||"#333"):"1px solid #ddd",borderRadius:"20px",background:a?(c||"#1a1a1a"):"transparent",color:a?"#fff":"#666",cursor:"pointer",fontSize:"12px",fontWeight:a?700:600,whiteSpace:"nowrap"});
-const cd=(e={})=>({background:"#fff",border:"1px solid #e0e0e0",borderRadius:"10px",padding:"16px",...e});
-const bg=(c)=>({display:"inline-block",padding:"2px 10px",borderRadius:"12px",fontSize:"11px",fontWeight:700,background:c+"18",color:c,textTransform:"uppercase",letterSpacing:".5px"});
-
-function App(){
-const[ac,setAc]=useState("novacast");
-const[sec,setSec]=useState("overview");
-const[qr,setQr]=useState(false);
-const[search,setSearch]=useState("");
-const[ss,setSs]=useState(false);
-const[ap,setAp]=useState(null);
-const comp=competitors[ac];
-const stats=useMemo(()=>gs(ac),[ac]);
-const all=useMemo(()=>({novacast:gs("novacast"),secureview:gs("secureview"),compactstream:gs("compactstream")}),[]);
-const secs=qr?[{id:"objections",l:"Objections"},{id:"trap",l:"Trap Questions"},{id:"quickwins",l:"Quick Wins"}]:[{id:"overview",l:"Overview"},{id:"winloss",l:"Win/Loss"},{id:"comparison",l:"Head-to-Head"},{id:"persona",l:"Personas"},{id:"trap",l:"Trap Qs"},{id:"objections",l:"Objections"},{id:"redflags",l:"Red Flags"},{id:"quickwins",l:"Quick Wins"}];
-const sr=useMemo(()=>{if(!search||search.length<2)return[];const q=search.toLowerCase();const r=[];Object.values(competitors).forEach(c=>{c.objections.forEach(o=>{if((o.says+o.response).toLowerCase().includes(q))r.push({comp:c.name,sec:"Objections",text:o.says,color:c.color});});c.trapQuestions.forEach(t=>{if((t.q+t.reveals).toLowerCase().includes(q))r.push({comp:c.name,sec:"Trap Qs",text:t.q.slice(0,80)+"...",color:c.color});});c.redFlags.forEach(f=>{if(f.toLowerCase().includes(q))r.push({comp:c.name,sec:"Red Flags",text:f,color:c.color});});});return r.slice(0,8);},[search]);
-
-const curObjections=useMemo(()=>{if(ap&&personaObjestions[ac]&&personaObjestions[ac][ap])return personaObjestions[ac][ap];return comp.objections;},[ac,ap,comp]);
-const curTrapQs=useMemo(()=>{if(ap&&personaTrapQs[ac]&&personaTrapQs[ac][ap])return personaTrapQs[ac][ap];return comp.trapQuestions;},[ac,ap,comp]);
-
-return h("div",{style:{fontFamily:"'Inter',-apple-system,system-ui,sans-serif",maxWidth:"900px",margin:"0 auto",color:"#1a1a1a"}},
-h("div",{style:{textAlign:"center",padding:"24px 16px 16px",borderBottom:"1px solid #e0e0e0"}},
-h("div",{style:{fontSize:"11px",fontWeight:700,letterSpacing:"2px",color:"#888",textTransform:"uppercase"}},"Work Sample \u00b7 Sales Battlecards (Anonymized)"),
-h("div",{style:{background:"#fff3cd",border:"1px solid #ffc107",borderRadius:"8px",padding:"10px 16px",margin:"10px auto",maxWidth:"600px",fontSize:"12px",color:"#856404"}},"\u26a0\ufe0f This is an anonymized portfolio sample. All company names, deal values, competitor details, and quotes have been changed to protect confidential information."),
-h("div",{style:{display:"flex",justifyContent:"center",gap:"12px",marginTop:"10px",flexWrap:"wrap"}},
-h("button",{onClick:()=>setSs(!ss),style:{...ps(ss,"#333"),fontSize:"13px"}},"\ud83d\udd0d Search"),
-h("button",{onClick:()=>{setQr(!qr);setSec(qr?"overview":"objections");},style:{...ps(qr,"#e74c3c"),fontSize:"13px",background:qr?"#e74c3c":"transparent",color:qr?"#fff":"#666"}},qr?"\u2715 Exit Quick Reference":"\u26a1 Quick Reference")),
-qr&&h("div",{style:{marginTop:"8px",fontSize:"12px",color:"#e74c3c",fontWeight:600}},"QUICK REFERENCE \u2014 talk tracks, trap questions, quick wins only")),
-
-ap&&h("div",{style:{background:personas[ap].color+"10",borderBottom:"1px solid "+personas[ap].color+"30",padding:"8px 16px",display:"flex",alignItems:"center",justifyContent:"center",gap:"8px"}},
-h("span",{style:{fontSize:"13px"}},personas[ap].icon),
-h("span",{style:{fontSize:"12px",fontWeight:700,color:personas[ap].color}},"Persona Active: "+personas[ap].label),
-h("span",{style:{fontSize:"11px",color:"#888"}}," \u2014 Objections and Trap Qs are tailored"),
-h("button",{onClick:()=>setAp(null),style:{marginLeft:"8px",background:"none",border:"1px solid #ccc",borderRadius:"12px",padding:"2px 10px",fontSize:"11px",cursor:"pointer",color:"#888"}},"\u2715 Clear")),
-
-ss&&h("div",{style:{padding:"12px 16px",borderBottom:"1px solid #eee"}},
-h("input",{type:"text",value:search,onChange:e=>setSearch(e.target.value),placeholder:"Search across all competitors...",style:{width:"100%",padding:"10px 14px",border:"1px solid #ddd",borderRadius:"8px",fontSize:"14px",outline:"none",boxSizing:"border-box"}}),
-sr.length>0&&h("div",{style:{marginTop:"8px"}},sr.map((r,i)=>h("div",{key:i,style:{padding:"8px 12px",borderBottom:"1px solid #f0f0f0",display:"flex",alignItems:"center",gap:"10px",fontSize:"13px"}},h("span",{style:{...bg(r.color),fontSize:"10px"}},r.comp),h("span",{style:{color:"#888",fontSize:"11px"}},r.sec),h("span",null,r.text))))),
-
-h("div",{style:{display:"flex",justifyContent:"center",gap:"4px",padding:"12px 8px",borderBottom:"1px solid #e0e0e0",flexWrap:"wrap"}},Object.values(competitors).map(c=>h("button",{key:c.id,onClick:()=>{setAc(c.id);if(!qr)setSec("overview");},style:{padding:"10px 18px",border:"none",borderBottom:ac===c.id?"3px solid "+c.color:"3px solid transparent",background:ac===c.id?"#f8f9fa":"transparent",color:ac===c.id?c.color:"#666",cursor:"pointer",fontWeight:ac===c.id?700:500,fontSize:"14px"}},"\u25cf "+c.name))),
-
-h("div",{style:{display:"flex",gap:"6px",padding:"12px 8px",overflowX:"auto",borderBottom:"1px solid #eee"}},secs.map(s=>h("button",{key:s.id,onClick:()=>setSec(s.id),style:ps(sec===s.id,comp.color)},s.l))),
-
-h("div",{style:{padding:"16px 8px"}},
-
-sec==="overview"&&!qr&&h("div",null,
-h("div",{style:{display:"flex",alignItems:"center",gap:"12px",marginBottom:"16px",flexWrap:"wrap"}},
-h("div",{style:{width:"44px",height:"44px",borderRadius:"12px",background:comp.color+"20",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"20px",fontWeight:800,color:comp.color}},comp.name[0]),
-h("div",null,h("h2",{style:{margin:0,fontSize:"20px",fontWeight:700}},comp.name),h("div",{style:{fontSize:"12px",color:"#888"}},(comp.formerly?comp.formerly+" \u00b7 ":"")+comp.ticker)),
-h("div",{style:{marginLeft:"auto",textAlign:"center"}},h("div",{style:{fontSize:"28px",fontWeight:800,color:stats.winRate>=60?"#27ae60":stats.winRate>=40?"#f39c12":"#e74c3c"}},stats.winRate+"%"),h("div",{style:{fontSize:"10px",fontWeight:700,color:"#888",textTransform:"uppercase"}},"Win Rate ("+stats.count+" deals)"))),
-h("div",{style:{...cd({borderLeft:"4px solid "+comp.color,marginBottom:"16px"})}},h("div",{style:{fontSize:"11px",fontWeight:700,letterSpacing:"1px",color:comp.color,textTransform:"uppercase",marginBottom:"6px"}},"Executive Summary"),h("p",{style:{fontSize:"14px",lineHeight:1.6,margin:0,fontWeight:500}},comp.executiveSummary)),
-h("div",{style:{display:"grid",gridTemplateColumns:"repeat(auto-fit, minmax(250px, 1fr))",gap:"12px"}},
-h("div",{style:cd()},h("div",{style:{fontSize:"11px",fontWeight:700,color:"#27ae60",textTransform:"uppercase",marginBottom:"6px"}},"\u2713 Our Sweet Spot"),h("p",{style:{fontSize:"13px",lineHeight:1.5,margin:0}},comp.ourSweet)),
-h("div",{style:cd()},h("div",{style:{fontSize:"11px",fontWeight:700,color:"#e74c3c",textTransform:"uppercase",marginBottom:"6px"}},"\u2715 Their Sweet Spot"),h("p",{style:{fontSize:"13px",lineHeight:1.5,margin:0}},comp.theirSweet)))),
-
-sec==="persona"&&!qr&&h("div",null,
-h("h3",{style:{fontSize:"18px",fontWeight:700,marginBottom:"4px"}},"Buyer Persona Playbook"),
-h("p",{style:{fontSize:"13px",color:"#666",marginBottom:"16px"}},"Select a persona to tailor objection handling and trap questions to their priorities. The active persona filter applies across all sections."),
-Object.values(personas).map(p=>h("div",{key:p.id,onClick:()=>setAp(p.id),style:{...cd({marginBottom:"12px",borderLeft:"4px solid "+p.color,cursor:"pointer",transition:"box-shadow 0.15s",boxShadow:ap===p.id?"0 0 0 2px "+p.color:"none"})}},
-h("div",{style:{display:"flex",alignItems:"center",gap:"10px",marginBottom:"10px"}},
-h("div",{style:{width:"36px",height:"36px",borderRadius:"10px",background:p.color+"15",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"18px"}},p.icon),
-h("div",{style:{flex:1}},h("div",{style:{fontSize:"15px",fontWeight:700}},p.label),h("div",{style:{fontSize:"11px",color:p.color,fontWeight:600,textTransform:"uppercase"}},ap===p.id?"ACTIVE":"Click to activate")),
-ap===p.id&&h("span",{style:{...bg(p.color)}},"Active")),
-h("div",{style:{fontSize:"13px",lineHeight:1.6,marginBottom:"10px",fontStyle:"italic",color:"#555"}},p.buyingStyle),
-h("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"8px"}},
-h("div",null,h("div",{style:{fontSize:"11px",fontWeight:700,color:"#888",textTransform:"uppercase",marginBottom:"4px"}},"Priorities"),p.priorities.map((pr,i)=>h("div",{key:i,style:{fontSize:"12px",marginBottom:"2px"}},"\u2022 "+pr))),
-h("div",null,h("div",{style:{fontSize:"11px",fontWeight:700,color:"#888",textTransform:"uppercase",marginBottom:"4px"}},"Key Metrics"),p.keyMetrics.map((m,i)=>h("div",{key:i,style:{fontSize:"12px",marginBottom:"2px"}},"\u2022 "+m))))))),
-
-sec==="winloss"&&!qr&&h("div",null,
-h("h3",{style:{fontSize:"18px",fontWeight:700,marginBottom:"4px"}},"Win/Loss vs "+comp.name),
-h("p",{style:{fontSize:"13px",color:"#666",marginBottom:"16px"}},stats.count+" deals \u00b7 "+stats.wins.length+"W \u2013 "+stats.losses.length+"L \u00b7 \u00a3"+(stats.totalValue/1000).toFixed(0)+"k"),
-h("div",{style:cd({marginBottom:"16px"})},
-h("div",{style:{display:"flex",height:"24px",borderRadius:"6px",overflow:"hidden",marginBottom:"12px"}},h("div",{style:{width:stats.winRate+"%",background:"#27ae60",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:"11px",fontWeight:700}},stats.winRate>10?stats.winRate+"% Won":""),h("div",{style:{width:(100-stats.winRate)+"%",background:"#e74c3c",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:"11px",fontWeight:700}},(100-stats.winRate)>10?(100-stats.winRate)+"% Lost":"")),
-h("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px"}},
-h("div",null,h("div",{style:{fontSize:"11px",fontWeight:700,color:"#27ae60",textTransform:"uppercase",marginBottom:"6px"}},"Why We Win"),Object.entries(stats.winDrivers).map(([k,v])=>h("div",{key:k,style:{fontSize:"13px",marginBottom:"4px"}},"\u2022 "+k+" ("+v+"x)"))),
-h("div",null,h("div",{style:{fontSize:"11px",fontWeight:700,color:"#e74c3c",textTransform:"uppercase",marginBottom:"6px"}},"Why We Lose"),Object.entries(stats.lossReasons).map(([k,v])=>h("div",{key:k,style:{fontSize:"13px",marginBottom:"4px"}},"\u2022 "+k+" ("+v+"x)"))))),
-stats.deals.sort((a,b)=>b.date.localeCompare(a.date)).map((d,i)=>h("div",{key:i,style:{...cd({marginBottom:"10px",borderLeft:"4px solid "+(d.outcome==="Won"?"#27ae60":"#e74c3c")})}},
-h("div",{style:{display:"flex",alignItems:"center",gap:"8px",flexWrap:"wrap",marginBottom:"6px"}},h("span",{style:bg(d.outcome==="Won"?"#27ae60":"#e74c3c")},d.outcome),h("span",{style:{fontWeight:700,fontSize:"14px"}},d.deal),h("span",{style:{fontSize:"12px",color:"#888",marginLeft:"auto"}},d.region+" \u00b7 "+d.vertical)),
-h("p",{style:{fontSize:"13px",margin:"0 0 6px",lineHeight:1.5}},h("strong",null,"Decision: "),d.factor+". "+d.detail),
-h("div",{style:{fontSize:"13px",fontStyle:"italic",color:"#555",background:"#f8f9fa",padding:"8px 12px",borderRadius:"6px"}},'"'+d.quote+'"')))),
-
-sec==="comparison"&&!qr&&h("div",null,
-h("h3",{style:{fontSize:"18px",fontWeight:700,marginBottom:"16px"}},"Head-to-Head Comparison"),
-h("div",{style:cd()},["Bandwidth","Deployments","Certifications","Network Focus","Backing"].map((label,i)=>{const keys=["bandwidth","deployments","certs","network","backing"];return h("div",{key:i,style:{display:"grid",gridTemplateColumns:"minmax(100px,1fr) 1fr 1fr",gap:"8px",marginBottom:"8px",fontSize:"13px"}},h("div",{style:{fontWeight:600,color:"#666",fontSize:"11px",textTransform:"uppercase",paddingTop:"8px"}},label),h("div",{style:{background:"#1a6b4a12",border:"1px solid #1a6b4a25",borderRadius:"6px",padding:"8px"}},h("span",{style:{fontSize:"10px",fontWeight:700,color:"#1a6b4a"}},"STREAMEDGE"),h("br"),vc[keys[i]]),h("div",{style:{background:comp.color+"10",border:"1px solid "+comp.color+"25",borderRadius:"6px",padding:"8px"}},h("span",{style:{fontSize:"10px",fontWeight:700,color:comp.color}},comp.name.toUpperCase()),h("br"),comp.comparison[keys[i]]));})),
-h("div",{style:{...cd({marginTop:"16px"})}},h("div",{style:{fontSize:"11px",fontWeight:700,textTransform:"uppercase",color:"#888",marginBottom:"12px"}},"All Competitors \u2014 Win Rate"),Object.values(competitors).map(c=>{const s=all[c.id];return h("div",{key:c.id,style:{display:"flex",alignItems:"center",gap:"12px",marginBottom:"10px"}},h("div",{style:{width:"120px",fontSize:"13px",fontWeight:600,color:c.color}},c.name),h("div",{style:{flex:1,height:"20px",borderRadius:"4px",background:"#eee",overflow:"hidden",display:"flex"}},h("div",{style:{width:s.winRate+"%",background:"#27ae60"}}),h("div",{style:{width:(100-s.winRate)+"%",background:"#e74c3c"}})),h("div",{style:{width:"80px",fontSize:"13px",fontWeight:700,textAlign:"right"}},s.winRate+"% ("+s.wins.length+"W-"+s.losses.length+"L)"));}))),
-
-sec==="trap"&&h("div",null,
-h("h3",{style:{fontSize:"18px",fontWeight:700,marginBottom:"4px"}},"Trap Questions"+(qr?" \u2014 ask these now":"")),
-ap&&h("p",{style:{fontSize:"12px",color:personas[ap].color,fontWeight:600,marginBottom:"12px"}},personas[ap].icon+" Tailored for "+personas[ap].label),
-!ap&&!qr&&h("p",{style:{fontSize:"12px",color:"#888",marginBottom:"12px"}},"Tip: Select a persona from the Personas tab to see role-specific trap questions"),
-curTrapQs.map((t,i)=>h("div",{key:i,style:{...cd({marginBottom:"12px"})}},
-h("div",{style:{display:"flex",gap:"12px"}},
-h("div",{style:{width:"28px",height:"28px",borderRadius:"50%",background:comp.color+"15",color:comp.color,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:800,fontSize:"14px",flexShrink:0}},i+1),
-h("div",{style:{flex:1}},
-h("p",{style:{fontSize:"14px",fontWeight:600,lineHeight:1.5,margin:"0 0 6px",fontStyle:"italic"}},'"'+t.q+'"'),
-!qr&&h("div",{style:{fontSize:"12px",color:"#777",background:"#f5f5f5",borderRadius:"6px",padding:"8px 12px"}},h("strong",null,"Reveals: "),t.reveals)))))),
-
-sec==="objections"&&h("div",null,
-h("h3",{style:{fontSize:"18px",fontWeight:700,marginBottom:"4px"}},"Objection Handling"+(qr?" \u2014 your responses":"")),
-ap&&h("p",{style:{fontSize:"12px",color:personas[ap].color,fontWeight:600,marginBottom:"12px"}},personas[ap].icon+" Tailored for "+personas[ap].label),
-!ap&&!qr&&h("p",{style:{fontSize:"12px",color:"#888",marginBottom:"12px"}},"Tip: Select a persona from the Personas tab to see role-specific objection handling"),
-curObjections.map((o,i)=>h("div",{key:i,style:{...cd({marginBottom:"16px"})}},
-h("div",{style:{background:"#e74c3c0c",borderRadius:"8px",padding:"10px 14px",marginBottom:"10px",border:"1px solid #e74c3c18"}},h("div",{style:{fontSize:"11px",fontWeight:700,color:"#e74c3c",textTransform:"uppercase",marginBottom:"3px"}},"They say"),h("div",{style:{fontSize:"15px",fontWeight:600}},'"'+o.says+'"')),
-h("div",{style:{background:"#27ae600a",borderRadius:"8px",padding:"10px 14px",border:"1px solid #27ae6020"}},h("div",{style:{fontSize:"11px",fontWeight:700,color:"#27ae60",textTransform:"uppercase",marginBottom:"3px"}},"Your response"),h("div",{style:{fontSize:"14px",lineHeight:1.6}},o.response))))),
-
-sec==="redflags"&&!qr&&h("div",null,
-h("h3",{style:{fontSize:"18px",fontWeight:700,marginBottom:"16px"}},comp.name+" Is in the Deal"),
-h("div",{style:cd()},comp.redFlags.map((f,i)=>h("div",{key:i,style:{display:"flex",alignItems:"flex-start",gap:"12px",padding:"10px 0",borderBottom:i<comp.redFlags.length-1?"1px solid #eee":"none"}},h("span",{style:{color:"#e74c3c",fontWeight:800,fontSize:"16px"}},"\u2691"),h("span",{style:{fontSize:"14px",lineHeight:1.5}},f))))),
-
-sec==="quickwins"&&h("div",null,
-h("h3",{style:{fontSize:"18px",fontWeight:700,marginBottom:"16px"}},"Quick Win Plays"+(qr?" \u2014 act now":"")),
-comp.quickWins.map((p,i)=>h("div",{key:i,style:{...cd({marginBottom:"12px",borderLeft:"4px solid "+comp.color})}},
-h("div",{style:{display:"flex",alignItems:"center",gap:"10px",marginBottom:"6px"}},h("div",{style:{width:"28px",height:"28px",borderRadius:"50%",background:comp.color,color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontWeight:800,fontSize:"14px"}},i+1),h("span",{style:{fontSize:"15px",fontWeight:700}},p.title)),
-h("p",{style:{fontSize:"14px",lineHeight:1.6,margin:0,paddingLeft:"38px"}},p.action))))),
-
-h("div",{style:{textAlign:"center",padding:"16px",borderTop:"1px solid #eee",fontSize:"11px",color:"#999"}},"Competitive Intelligence \u00b7 Work Sample (Anonymized) \u00b7 "+winLossDeals.length+" deals tracked \u00b7 4 buyer personas"));
+const PERSONA_PROOF = {ciso:[2, 0, 4]};
+function renderCerts(){
+  $("#certList").innerHTML = CERTS.map((c, i) => `<li class="cert" id="cert-${i}"><span class="p-tile">${icon(c.icon)}</span><div><h4>${esc(c.title)}</h4><p>${esc(c.body)}</p></div><span class="cert-tag">${esc(c.tag)}</span></li>`).join("");
 }
-ReactDOM.render(h(App),document.getElementById("root"));
+function proofHTML(persona){
+  const ids = PERSONA_PROOF[persona]; if (!ids) return "";
+  return `<div class="brief-proof"><h4>Proof you can offer</h4><p>Certifications that answer this buyer's first questions. Full details are in the Company view.</p><ul class="proof-list">${ids.map(i => `<li><span class="p-tile">${icon(CERTS[i].icon)}</span>${esc(CERTS[i].short)}</li>`).join("")}</ul></div>`;
+}
+
+/* ================= Company view (all competitors) ================= */
+const isAll = () => state.comp === "all";
+const inView = () => ORDER.filter(id => state.show[id]);
+const dealPool = () => isAll() ? DEALS.filter(d => state.show[idByName[d.competitor]]).sort((a, b) => b.date.localeCompare(a.date)) : STATS[state.comp].deals;
+function applyMode(){
+  document.body.classList.toggle("mode-all", isAll());
+  $("#ovCompany").hidden = !isAll(); $("#ovComp").hidden = isAll();
+}
+function allOptionHTML(){
+  const w = DEALS.filter(d => d.outcome === "Won").length, l = DEALS.length - w;
+  return `<label class="comp-opt" data-comp="all"><input class="sr-only" type="radio" name="comp" value="all"${state.comp === "all" ? " checked" : ""}><span class="mono mono-all" aria-hidden="true">All</span><span class="comp-name">Company</span><span class="comp-meta num"><span aria-hidden="true">${w}–${l} · ${OVERALL}%</span><span class="sr-only">Company view: ${w} wins, ${l} losses, ${OVERALL}% win rate</span></span>${sparkSVG("all")}</label>`;
+}
+function ctoggleHTML(id, small){
+  const s = STATS[id];
+  return `<button type="button" class="ctoggle${small ? " sm" : ""}" data-cid="${id}" aria-pressed="${state.show[id]}" style="--c:${CCOLOR[id]}"><span class="c-dot"></span><span>${COMPETITORS[id].name}</span>${small ? "" : `<span class="c-val num">${s.wins.length}–${s.losses.length} · ${s.rate}%</span>`}</button>`;
+}
+function renderCompanyStatic(){
+  $("#ctoggles").innerHTML = ORDER.map(id => ctoggleHTML(id)).join("") +
+    `<button type="button" class="ctoggle" data-cid="overall" aria-pressed="${state.showOverall}" style="--c:#0E1F4D"><span class="c-dot"></span><span>Overall line</span></button>`;
+}
+function syncToggles(){
+  $$(".ctoggle").forEach(b => b.setAttribute("aria-pressed", b.dataset.cid === "overall" ? state.showOverall : !!state.show[b.dataset.cid]));
+}
+function renderPickCards(){
+  $$(".pick-card").forEach(el => { el.innerHTML = `<h2 class="card-title">Pick a competitor</h2><p class="card-sub">Talk tracks and plays are written for each competitor.</p><div class="pick-row">${ORDER.map(id => `<button class="pchip" type="button" data-drill="${id}" style="--c:${CCOLOR[id]}"><span class="c-dot"></span>${COMPETITORS[id].name}</button>`).join("")}</div>`; });
+}
+const rateOf = list => list.length ? Math.round(list.filter(d => d.outcome === "Won").length / list.length * 100) : 0;
+function renderCompanySummary(){
+  const pool = dealPool(), w = pool.filter(d => d.outcome === "Won"), l = pool.filter(d => d.outcome === "Lost"), rate = rateOf(pool);
+  const ring = $("#cRingVal"); ring.style.strokeDasharray = RING_C; ring.style.strokeDashoffset = RING_C * (1 - rate / 100);
+  tween($("#cRingNum"), rate); tween($("#cW"), w.length); tween($("#cL"), l.length);
+  tween($("#cValue"), Math.round(sum(w) / 1000), {fmt: v => v >= 1000 ? "£" + (v / 1000).toFixed(2).replace(/\.?0+$/, "") + "M" : "£" + v + "k"});
+  const ids = inView(), ranked = ids.slice().sort((a, b) => STATS[b].rate - STATS[a].rate), best = ranked[0], worst = ranked[ranked.length - 1];
+  $("#cLede").textContent = !ids.length ? "Turn on at least one competitor to see results."
+    : ids.length === 1 ? `StreamEdge won ${w.length} of ${pool.length} deals against ${COMPETITORS[best].name}, worth ${fmtMoney(sum(w))}.`
+    : `StreamEdge won ${w.length} of ${pool.length} deals against the competitors in view, worth ${fmtMoney(sum(w))}. Strongest against ${COMPETITORS[best].name} (${STATS[best].rate}%), weakest against ${COMPETITORS[worst].name} (${STATS[worst].rate}%).`;
+  $("#byComp").innerHTML = ORDER.map(id => { const s = STATS[id];
+    return `<button type="button" class="bc-row${state.show[id] ? "" : " off"}" data-drill="${id}" data-cid="${id}" style="--c:${CCOLOR[id]}" aria-label="Open ${COMPETITORS[id].name}: ${s.wins.length} wins, ${s.losses.length} losses, ${s.rate}% win rate"><span class="c-dot"></span><span class="bc-name">${COMPETITORS[id].name}</span><span class="bc-rec num">${s.wins.length}–${s.losses.length}</span><span class="bar thin" aria-hidden="true"><i style="transform:scaleX(${s.rate / 100})"></i></span><span class="bc-pct">${s.rate}%</span>${icon("chevron", "bc-chev")}</button>`; }).join("");
+}
+function drawCompanyDonut(animate){
+  const ids = inView(), segs = [];
+  ids.forEach(id => { if (STATS[id].wonValue) segs.push({id, out:"Won", v:STATS[id].wonValue}); });
+  ids.forEach(id => { if (STATS[id].lostValue) segs.push({id, out:"Lost", v:STATS[id].lostValue}); });
+  const total = segs.reduce((a, g) => a + g.v, 0), r = 64, C = 2 * Math.PI * r, gap = segs.length > 1 ? 3 : 0;
+  let off = 0, circles = "";
+  segs.forEach(g => {
+    g.len = Math.max(0, g.v / total * C - gap); g.start = off; off += g.v / total * C;
+    circles += `<circle class="seg cseg" data-cid="${g.id}" data-drill="${g.id}" cx="86" cy="86" r="${r}" stroke="${CCOLOR[g.id]}" stroke-opacity="${g.out === "Won" ? 1 : .36}" stroke-dasharray="${g.len.toFixed(2)} ${C.toFixed(2)}" stroke-dashoffset="${(-g.start).toFixed(2)}" transform="rotate(-90 86 86)"><title>${COMPETITORS[g.id].name}, ${g.out.toLowerCase()}: ${fmtMoney(g.v)}</title></circle>`;
+  });
+  $("#cDonut").innerHTML = `<svg viewBox="0 0 172 172" role="img" aria-label="Deal value by competitor: ${segs.map(g => `${COMPETITORS[g.id].name} ${g.out.toLowerCase()} ${fmtMoney(g.v)}`).join("; ") || "no competitors in view"}"><circle cx="86" cy="86" r="${r}" fill="none" stroke="#ECF0F8" stroke-width="22"/>${circles}</svg><div class="donut-center"><span class="big num" style="font-size:24px">${total ? fmtMoney(total) : "£0"}</span><small>contested value</small></div>`;
+  if (animate) $$("#cDonut .cseg").forEach((el, i) => { const g = segs[i];
+    anim(el, [{strokeDasharray:`0 ${C}`}, {strokeDasharray:`${g.len} ${C}`}], {duration:Math.max(260, g.len / C * 900), delay:100 + g.start / C * 700, easing:EASE_OUT, fill:"backwards"}); });
+  const group = (label, list) => list.length ? `<p class="lg-group">${label} · ${fmtMoney(list.reduce((a, g) => a + g.v, 0))}</p>` + list.map(g => `<button type="button" class="lg-row clg-row" data-drill="${g.id}" data-cid="${g.id}" aria-label="${COMPETITORS[g.id].name}, ${g.out.toLowerCase()} ${fmtMoney(g.v)}. Open competitor"><span class="lg-dot ${g.out === "Won" ? "won" : "lost"}" style="background:${CCOLOR[g.id]};border-color:${CCOLOR[g.id]}"></span><span class="lg-name">${COMPETITORS[g.id].name}</span><span class="lg-pct num">${fmtMoney(g.v)}</span></button>`).join("") : "";
+  $("#cLegend").innerHTML = total ? group("Won", segs.filter(g => g.out === "Won")) + group("Lost", segs.filter(g => g.out === "Lost")) : `<p class="empty">No competitors in view.</p>`;
+}
+function drawCompanyLine(animate, onlyIds){
+  const box = $("#cLineCanvas"), w = Math.max(280, box.clientWidth), h = w < 560 ? 230 : 280;
+  const X = x => LM.l + x / 11 * (w - LM.l - LM.r), Y = r => LM.t + (1 - r / 100) * (h - LM.t - LM.b);
+  const ids = inView(), pool = dealPool(), overall = cumulative(pool), base = Y(0);
+  let s = `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="group" aria-label="Cumulative win rate over time by competitor">`;
+  [0, 25, 50, 75, 100].forEach(v => { s += `<line class="gl" x1="${LM.l}" x2="${w - LM.r}" y1="${Y(v)}" y2="${Y(v)}"/><text class="ax" x="${LM.l - 10}" y="${Y(v)}" dy="0.32em" text-anchor="end">${v}%</text>`; });
+  if (state.showOverall && overall.length){
+    const P = overall.map(p => ({x:X(p.x), y:Y(p.rate)})), d = monotone(P), last = P[P.length - 1];
+    s += `<g class="c-ov"><path class="area-ov" d="${d} L${last.x.toFixed(1)},${base} L${P[0].x.toFixed(1)},${base} Z"/><path class="ln-ov" d="${d}"/></g>`;
+  }
+  ids.forEach(id => {
+    const pts = SERIES[id], P = pts.map(p => ({x:X(p.x), y:Y(p.rate)}));
+    s += `<g class="cgrp" data-gid="${id}" style="--c:${CCOLOR[id]}"><path class="cl" d="${monotone(P)}"/>`;
+    pts.forEach((p, i) => { const d = p.deal;
+      s += `<g class="pt cpt ${d.outcome === "Won" ? "won" : "lost"}" data-cid="${id}" data-deal="${d.id}" data-rate="${p.rate}" tabindex="0" role="button" aria-label="${esc(d.deal)} vs ${COMPETITORS[id].name}, ${d.outcome}, ${fmtDate(d.date)}. Win rate ${p.rate}%. Open deal" transform="translate(${P[i].x.toFixed(1)} ${P[i].y.toFixed(1)})"><circle class="halo" r="12"/><circle class="mk" r="4.8"/></g>`; });
+    s += "</g>";
+  });
+  if (!ids.length) s += `<text class="ax" x="${(w / 2).toFixed(0)}" y="${(h / 2).toFixed(0)}" text-anchor="middle" style="font-size:14px">Turn on a competitor to plot its win rate</text>`;
+  box.innerHTML = s + "</svg>";
+  const on = new Set(pool.map(d => Math.floor(monthPos(d.date))));
+  const names = ["Aug","Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun"];
+  const mo = $("#cMonths"); mo.style.paddingLeft = LM.l + "px"; mo.style.paddingRight = LM.r + "px";
+  mo.innerHTML = names.map((n, i) => `<span class="month${on.has(i) ? " on" : ""}">${n}</span>`).join("");
+  if (animate && !reduce.matches){
+    let k = 0;
+    $$(".cgrp", box).forEach(g => {
+      if (onlyIds && !onlyIds.includes(g.dataset.gid)) return;
+      const delay = onlyIds ? 0 : k++ * 150, ln = $(".cl", g), L = ln.getTotalLength();
+      ln.animate([{strokeDasharray:`${L} ${L}`, strokeDashoffset:L}, {strokeDasharray:`${L} ${L}`, strokeDashoffset:0}], {duration:900, delay, easing:EASE_OUT, fill:"backwards"});
+      $$(".mk", g).forEach((m, i) => anim(m, [{transform:"scale(0)"}, {transform:"scale(1)"}], {duration:300, delay:delay + 250 + i * 50, easing:SPRING, fill:"backwards"}));
+    });
+    anim($(".c-ov", box), [{opacity:0}, {opacity:1}], {duration:500, delay:onlyIds ? 0 : 300, easing:"ease-out", fill:"backwards"});
+  }
+  tween($("#cLineVal"), rateOf(pool));
+}
+function renderCompanyFactors(){
+  const pool = dealPool();
+  const agg = out => Object.entries(pool.filter(d => d.outcome === out).reduce((m, d) => ((m[d.factor] = m[d.factor] || []).push(d), m), {})).sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0]));
+  const col = (title, list, cls) => `<div class="fcol"><h4><span class="mk-${cls}"></span>${title}</h4>${list.length ? `<ul>${list.map(([f, ds]) => `<li><span>${esc(f)}</span><span class="fdots" role="img" aria-label="${ds.length} deal${ds.length > 1 ? "s" : ""}: ${esc(ds.map(d => d.competitor).join(", "))}">${ds.map(d => `<span class="fdot ${cls}" style="--c:${CCOLOR[idByName[d.competitor]]}" title="${esc(d.deal)} (${esc(d.competitor)})"></span>`).join("")}</span></li>`).join("")}</ul>` : `<p class="empty">No ${cls === "won" ? "wins" : "losses"} in view.</p>`}</div>`;
+  $("#cFactors").innerHTML = col("Why we win", agg("Won"), "won") + col("Why we lose", agg("Lost"), "lost");
+  if (!reduce.matches) $$("#cFactors .fdot").forEach((el, i) => anim(el, [{transform:"scale(0)"}, {transform:"scale(1)"}], {duration:260, delay:120 + i * 25, easing:SPRING, fill:"backwards"}));
+}
+function drawCompany(animate){ renderCompanySummary(); drawCompanyDonut(animate); drawCompanyLine(animate); renderCompanyFactors(); chartsDirty = false; }
+function cLinkHL(cid){
+  const root = $("#ovCompany");
+  root.classList.toggle("clinking", !!cid);
+  $$("[data-cid], [data-gid]", root).forEach(el => el.classList.toggle("lit", !!cid && (el.dataset.cid || el.dataset.gid) === cid));
+}
+function showCTip(g){
+  const d = DEALS[+g.dataset.deal], card = $("#cLineCard"), tip = $("#cTip");
+  const cr = card.getBoundingClientRect(), gr = g.querySelector(".mk").getBoundingClientRect();
+  tip.innerHTML = `<strong>${esc(d.deal)}</strong><span>${d.outcome} vs ${esc(d.competitor)} · ${fmtMoney(d.value)} · ${fmtDate(d.date)}</span><span>${esc(d.factor)} · win rate vs ${esc(d.competitor)} now ${g.dataset.rate}%</span>`;
+  tip.hidden = false;
+  const half = tip.offsetWidth / 2;
+  tip.style.left = Math.max(half + 10, Math.min(cr.width - half - 10, gr.left + gr.width / 2 - cr.left)) + "px";
+  tip.style.top = (gr.top - cr.top) + "px";
+  requestAnimationFrame(() => tip.classList.add("show"));
+}
+function hideCTip(){ const t = $("#cTip"); t.classList.remove("show"); t.hidden = true; }
+function toggleShow(cid){
+  if (cid === "overall"){ state.showOverall = !state.showOverall; syncToggles(); if (isAll() && state.tab === "overview") drawCompanyLine(true, []); return; }
+  const on = !state.show[cid]; state.show[cid] = on; syncToggles(); cLinkHL(null);
+  announce(`${COMPETITORS[cid].name} ${on ? "shown" : "hidden"}.`);
+  const redraw = () => {
+    if (isAll() && state.tab === "overview"){ renderCompanySummary(); drawCompanyDonut(true); drawCompanyLine(true, on ? [cid] : []); renderCompanyFactors(); }
+    else chartsDirty = true;
+    renderDealFilters(); renderDeals();
+  };
+  const g = $(`#cLineCanvas .cgrp[data-gid="${cid}"]`);
+  if (!on && g && !reduce.matches) Promise.race([g.animate([{opacity:1}, {opacity:0}], {duration:180, easing:EASE_IN, fill:"forwards"}).finished.catch(() => {}), new Promise(r => setTimeout(r, 240))]).then(redraw);
+  else redraw();
+}
+function wireCompany(){
+  const root = $("#ovCompany");
+  const key = t => t.closest && t.closest(".cpt, .cseg, .clg-row, .bc-row, .ctoggle");
+  const link = el => { const cid = el.dataset.cid; if (cid && cid !== "overall" && state.show[cid]) cLinkHL(cid); };
+  root.addEventListener("pointerover", e => { const el = key(e.target); if (!el) return; if (el.classList.contains("cpt")) showCTip(el); link(el); });
+  root.addEventListener("pointerout", e => { const el = key(e.target); if (!el || el.contains(e.relatedTarget)) return; if (el.classList.contains("cpt")) hideCTip(); cLinkHL(null); });
+  root.addEventListener("focusin", e => { const el = key(e.target); if (!el) return; if (el.classList.contains("cpt")) showCTip(el); link(el); });
+  root.addEventListener("focusout", e => { if (key(e.target)){ hideCTip(); cLinkHL(null); } });
+  root.addEventListener("click", e => { const pt = e.target.closest(".cpt"); if (pt){ hideCTip(); cLinkHL(null); openDealFromChart(+pt.dataset.deal); } });
+  $("#cLineCanvas").addEventListener("keydown", e => { const pt = e.target.closest(".cpt"); if (pt && (e.key === "Enter" || e.key === " ")){ e.preventDefault(); hideCTip(); openDealFromChart(+pt.dataset.deal); } });
+}
+
+/* ================= Deals ================= */
+function renderDealFilters(){
+  const pool = dealPool(), s = {deals:pool, wins:pool.filter(d => d.outcome === "Won"), losses:pool.filter(d => d.outcome === "Lost")};
+  const opt = (id, label, n) => `<button type="button" data-outcome="${id}" aria-pressed="${state.outcome === id}">${label} <span class="num">${n}</span></button>`;
+  $("#dealFilters").innerHTML = `<div class="seg-ctl" role="group" aria-label="Filter by outcome">${opt("all", "All", s.deals.length)}${opt("Won", "Won", s.wins.length)}${opt("Lost", "Lost", s.losses.length)}</div>` +
+    (state.factor ? `<span class="chip">${icon("filter")}${esc(state.factor)}<button type="button" data-clear-factor aria-label="Clear factor filter">${icon("x")}</button></span>` : "") +
+    (isAll() ? ORDER.map(id => ctoggleHTML(id, true)).join("") : "");
+}
+function renderDeals(){
+  const list = dealPool().filter(d => (state.outcome === "all" || d.outcome === state.outcome) && (!state.factor || d.factor === state.factor));
+  $("#dealList").innerHTML = list.length ? list.map(d => {
+    const won = d.outcome === "Won";
+    return `<li class="deal" id="deal-${d.id}" data-i="${d.id}">
+      <button class="deal-row" type="button" aria-expanded="false" aria-controls="deal-${d.id}-more">
+        <span class="res ${won ? "won" : "lost"}" aria-hidden="true">${won ? "W" : "L"}</span>
+        <span><span class="sr-only">${d.outcome}: </span><span class="deal-name">${esc(d.deal)}</span><span class="deal-meta">${isAll() ? `<span class="deal-comp" style="--c:${CCOLOR[idByName[d.competitor]]}">${esc(d.competitor)}</span> · ` : ""}${esc(d.factor)} · ${esc(d.region)} · ${esc(d.vertical)} · ${fmtDate(d.date)}</span></span>
+        <span class="deal-val${d.value ? "" : " na"}">${fmtMoney(d.value)}</span>
+        <span class="chev">${icon("chevron")}</span>
+      </button>
+      <div class="collapse" id="deal-${d.id}-more"><div class="collapse-in"><div class="deal-more">
+        <p><strong>Deciding factor: ${esc(d.factor)}.</strong> ${esc(d.detail)}</p>
+        <blockquote>“${esc(d.quote)}”</blockquote>
+        <p class="stage">Decided at: ${esc(d.stage)}</p>
+      </div></div></div>
+    </li>`;
+  }).join("") : `<li class="empty">No deals match these filters.</li>`;
+}
+function toggleDeal(li, force){
+  const btn = $(".deal-row", li), col = $(".collapse", li); if (!btn) return;
+  const open = force ?? btn.getAttribute("aria-expanded") !== "true";
+  btn.setAttribute("aria-expanded", open); col.classList.toggle("open", open);
+}
+function setDealFilter({outcome, factor}){
+  if (outcome !== undefined) state.outcome = outcome;
+  if (factor !== undefined) state.factor = factor;
+  renderDealFilters();
+  return swap("deals", 1, renderDeals);
+}
+
+/* ================= Talk tracks & plays ================= */
+function personaChip(){
+  if (!state.persona) return "";
+  const p = PERSONAS[state.persona];
+  return `<span class="chip">${icon(p.icon)}For ${esc(p.short)}<button type="button" data-persona="" aria-label="Clear buyer filter">${icon("x")}</button></span>`;
+}
+function renderTalk(){
+  if (isAll()) return;
+  const c = COMPETITORS[state.comp], p = state.persona ? PERSONAS[state.persona] : null, key = state.persona || "all";
+  $$(".js-pchip").forEach(el => { el.innerHTML = personaChip(); });
+  $("#brief").innerHTML = p ? `<div class="brief-card">
+      <div class="brief-head"><span class="p-tile">${icon(p.icon)}</span><div><p class="card-sub">Buyer in the room</p><h3>${esc(p.label)}</h3></div><button class="pill-btn" type="button" data-persona="">Any buyer</button></div>
+      <p class="brief-style">${esc(p.buyingStyle)}</p>
+      <div class="brief-cols"><div><h4>What they prioritise</h4><ul>${p.priorities.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div><div><h4>Proof they will ask for</h4><ul>${p.keyMetrics.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div></div>${proofHTML(state.persona)}
+    </div>`
+    : `<div class="brief-empty"><span>Tailor these talk tracks to the buyer in the room</span>${PERSONA_ORDER.map(k => `<button class="pchip" type="button" data-persona="${k}"><span class="p-tile">${icon(PERSONAS[k].icon)}</span>${PERSONAS[k].short}</button>`).join("")}</div>`;
+  const objs = p ? PERSONA_OBJECTIONS[state.comp][state.persona] : c.objections;
+  const qs = p ? PERSONA_QUESTIONS[state.comp][state.persona] : c.questions;
+  $("#objSub").textContent = p ? `What a ${p.label.toLowerCase()} is likely to hear from ${c.name}, and how to answer.` : `What prospects hear from ${c.name}, and how to answer.`;
+  $("#qSub").textContent = p ? `Questions to plant with the ${p.label.toLowerCase()}. Each one exposes a gap in ${c.name}'s story.` : `Questions to plant with the buyer. Each one exposes a gap in ${c.name}'s story.`;
+  $("#objList").innerHTML = objs.map((o, i) => `<article class="obj" id="obj-${key}-${i}">
+      <div class="obj-say"><p class="lbl them"><span class="mk-lost"></span>They say</p><p class="quote">“${esc(o.says)}”</p></div>
+      <div class="obj-resp"><p class="lbl us"><span class="mk-won"></span>You say</p><p>${esc(o.response)}</p>
+        <div class="row-end"><button class="copy" type="button" data-copy="${esc(o.response)}">${icon("copy")}<span>Copy</span></button></div></div>
+    </article>`).join("");
+  $("#qList").innerHTML = qs.map((t, i) => `<article class="q" id="q-${key}-${i}">
+      <p class="q-text">“${esc(t.q)}”</p>
+      <div class="q-foot"><p class="q-reveals"><strong>Exposes:</strong> ${esc(t.reveals)}</p><button class="copy" type="button" data-copy="${esc(t.q)}">${icon("copy")}<span>Copy</span></button></div>
+    </article>`).join("");
+}
+function renderPlays(){
+  if (isAll()) return;
+  const c = COMPETITORS[state.comp];
+  $("#flagList").innerHTML = c.redFlags.map((f, i) => `<li id="flag-${i}"><span class="f-ico">${icon("flag")}</span><span>${esc(f)}</span></li>`).join("");
+  $("#playList").innerHTML = c.quickWins.map((p, i) => `<article class="play" id="play-${i}"><div class="play-head"><span class="p-tile">${icon("target")}</span><h3>${esc(p.title)}</h3></div><p>${esc(p.action)}</p></article>`).join("");
+}
+function drawOverview(animate){ if (isAll()) drawCompany(animate); else drawCharts(animate); chartsDirty = false; }
+function renderComp(animate = true){
+  applyMode();
+  if (isAll()){ $$(".js-cname").forEach(e => { e.textContent = "all competitors"; }); renderCompanyStatic(); }
+  else renderDossier();
+  if (state.tab === "overview") drawOverview(animate); else chartsDirty = true;
+  renderDealFilters(); renderDeals(); renderTalk(); renderPlays();
+}
+
+/* Crossfade visible content in the direction of travel. A newer swap cancels an older one. */
+let pending = {muts:[], kinds:new Set(), waiters:[]};
+async function swap(kind, dir, mutate){
+  const token = ++swapToken;
+  pending.muts.push(mutate); pending.kinds.add(kind);
+  const visible = el => el.offsetParent !== null;
+  const targets = $$(`[data-swap~="${kind}"]`).filter(visible);
+  if (!reduce.matches && targets.length){
+    const outs = targets.map(el => el.animate([{opacity:0, transform:`translateX(${-10 * dir}px)`}], {duration:130, easing:EASE_IN, fill:"forwards"}));
+    await Promise.race([Promise.all(outs.map(a => a.finished.catch(() => {}))), new Promise(r => setTimeout(r, 220))]);
+    // A newer change arrived: it will apply this update too, so wait for it instead of dropping it.
+    if (token !== swapToken) return new Promise(r => pending.waiters.push(r));
+  }
+  const {muts, kinds, waiters} = pending;
+  pending = {muts:[], kinds:new Set(), waiters:[]};
+  muts.forEach(m => m());
+  $$("[data-swap]").forEach(el => el.getAnimations().forEach(a => a.cancel()));
+  $$([...kinds].map(k => `[data-swap~="${k}"]`).join(",")).filter(visible).forEach((el, i) => {
+    anim(el, [{opacity:0, transform:`translateX(${14 * dir}px)`}, {opacity:1, transform:"none"}], {duration:360, delay:i * 30, easing:EASE_OUT, fill:"backwards"});
+  });
+  waiters.forEach(r => r());
+}
+function setComp(id){
+  if (!COMP_KEYS.includes(id) || id === state.comp) return Promise.resolve();
+  const dir = COMP_KEYS.indexOf(id) > COMP_KEYS.indexOf(state.comp) ? 1 : -1;
+  state.comp = id; state.factor = null; state.outcome = "all"; syncControls();
+  try { history.replaceState(null, "", "#" + id); } catch (e) {}
+  if (id === "all") announce("Company view, all competitors.");
+  else { const s = STATS[id]; announce(`${COMPETITORS[id].name}. ${s.wins.length} wins, ${s.losses.length} losses.`); }
+  return swap("comp", dir, () => renderComp(true));
+}
+function setPersona(p){
+  if (p === state.persona) return Promise.resolve();
+  state.persona = p; syncControls();
+  announce(p ? `Talk tracks tailored for ${PERSONAS[p].label}.` : "Showing talk tracks for any buyer.");
+  return swap("persona", 1, renderTalk);
+}
+
+/* ================= Tabs ================= */
+function renderTabs(){
+  $("#tabs").insertAdjacentHTML("beforeend", TABS.map(([id, label]) => `<button class="tab" type="button" role="tab" id="tab-${id}" aria-controls="view-${id}" aria-selected="${id === state.tab}" tabindex="${id === state.tab ? 0 : -1}" data-tab="${id}">${label}</button>`).join(""));
+}
+function placeTabInd(animate = true){
+  const t = $(`#tab-${state.tab}`), ind = $("#tabInd"); if (!t || !t.offsetParent) return;
+  if (!animate) ind.style.transition = "none";
+  ind.style.width = t.offsetWidth + "px"; ind.style.transform = `translateX(${t.offsetLeft}px)`;
+  if (!animate){ void ind.offsetWidth; ind.style.transition = ""; }
+}
+function setTab(id, {focusTab = false} = {}){
+  if (id === state.tab) return Promise.resolve();
+  const idx = k => TABS.findIndex(t => t[0] === k), dir = idx(id) > idx(state.tab) ? 1 : -1;
+  const from = $("#view-" + state.tab), to = $("#view-" + id), token = ++tabToken;
+  state.tab = id;
+  $$(".tab").forEach(t => { const on = t.dataset.tab === id; t.setAttribute("aria-selected", on); t.tabIndex = on ? 0 : -1; });
+  if (focusTab) $("#tab-" + id).focus();
+  placeTabInd();
+  const top = $("#main").getBoundingClientRect().top + scrollY - 100;
+  if (scrollY > top) window.scrollTo({top, behavior:"auto"});
+  const show = () => {
+    if (token !== tabToken) return;
+    from.hidden = true; to.hidden = false;
+    if (id === "overview" && chartsDirty) drawOverview(true);
+    anim(to, [{opacity:0, transform:`translateX(${18 * dir}px)`}, {opacity:1, transform:"none"}], {duration:380, easing:EASE_OUT});
+  };
+  if (reduce.matches){ show(); return Promise.resolve(); }
+  const out = from.animate([{opacity:1, transform:"none"}, {opacity:0, transform:`translateX(${-12 * dir}px)`}], {duration:140, easing:EASE_IN});
+  return Promise.race([out.finished.catch(() => {}), new Promise(r => setTimeout(r, 220))]).then(() => { out.cancel(); show(); });
+}
+
+/* ================= Live call ================= */
+function setLive(on){
+  state.live = on;
+  document.body.classList.toggle("live", on);
+  const b = $("#liveBtn"); b.setAttribute("aria-pressed", on);
+  $(".live-lbl", b).textContent = on ? "Exit live call" : "Live call";
+  const after = () => {
+    window.scrollTo({top:0, behavior:"auto"});
+    $$("#view-talk > *, #view-plays > *").filter(el => el.offsetParent !== null).forEach((el, i) => anim(el, [{opacity:0, transform:"translateY(10px)"}, {opacity:1, transform:"none"}], {duration:360, delay:i * 50, easing:EASE_OUT, fill:"backwards"}));
+  };
+  if (on){ state.tab === "talk" ? after() : setTab("talk").then(after); toast("Live call view. Talk tracks, red flags and plays together.", "radio"); }
+  else { requestAnimationFrame(() => placeTabInd(false)); toast("Full battlecard view."); }
+}
+
+/* ================= Command palette ================= */
+const TYPE_META = {Objection:{icon:"message", order:0}, Question:{icon:"crosshair", order:1}, "Red flag":{icon:"flag", order:2}, Play:{icon:"target", order:3}, Deal:{icon:"briefcase", order:4}, Certification:{icon:"shield", order:5}, Action:{icon:"arrow", order:-1}};
+const GROUP_LABEL = {Objection:"Objections", Question:"Trap questions", "Red flag":"Red flags", Play:"Plays", Deal:"Deals", Certification:"Certifications", Action:"Jump to"};
+const INDEX = [];
+function buildIndex(){
+  ORDER.forEach(cid => {
+    const c = COMPETITORS[cid];
+    c.objections.forEach((o, i) => INDEX.push({type:"Objection", comp:cid, persona:"", title:o.says, body:o.response, target:`obj-all-${i}`}));
+    c.questions.forEach((q, i) => INDEX.push({type:"Question", comp:cid, persona:"", title:q.q, body:q.reveals, target:`q-all-${i}`}));
+    PERSONA_ORDER.forEach(p => {
+      PERSONA_OBJECTIONS[cid][p].forEach((o, i) => INDEX.push({type:"Objection", comp:cid, persona:p, title:o.says, body:o.response, target:`obj-${p}-${i}`}));
+      PERSONA_QUESTIONS[cid][p].forEach((q, i) => INDEX.push({type:"Question", comp:cid, persona:p, title:q.q, body:q.reveals, target:`q-${p}-${i}`}));
+    });
+    c.redFlags.forEach((f, i) => INDEX.push({type:"Red flag", comp:cid, persona:"", title:f, body:"", target:`flag-${i}`}));
+    c.quickWins.forEach((p, i) => INDEX.push({type:"Play", comp:cid, persona:"", title:p.title, body:p.action, target:`play-${i}`}));
+  });
+  DEALS.forEach(d => INDEX.push({type:"Deal", comp:idByName[d.competitor], persona:"", title:d.deal, body:`${d.outcome} ${d.factor} ${d.detail} ${d.region} ${d.vertical}`, target:`deal-${d.id}`, deal:d}));
+  CERTS.forEach((c, i) => INDEX.push({type:"Certification", comp:"all", persona:"", title:c.title, body:`${c.body} ${c.tag}`, meta:`StreamEdge · ${c.tag}`, target:`cert-${i}`}));
+  INDEX.forEach(it => { it.hay = [it.title, it.body, COMPETITORS[it.comp] ? COMPETITORS[it.comp].name : "StreamEdge", it.persona ? PERSONAS[it.persona].label : "", it.type].join(" ").toLowerCase(); });
+}
+const pal = {open:false, items:[], active:0, lastFocus:null, anims:[]};
+function actions(){
+  return [
+    {type:"Action", title:"Go to company overview", meta:"All competitors", run:() => setComp("all")},
+    ...ORDER.map(id => ({type:"Action", title:`Go to ${COMPETITORS[id].name}`, meta:`${STATS[id].wins.length}–${STATS[id].losses.length} record · ${STATS[id].rate}% win rate`, run:() => setComp(id)})),
+    ...TABS.filter(t => t[0] !== state.tab).map(([id, label]) => ({type:"Action", title:`Open ${label}`, meta:"View", run:() => setTab(id)})),
+    {type:"Action", title: state.live ? "Exit live call view" : "Start live call view", meta:"Shortcut: L", run:() => setLive(!state.live)}
+  ];
+}
+function hl(text, terms){
+  let out = esc(text);
+  terms.forEach(t => { const re = new RegExp("(" + esc(t).replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "gi"); out = out.replace(re, "<mark>$1</mark>"); });
+  return out;
+}
+function runSearch(q){
+  const terms = q.toLowerCase().trim().split(/\s+/).filter(Boolean);
+  let items;
+  if (!terms.length) items = actions();
+  else items = INDEX.filter(it => terms.every(t => it.hay.includes(t))).map(it => ({...it,
+      score:(it.comp === state.comp ? 2 : 0) + (terms.every(t => it.title.toLowerCase().includes(t)) ? 3 : 0) + (it.persona && it.persona === state.persona ? 1 : 0)}))
+    .sort((a, b) => TYPE_META[a.type].order - TYPE_META[b.type].order || b.score - a.score).slice(0, 60);
+  pal.items = items; pal.active = 0;
+  let html = "", group = null;
+  if (!terms.length) html += `<li role="presentation" class="p-try">Try ${["certification", "SATCOM", "price", "packet loss", "edge analytics"].map(t => `<button type="button" data-try="${t}">${t}</button>`).join("")}</li>`;
+  items.forEach((it, i) => {
+    if (it.type !== group){ group = it.type; html += `<li role="presentation" class="p-group">${GROUP_LABEL[it.type]}</li>`; }
+    const meta = it.meta || [COMPETITORS[it.comp].name, it.persona ? PERSONAS[it.persona].short : null, it.deal ? `${it.deal.outcome} · ${fmtMoney(it.deal.value)}` : null].filter(Boolean).join(" · ");
+    html += `<li role="option" class="p-item" id="popt-${i}" data-i="${i}" aria-selected="${i === 0}"><span class="p-ico">${icon(TYPE_META[it.type].icon)}</span><span><span class="p-title">${hl(it.title, terms)}</span><span class="p-meta">${esc(meta)}</span></span></li>`;
+  });
+  if (terms.length && !items.length) html = `<li role="presentation" class="p-empty">No matches for “${esc(q)}”. Try a competitor name, a network type such as SATCOM, or a buyer concern such as price.</li>`;
+  $("#pres").innerHTML = html;
+  $("#pq").setAttribute("aria-activedescendant", items.length ? "popt-0" : "");
+  $("#pcount").textContent = terms.length ? `${items.length} result${items.length === 1 ? "" : "s"}` : "";
+  $("#plist").scrollTop = 0;
+  if (!terms.length) $$("#pres .p-item").forEach((li, i) => anim(li, [{opacity:0, transform:"translateY(4px)"}, {opacity:1, transform:"none"}], {duration:220, delay:i * 22, easing:EASE_OUT, fill:"backwards"}));
+}
+function setActiveOption(i){
+  if (!pal.items.length) return;
+  pal.active = (i + pal.items.length) % pal.items.length;
+  $$("#pres .p-item").forEach(li => li.setAttribute("aria-selected", +li.dataset.i === pal.active));
+  const li = $("#popt-" + pal.active); $("#pq").setAttribute("aria-activedescendant", li.id); li.scrollIntoView({block:"nearest"});
+}
+function openPalette(){
+  if (pal.open) return;
+  pal.open = true; pal.lastFocus = document.activeElement;
+  pal.anims.forEach(a => a.cancel()); pal.anims = [];
+  $("#palette").hidden = false; document.documentElement.classList.add("lock");
+  $("#pq").value = ""; runSearch(""); $("#pq").focus();
+  anim($(".palette-scrim"), [{opacity:0}, {opacity:1}], {duration:200, easing:"ease-out"});
+  anim($(".palette-panel"), [{opacity:0, transform:"translateY(-8px) scale(.98)"}, {opacity:1, transform:"none"}], {duration:280, easing:EASE_OUT});
+}
+function closePalette(restoreFocus = true){
+  if (!pal.open) return;
+  pal.open = false;
+  const done = () => { $("#palette").hidden = true; document.documentElement.classList.remove("lock"); pal.anims.forEach(a => a.cancel()); pal.anims = []; };
+  if (reduce.matches) done();
+  else {
+    pal.anims = [$(".palette-scrim").animate([{opacity:0}], {duration:150, easing:EASE_IN, fill:"forwards"}),
+                 $(".palette-panel").animate([{opacity:0, transform:"translateY(-4px) scale(.985)"}], {duration:150, easing:EASE_IN, fill:"forwards"})];
+    pal.anims[1].onfinish = done;
+  }
+  if (restoreFocus && pal.lastFocus && pal.lastFocus.focus) pal.lastFocus.focus({preventScroll:true});
+}
+function flash(el){ el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash"); el.addEventListener("animationend", () => el.classList.remove("flash"), {once:true}); }
+async function goTo(it){
+  const persona = (it.type === "Objection" || it.type === "Question") ? it.persona : state.persona;
+  if (it.type === "Deal"){ state.outcome = "all"; state.factor = null; }
+  if (isAll() && it.type === "Deal"){ state.show[it.comp] = true; syncToggles(); chartsDirty = true; renderDealFilters(); renderDeals(); }
+  else if (it.comp !== state.comp){ state.persona = persona; await setComp(it.comp); }
+  else if (persona !== state.persona) await setPersona(persona);
+  else if (it.type === "Deal"){ renderDealFilters(); renderDeals(); }
+  const tab = TAB_FOR[it.type];
+  if (state.live && (tab === "deals" || tab === "overview")) setLive(false);
+  if (!(state.live && tab === "plays")) await setTab(tab);
+  const el = document.getElementById(it.target); if (!el) return;
+  if (it.type === "Deal") toggleDeal(el, true);
+  const focusEl = it.type === "Deal" ? $(".deal-row", el) : el;
+  if (focusEl === el) el.setAttribute("tabindex", "-1");
+  el.scrollIntoView({block:"center", behavior: reduce.matches ? "auto" : "smooth"});
+  focusEl.focus({preventScroll:true}); flash(el);
+}
+function choose(i){
+  const it = pal.items[i]; if (!it) return;
+  closePalette(!!it.run);
+  if (it.run) it.run(); else goTo(it);
+}
+
+/* ================= Events ================= */
+const isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+async function copyText(btn){
+  const done = () => {
+    btn.classList.add("done"); btn.innerHTML = icon("check") + "<span>Copied</span>"; announce("Copied to clipboard");
+    clearTimeout(btn._t); btn._t = setTimeout(() => { btn.classList.remove("done"); btn.innerHTML = icon("copy") + "<span>Copy</span>"; }, 1600);
+  };
+  try { await navigator.clipboard.writeText(btn.dataset.copy); done(); }
+  catch (err) {
+    const src = btn.closest(".obj") ? $(".obj-resp p", btn.closest(".obj")) : $(".q-text", btn.closest(".q"));
+    if (src){ const r = document.createRange(); r.selectNodeContents(src); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); }
+    toast("Text selected. Press " + (isMac ? "⌘C" : "Ctrl+C") + " to copy.", "copy");
+  }
+}
+function openDealFromChart(id){
+  setTab("deals").then(() => {
+    const li = $("#deal-" + id);
+    if (!li){ state.outcome = "all"; state.factor = null; renderDealFilters(); renderDeals(); }
+    const el = $("#deal-" + id); if (!el) return;
+    toggleDeal(el, true); el.scrollIntoView({block:"center", behavior: reduce.matches ? "auto" : "smooth"}); $(".deal-row", el).focus({preventScroll:true}); flash(el);
+  });
+}
+function wire(){
+  wireCompany();
+  $("#compList").addEventListener("change", e => { if (e.target.name === "comp") setComp(e.target.value); });
+  $("#personaList").addEventListener("change", e => { if (e.target.name === "persona") setPersona(e.target.value); });
+  document.addEventListener("click", e => {
+    const ct = e.target.closest(".ctoggle"); if (ct){ toggleShow(ct.dataset.cid); return; }
+    const dr = e.target.closest("[data-drill]"); if (dr){ setComp(dr.dataset.drill); return; }
+    const pb = e.target.closest("[data-persona]"); if (pb){ setPersona(pb.dataset.persona); return; }
+    const cb = e.target.closest("[data-copy]"); if (cb) copyText(cb);
+  });
+
+  // Tabs (ARIA tabs pattern)
+  $("#tabs").addEventListener("click", e => { const t = e.target.closest(".tab"); if (t) setTab(t.dataset.tab); });
+  $("#tabs").addEventListener("keydown", e => {
+    const i = TABS.findIndex(t => t[0] === state.tab);
+    if (e.key === "ArrowRight" || e.key === "ArrowLeft"){ e.preventDefault(); setTab(TABS[(i + (e.key === "ArrowRight" ? 1 : -1) + TABS.length) % TABS.length][0], {focusTab:true}); }
+    else if (e.key === "Home"){ e.preventDefault(); setTab(TABS[0][0], {focusTab:true}); }
+    else if (e.key === "End"){ e.preventDefault(); setTab(TABS[TABS.length - 1][0], {focusTab:true}); }
+  });
+
+  // Overview linking
+  const ov = $("#ovComp");
+  ov.addEventListener("pointerover", e => {
+    const pt = e.target.closest(".pt"); if (pt){ showTip(pt); return; }
+    const f = e.target.closest(".seg, .lg-row"); if (f) linkHL(f.dataset.factor);
+  });
+  ov.addEventListener("pointerout", e => {
+    const f = e.target.closest(".pt, .seg, .lg-row"); if (!f || f.contains(e.relatedTarget)) return;
+    if (f.classList.contains("pt")) hideTip(); else linkHL(null);
+  });
+  ov.addEventListener("focusin", e => { const pt = e.target.closest(".pt"); if (pt) showTip(pt); else { const r = e.target.closest(".lg-row"); if (r) linkHL(r.dataset.factor); } });
+  ov.addEventListener("focusout", e => { if (e.target.closest(".pt")) hideTip(); else if (e.target.closest(".lg-row")) linkHL(null); });
+  ov.addEventListener("click", e => {
+    const pt = e.target.closest(".pt"); if (pt){ hideTip(); openDealFromChart(+pt.dataset.deal); return; }
+    const f = e.target.closest(".seg, .lg-row");
+    if (f){ linkHL(null); state.outcome = "all"; state.factor = f.dataset.factor; renderDealFilters(); renderDeals(); setTab("deals"); announce(`Showing deals decided on ${f.dataset.factor}.`); }
+  });
+  $("#lineCanvas").addEventListener("keydown", e => { const pt = e.target.closest(".pt"); if (pt && (e.key === "Enter" || e.key === " ")){ e.preventDefault(); hideTip(); openDealFromChart(+pt.dataset.deal); } });
+  $$(".switch").forEach(sw => sw.addEventListener("click", () => {
+    const k = sw.dataset.series, on = !state.series[k]; state.series[k] = on; sw.setAttribute("aria-checked", on);
+    $("#lineCanvas svg")?.classList.toggle(k === "cur" ? "hide-cur" : "hide-all", !on);
+  }));
+
+  // Deals
+  $("#dealFilters").addEventListener("click", e => {
+    const o = e.target.closest("[data-outcome]"); if (o){ setDealFilter({outcome:o.dataset.outcome}); return; }
+    if (e.target.closest("[data-clear-factor]")) setDealFilter({factor:null});
+  });
+  $("#dealList").addEventListener("click", e => { const b = e.target.closest(".deal-row"); if (b) toggleDeal(b.closest(".deal")); });
+
+  let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if (state.tab === "overview"){ if (isAll()) drawCompanyLine(false); else drawLine(false); } else chartsDirty = true; placeCompInd(false); placeTabInd(false); }, 120); });
+  addEventListener("hashchange", () => { const h = location.hash.slice(1); if (COMP_KEYS.includes(h)) setComp(h); else if (TABS.some(t => t[0] === h)) setTab(h); });
+
+  $("#searchBtn").addEventListener("click", openPalette);
+  $("#liveBtn").addEventListener("click", () => setLive(!state.live));
+  $("#palette").addEventListener("click", e => {
+    if (e.target.closest("[data-close]")){ closePalette(); return; }
+    const t = e.target.closest("[data-try]"); if (t){ $("#pq").value = t.dataset.try; runSearch(t.dataset.try); $("#pq").focus(); return; }
+    const li = e.target.closest(".p-item"); if (li) choose(+li.dataset.i);
+  });
+  $("#pres").addEventListener("mousemove", e => { const li = e.target.closest(".p-item"); if (li && +li.dataset.i !== pal.active) setActiveOption(+li.dataset.i); });
+  $("#pq").addEventListener("input", e => runSearch(e.target.value));
+  $("#palette").addEventListener("keydown", e => {
+    if (e.key === "Escape"){ e.preventDefault(); closePalette(); }
+    else if (e.key === "ArrowDown"){ e.preventDefault(); setActiveOption(pal.active + 1); }
+    else if (e.key === "ArrowUp"){ e.preventDefault(); setActiveOption(pal.active - 1); }
+    else if (e.key === "Enter" && e.target.id === "pq"){ e.preventDefault(); choose(pal.active); }
+    else if (e.key === "Tab"){ const f = [$("#pq"), $(".kbd-btn")], i = f.indexOf(document.activeElement); e.preventDefault(); f[(i + (e.shiftKey ? -1 : 1) + f.length) % f.length].focus(); }
+  });
+  document.addEventListener("keydown", e => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k"){ e.preventDefault(); pal.open ? closePalette() : openPalette(); return; }
+    if (pal.open || e.metaKey || e.ctrlKey || e.altKey) return;
+    const t = e.target;
+    if (t.isContentEditable || t.tagName === "TEXTAREA" || (t.tagName === "INPUT" && t.type !== "radio")) return;
+    if (e.key === "/"){ e.preventDefault(); openPalette(); }
+    else if (["0", "1", "2", "3"].includes(e.key)) setComp(COMP_KEYS[+e.key]);
+    else if (e.key.toLowerCase() === "l") setLive(!state.live);
+  });
+}
+
+/* ================= Boot ================= */
+function boot(){
+  $$("[data-icon]").forEach(el => { el.outerHTML = icon(el.dataset.icon); });
+  if (!isMac){ $("#kbdHint").textContent = "Ctrl K"; $$(".js-mod").forEach(k => { k.textContent = "Ctrl K"; }); }
+  const h = location.hash.slice(1);
+  if (COMP_KEYS.includes(h)) state.comp = h;
+
+  buildIndex(); renderSide(); renderTabs(); renderPickCards(); renderCerts();
+  renderComp(true);
+  if (TABS.some(t => t[0] === h) && h !== "overview"){ $("#view-overview").hidden = true; $("#view-" + h).hidden = false; state.tab = h; $$(".tab").forEach(t => { const on = t.dataset.tab === h; t.setAttribute("aria-selected", on); t.tabIndex = on ? 0 : -1; }); }
+  placeCompInd(false); placeTabInd(false);
+  wire();
+
+  // Entrance: signal bars acquire, the sidebar settles, then the record counts up and the charts draw in.
+  $$(".logo").forEach(l => {
+    anim($(".tri", l), [{opacity:0, transform:"translateX(-5px) scale(.8)"}, {opacity:1, transform:"none"}], {duration:520, easing:SPRING, fill:"backwards"});
+    $$(".spd", l).forEach((r, i) => anim(r, [{opacity:0, transform:"translateX(-7px)"}, {opacity:1, transform:"none"}], {duration:440, delay:180 + i * 90, easing:EASE_OUT, fill:"backwards"}));
+  });
+  $$(".side > .card").forEach((el, i) => anim(el, [{opacity:0, transform:"translateY(12px)"}, {opacity:1, transform:"none"}], {duration:500, delay:60 + i * 70, easing:EASE_OUT, fill:"backwards"}));
+  $$(".view:not([hidden]) .card").filter(el => el.offsetParent !== null).forEach((el, i) => anim(el, [{opacity:0, transform:"translateY(14px)"}, {opacity:1, transform:"none"}], {duration:520, delay:100 + i * 80, easing:EASE_OUT, fill:"backwards"}));
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { placeCompInd(false); placeTabInd(false); });
+}
+boot();
+})();
 </script>
 </body>
 </html>
