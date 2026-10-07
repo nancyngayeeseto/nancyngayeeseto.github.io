@@ -98,6 +98,11 @@
   .btn i { font-size: 1.05em; transition: transform 0.45s var(--spring); }
   .btn:hover i.ph-arrow-down { transform: translateY(3px); }
   .btn:hover i.ph-arrow-up-right, .link:hover i { transform: translate(3px, -3px); }
+  .intro-btn { padding-left: 8px; gap: 10px; }
+  .intro-play { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--on-accent); font-size: 0.95rem; transition: transform 0.5s var(--spring); }
+  .intro-play i { margin-left: 2px; }
+  .intro-btn:hover .intro-play { transform: scale(1.08); }
+  .intro-btn small { font-size: 0.85rem; opacity: 0.75; }
   .link { display: inline-flex; align-items: center; gap: 6px; color: var(--accent-text); text-decoration: none; min-height: 44px; }
   .link i { transition: transform 0.45s var(--spring); }
   .link:hover { text-decoration: underline; text-underline-offset: 4px; }
@@ -551,7 +556,7 @@
         <p class="lede">Product marketing and product leader, 20+ years in global B2B <span class="nowrap">go-to-market</span>. I position, launch and build products with AI.</p>
         <div class="cta-row">
           <a class="btn btn-primary" href="#products" data-magnetic>See the work <i class="ph ph-arrow-down" aria-hidden="true"></i></a>
-          <a class="btn btn-ghost" href="mailto:nancyngayee.seto@gmail.com" data-magnetic>Email me</a>
+          <button class="btn btn-ghost intro-btn" type="button" aria-haspopup="dialog" data-video="assets/video/nancy-intro.mp4" data-poster="assets/img/nancy-intro-poster.jpg" aria-label="Play my intro film, 52 seconds" data-magnetic><span class="intro-play"><i class="ph ph-play" aria-hidden="true"></i></span>Watch my intro <small>0:52</small></button>
         </div>
       </div>
 
@@ -1219,9 +1224,13 @@ document.addEventListener('DOMContentLoaded', () => {
       i = n;
       slides[i].classList.add('is-active');
       dots.forEach((d, k) => d.setAttribute('aria-current', String(k === i)));
-      url.textContent = slides[i].dataset.url;
-      cap.innerHTML = slides[i].dataset.caption;
-      cap.classList.remove('swap'); void cap.offsetWidth; cap.classList.add('swap');
+      const next = slides[i];
+      clearTimeout(show.t);
+      show.t = setTimeout(() => {  // swap the labels as the new screenshot finishes wiping in
+        url.textContent = next.dataset.url;
+        cap.innerHTML = next.dataset.caption;
+        cap.classList.remove('swap'); void cap.offsetWidth; cap.classList.add('swap');
+      }, reduce ? 0 : 450);
     };
     const restart = () => { clearInterval(timer); if (!reduce) timer = setInterval(() => { if (inView && !hover && !document.hidden) show((i + 1) % slides.length); }, 3400); };
     dots.forEach((d, k) => d.addEventListener('click', () => { show(k); restart(); }));
@@ -1355,10 +1364,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* Films: the play pill grows into the player (one shared dialog for every video) */
   const dialog = $('#filmDialog');
-  const openers = $$('.film-open');
+  const openers = $$('[data-video]');
   if (openers.length && dialog && typeof dialog.showModal === 'function') {
     const video = $('#filmVideo'), inner = $('.film-inner', dialog);
-    let busy = false, filmOpen = openers[0], pill = $('.film-pill', filmOpen);
+    const pillOf = btn => $('.film-pill', btn) || btn;
+    let busy = false, filmOpen = openers[0], pill = pillOf(filmOpen);
     const pillState = () => {
       const a = pill.getBoundingClientRect(), b = inner.getBoundingClientRect();
       const dx = a.left + a.width / 2 - (b.left + b.width / 2), dy = a.top + a.height / 2 - (b.top + b.height / 2);
@@ -1369,11 +1379,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const load = btn => {
       const src = btn.dataset.video;
       if (video.getAttribute('src') !== src) { video.src = src; video.poster = btn.dataset.poster || ''; }
-      dialog.setAttribute('aria-label', btn.getAttribute('aria-label').replace(/^Play the /, ''));
+      const label = btn.getAttribute('aria-label').replace(/^Play (the )?/, '');
+      dialog.setAttribute('aria-label', label.charAt(0).toUpperCase() + label.slice(1));
     };
     const open = btn => {
       if (busy || dialog.open) return;
-      filmOpen = btn; pill = $('.film-pill', btn);
+      filmOpen = btn; pill = pillOf(btn);
       load(btn);
       video.preload = 'auto';
       dialog.showModal();
